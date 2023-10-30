@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
-
+using TMPro;
 public class UIManager : MonoBehaviour
 {
     private static UIManager _instance;
@@ -17,6 +19,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private TMP_Text _text;
     public void Init()
     {
         

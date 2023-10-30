@@ -1,34 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 [RequireComponent(typeof(Collider2D),typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerHandler
 {
-    [SerializeField] private InputSO _inputSO;
-    [SerializeField] private MovementSO _movementSO;
-    
-    private Rigidbody _rigidbody;
-    private Collider _collider;
+    private Rigidbody2D _rigidbody;
+    [SerializeField] private Collider2D _collider;
     private Vector3 _inputVec3;
 
     public bool IsGrounded => Physics2D.BoxCast(transform.position,
-        _collider.bounds.size,0,Vector3.down,0.2f);
+        _collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
     
-    public void Init()
+    public override void Init(PlayerBrain brain)
     {
-        _rigidbody = GetComponent<Rigidbody>();
-        _collider = GetComponent<Collider>();
+        base.Init(brain);
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<Collider2D>();
         
-        _inputSO.OnJumpKeyPress += Jump;
-        _inputSO.OnMovementKeyPress += Movement;
-    }
-
-    private void FixedUpdate()
-    {
-        Debug.Log($"IsGrounded: {IsGrounded}");
-        transform.position += _inputVec3 * (_movementSO.Speed * Time.fixedDeltaTime);
+        _brain.InputSO.OnJumpKeyPress += Jump;
+        _brain.InputSO.OnMovementKeyPress += Movement;
     }
     private void Movement(Vector2 value)
     {
@@ -37,10 +31,16 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         if (!IsGrounded) return;   
-        _rigidbody.velocity += new Vector3(0,_movementSO.JumpPower,0);
+        _rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
-    private void Dash()
+    public override void BrainUpdate()
     {
         
+    }
+
+    public override void BrainFixedUpdate()
+    {
+        Debug.Log($"IsGrounded: {IsGrounded}");
+        transform.position += _inputVec3 * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
     }
 }

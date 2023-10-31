@@ -2,29 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Collider2D),typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : PlayerHandler
 {
     private Rigidbody2D _rigidbody;
-    [SerializeField] private Collider2D _collider;
     private Vector3 _inputVec3;
-
+    public Vector3 InputVec => _inputVec3;
+    private Coroutine _stopCoroutine;
+    
+    public bool IsStopped { get; private set; }
     public bool IsGrounded => Physics2D.BoxCast(transform.position,
-        _collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
+        _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
     
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
         _rigidbody = GetComponent<Rigidbody2D>();
-        _collider = GetComponent<Collider2D>();
         
         _brain.InputSO.OnJumpKeyPress += Jump;
-        _brain.InputSO.OnMovementKeyPress += Movement;
+        _brain.InputSO.OnMovementKeyPress += SetInputVec;
+        StopAllCoroutines();
     }
-    private void Movement(Vector2 value)
+    private void SetInputVec(Vector2 value)
     {
         _inputVec3 = value;
     }
@@ -40,7 +43,21 @@ public class PlayerMovement : PlayerHandler
 
     public override void BrainFixedUpdate()
     {
-        Debug.Log($"IsGrounded: {IsGrounded}");
-        transform.position += _inputVec3 * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
+        if (IsStopped) return;
+        Vector3 movement = _inputVec3;
+        movement.y = Mathf.Min(0,_inputVec3.y);
+        
+        transform.position += movement * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
+    }
+    //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
+    public void StopImmediately(float stopTime) => _stopCoroutine = StartCoroutine(StopCoroutine(stopTime));
+    private IEnumerator StopCoroutine(float stopTime)
+    {
+        float originGravityScale = _rigidbody.gravityScale;
+        _rigidbody.gravityScale = 0f;
+        IsStopped = true;
+        yield return new WaitForSeconds(stopTime);
+        _rigidbody.gravityScale = originGravityScale;
+        IsStopped = false;
     }
 }

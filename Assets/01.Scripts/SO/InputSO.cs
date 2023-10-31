@@ -20,7 +20,12 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
         _playerControls.Normal.Enable();
     }
 
-
+    public void SetInput(bool enable)
+    {
+        var inputType = _playerControls.Normal;
+        if (enable) inputType.Enable();
+        else inputType.Disable();
+    }
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.performed)

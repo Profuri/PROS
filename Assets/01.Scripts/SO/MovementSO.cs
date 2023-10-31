@@ -7,6 +7,6 @@ public class MovementSO : ScriptableObject
 {
     public float Speed;
     public float JumpPower;
-    
-    
+    public float DashPower;
+
 }

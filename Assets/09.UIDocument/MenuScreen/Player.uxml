@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UIDocument/MenuScreen/MenuScreen.uss?fileID=7433441132597879392&amp;guid=53d303c7bc36b14448c9449203a1122a&amp;type=3#MenuScreen" />
+    <ui:VisualElement name="player" style="flex-grow: 1; padding-right: 10px; padding-left: 10px;">
+        <ui:Label tabindex="-1" text="Me" parse-escape-sequences="true" display-tooltip-when-elided="true" name="player-name" class="font" />
+    </ui:VisualElement>
+</ui:UXML>

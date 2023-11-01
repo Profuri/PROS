@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340a2207b2d9e3d46a9d2a39ff8df26f, type: 3}
   m_Name: NormalPlayer
   m_EditorClassIdentifier: 
-  Speed: 0
-  JumpPower: 0
+  Speed: 5
+  JumpPower: 14.715
+  DashPower: 5

@@ -27,6 +27,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         //NetworkManager.Instance = GetComponent<NetworkManager>();
         NetworkManager.Instance.Init();
-        UIManager.Instance.Init();
+        //UIManager.Instance.Init();
     }
 }

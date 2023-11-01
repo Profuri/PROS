@@ -37,14 +37,14 @@ public class PlayerDash : PlayerHandler
         float prevValue = 0f;
         _brain.PlayerMovement.StopImmediately(dashTime);
         
-        
+        Vector3 mouseDir = (Camera.main.ScreenToWorldPoint((_brain.MousePos) - transform.position)).normalized;
         float radius = _brain.Collider.bounds.size.x * 0.5f;
-        Vector3 inputVec = _brain.PlayerMovement.InputVec;
-        Vector3 destination = transform.position + inputVec * power;
+        Vector3 destination = transform.position + mouseDir * power;
         
         var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
         
         
+        _brain.PlayerMovement.SetRotationByDirection(mouseDir);
         //timer 말고 Stop 되어있는 만큼 이동하는 방식으로 바꾸는게 더 나아보임
         while (timer < dashTime)
         {
@@ -56,13 +56,14 @@ public class PlayerDash : PlayerHandler
             prevValue = easingValue;
 
             transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
+            
             Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
             
             if (collider != null)
             {
                 if (collider.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.Damaged(transform.position,inputVec);
+                    damageable.Damaged(transform.position,mouseDir);
                     yield break;
                 }
             }
@@ -76,11 +77,13 @@ public class PlayerDash : PlayerHandler
             {
                 if (col.TryGetComponent(out IDamageable damageable))
                 {
-                    Vector3 direction = inputVec;
+                    Vector3 direction = mouseDir;
                     damageable.Damaged(transform.position,direction);
                 }
             }
         }
+        
+        transform.rotation = Quaternion.identity;
     }
 
     public override void BrainUpdate()

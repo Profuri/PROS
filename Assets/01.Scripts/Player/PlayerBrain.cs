@@ -13,12 +13,13 @@ public class PlayerBrain : MonoBehaviour
 
     [SerializeField] private InputSO _inputSO;
     public InputSO InputSO => _inputSO;
-
-    
     [SerializeField] private MovementSO _movementSO;
     public MovementSO MovementSO => _movementSO;
     public PlayerMovement PlayerMovement => _playerMovement;
     private PlayerMovement _playerMovement;
+
+    private Vector3 _mousePos;
+    public Vector3 MousePos => _mousePos;
     private void Awake()
     {
         _handlers = new List<PlayerHandler>();
@@ -27,6 +28,8 @@ public class PlayerBrain : MonoBehaviour
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();
+        
+        _inputSO.OnMouseAim += (mousePos) => _mousePos = mousePos;
     }
 
     public delegate void UnityMessageListener();

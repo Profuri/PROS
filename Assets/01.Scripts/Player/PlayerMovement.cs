@@ -49,6 +49,12 @@ public class PlayerMovement : PlayerHandler
         
         transform.position += movement * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
     }
+
+    public void SetRotationByDirection(Vector3 direction)
+    {
+        float desireAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.AngleAxis(desireAngle,Vector3.forward);
+    }
     //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
     public void StopImmediately(float stopTime,Action Callback = null) => _stopCoroutine = StartCoroutine(StopCoroutine(stopTime,Callback));
     private IEnumerator StopCoroutine(float stopTime,Action Callback)

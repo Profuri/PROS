@@ -20,73 +20,35 @@ public class OTCManager : MonoBehaviour
 
     [SerializeField] private float _otcPower = 10f;
 
-    public GameObject attackObj;
-    public GameObject otcObj;
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlayOTC(attackObj, otcObj);
-        }
-    }
-
     /// <summary>
     /// OTC Dropout Execution Function
     /// </summary>
-    /// <param name="attackObj">Objects that don't fly away</param>
-    /// <param name="otcObj">Objects to fly away</param>
-    public void PlayOTC(GameObject attackObj, GameObject otcObj)
+    /// <param name="attackDir"> Attack Object Moving Direction </param>
+    /// <param name="otcPrevPos"> Otc Object Previous Moving Direction </param>
+    /// <param name="otcCurPos"> Otc Object Current Moving Direction </param>
+    public void PlayOTC(GameObject otcObj, Vector3 otcPrevPos, Vector3 otcCurPos, Vector3 attackDir)
     {
-        if (attackObj == null)
-        {
-            Debug.LogError("Attack Object is null");
-            return;   
-        }
-        if (otcObj == null) 
-        {
-            Debug.LogError("OTC Object is null");
-            return;
-        }
-        
-        Vector2 attackObjDir = CalcMovingDir(attackObj);
-        Vector2 otcObjDir = CalcMovingDir(otcObj);
-        Debug.Log($"AtkObjDir : {attackObjDir}, OtcObjDir : {otcObjDir}");
+        Vector3 otcMovingDir = CalcMovingDir(otcPrevPos, otcCurPos);
 
-        Vector2 otcDir = CalcOTCDir(attackObjDir, otcObjDir);
+        Vector3 otcDir = CalcOTCDir(attackDir,  otcMovingDir);
         if (otcDir.y < 0)
+            otcDir *= -1;
+
+        if (otcObj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
-            otcDir.y *= -1;
+            rb.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
-        Debug.Log($"OtcDIr : {otcDir}");
-    
-        if(otcObj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-        {
-            Debug.Log($"Object Otc");
-            rb.transform.Translate(otcDir * 10);
-        }
+        else
+            Debug.LogError("Otc Object Rigidbody2D not Found");
     }
 
-    private Vector2 CalcOTCDir(Vector2 attackDir, Vector2 otcDir)
+    private Vector3 CalcOTCDir(Vector3 attackDir, Vector3 otcDir)
     {
         return (attackDir + otcDir).normalized;
     }
 
-    private Vector2 CalcMovingDir(GameObject obj)
+    private Vector3 CalcMovingDir(Vector3 prevPos, Vector3 curPos)
     {
-        Vector2 movingDir = new Vector2();
-        if (obj == null)
-            Debug.LogError("Moving Obj is null");
-        
-        if (obj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-        {
-            movingDir = rb.velocity.normalized;
-        }
-        else
-        {
-            Debug.LogError("Don't Find Rigidbody in OTC Object");
-        }
-
-        return movingDir;
+        return (curPos - prevPos).normalized;
     }
 }

@@ -4,6 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 using Photon.Realtime;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -25,17 +26,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool IsMasterClient => PhotonNetwork.IsMasterClient;
     public Player LocalPlayer => PhotonNetwork.LocalPlayer;
     public List<RoomInfo> RoomList => _roomList;
+    public List<Player> PlayerList => PhotonNetwork.PlayerList.ToList();
         
     
     private PhotonView _photonView;
     private List<RoomInfo> _roomList;
-    
+
     public event Action OnConnectedToMasterEvent;
     public event Action OnJoinedRoomEvent;
     public event Action OnJoinedLobbyEvent;
     public event Action OnLeftRoomEvent;
     public event Action<List<RoomInfo>> OnRoomListUpdateEvent;
     public event Action<Player> OnPlayerEnteredRoomEvent;
+    public event Action<Player> OnPlayerLeftRoomEvent;
     public void Init()
     {
         _photonView = GetComponent<PhotonView>();
@@ -54,6 +57,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom() => PhotonNetwork.CreateRoom($"Room: {Random.Range(0,9999)}");
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
+    public void JoinRoom(string name) => PhotonNetwork.JoinRoom(name);
+
     public override void OnJoinedLobby() => OnJoinedLobbyEvent?.Invoke();
     public override void OnJoinedRoom() => OnJoinedRoomEvent?.Invoke();
     public override void OnLeftRoom() => OnLeftRoomEvent?.Invoke();
@@ -63,6 +68,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         OnPlayerEnteredRoomEvent?.Invoke(newPlayer);
     }
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        OnPlayerLeftRoomEvent?.Invoke(otherPlayer);
+    }
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("OnRoomListUpdate");

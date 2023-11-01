@@ -950,6 +950,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _otcPower: 10
+  _otcObj: {fileID: 1693061891}
+  _otcPrevPos: {x: 0, y: 0, z: 0}
+  _otcCurPos: {x: 0, y: 0, z: 0}
+  _attackDir: {x: 0, y: 0, z: 0}
 --- !u!4 &1813157265
 Transform:
   m_ObjectHideFlags: 0
@@ -971,7 +975,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1611420302}
   - {fileID: 1626984690}
-  - {fileID: 1813157265}
   - {fileID: 312112399}
   - {fileID: 1693061899}
   - {fileID: 47748841}
+  - {fileID: 1813157265}

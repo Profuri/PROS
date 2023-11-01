@@ -20,6 +20,21 @@ public class OTCManager : MonoBehaviour
 
     [SerializeField] private float _otcPower = 10f;
 
+    [Header("Test Parameters")]
+    public GameObject _otcObj;
+    public Vector3 _otcPrevPos;
+    public Vector3 _otcCurPos;
+    public Vector3 _attackDir;
+
+    private void Update()
+    {
+        // TestFuncTion
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            PlayOTC(_otcObj, _otcPrevPos, _otcCurPos, _attackDir);
+        }
+    }
+
     /// <summary>
     /// OTC Dropout Execution Function
     /// </summary>
@@ -50,5 +65,11 @@ public class OTCManager : MonoBehaviour
     private Vector3 CalcMovingDir(Vector3 prevPos, Vector3 curPos)
     {
         return (curPos - prevPos).normalized;
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Test Draw
+        Debug.DrawLine(_otcObj.transform.position, _otcObj.transform.position + CalcOTCDir(_attackDir, CalcMovingDir(_otcPrevPos, _otcCurPos)) * _otcPower, Color.blue);
     }
 }

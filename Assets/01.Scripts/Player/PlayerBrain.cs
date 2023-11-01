@@ -14,13 +14,9 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private InputSO _inputSO;
     public InputSO InputSO => _inputSO;
 
+    
     [SerializeField] private MovementSO _movementSO;
-
-    public MovementSO MovementSO
-    {
-        get => _movementSO;
-        set => _movementSO = value;
-    }
+    public MovementSO MovementSO => _movementSO;
     public PlayerMovement PlayerMovement => _playerMovement;
     private PlayerMovement _playerMovement;
     private void Awake()

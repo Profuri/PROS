@@ -6,6 +6,9 @@ public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
     [SerializeField] private float _dashTime = 0.15f;
+
+    public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
+    private bool _isDashed = false; 
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -15,33 +18,49 @@ public class PlayerDash : PlayerHandler
 
     private void Dash()
     {
-        if (_dashCoroutine != null)
+        if (CanDash)
         {
-            StopCoroutine(_dashCoroutine);
+            if (_dashCoroutine != null)
+            {
+                StopCoroutine(_dashCoroutine);
+            }
+            float dashPower = _brain.MovementSO.DashPower;
+            _isDashed = true;
+            
+            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower));
         }
-        float dashPower = _brain.MovementSO.DashPower;
-        _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower));
     }
+    
     private IEnumerator DashCoroutine(float dashTime,float power)
     {
         float timer = 0f;
+        float prevValue = 0f;
         _brain.PlayerMovement.StopImmediately(dashTime);
+        
+        
+        float radius = _brain.Collider.bounds.size.x * 0.5f;
+        Vector3 inputVec = _brain.PlayerMovement.InputVec;
+        Vector3 destination = transform.position + inputVec * power;
+        
+        var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
+        
+        
         //timer 말고 Stop 되어있는 만큼 이동하는 방식으로 바꾸는게 더 나아보임
         while (timer < dashTime)
         {
             timer += Time.deltaTime;
-            
-            Vector3 inputVec = _brain.PlayerMovement.InputVec;
             float percent = Mathf.Lerp(0,1,timer / dashTime);
+            float easingValue = EaseOutExpo(percent);
+            float stepEasingValue = easingValue - prevValue;
             
-            transform.position += inputVec * (power * Time.deltaTime * EaseInBack(percent));
-            Vector3 colSize = _brain.Collider.bounds.size;
+            prevValue = easingValue;
+
+            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
+            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
             
-            var hit2D = Physics2D.BoxCast(transform.position,colSize,0f,inputVec,0f,1 << LayerMask.NameToLayer("DAMAGEABLE"));
-            
-            if (hit2D != default(RaycastHit2D))
+            if (collider != null)
             {
-                if (hit2D.collider.TryGetComponent(out IDamageable damageable))
+                if (collider.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.Damaged(transform.position,inputVec);
                     yield break;
@@ -49,11 +68,24 @@ public class PlayerDash : PlayerHandler
             }
             yield return null;
         }
+
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,layer);
+        if (cols.Length > 0)
+        {
+            foreach (var col in cols)
+            {
+                if (col.TryGetComponent(out IDamageable damageable))
+                {
+                    Vector3 direction = inputVec;
+                    damageable.Damaged(transform.position,direction);
+                }
+            }
+        }
     }
 
     public override void BrainUpdate()
     {
-        
+        if (_brain.PlayerMovement.IsGrounded) _isDashed = false;
     }
 
     public override void BrainFixedUpdate()

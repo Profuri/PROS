@@ -50,8 +50,8 @@ public class PlayerMovement : PlayerHandler
         transform.position += movement * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
     }
     //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
-    public void StopImmediately(float stopTime) => _stopCoroutine = StartCoroutine(StopCoroutine(stopTime));
-    private IEnumerator StopCoroutine(float stopTime)
+    public void StopImmediately(float stopTime,Action Callback = null) => _stopCoroutine = StartCoroutine(StopCoroutine(stopTime,Callback));
+    private IEnumerator StopCoroutine(float stopTime,Action Callback)
     {
         float originGravityScale = _rigidbody.gravityScale;
         _rigidbody.gravityScale = 0f;
@@ -59,5 +59,6 @@ public class PlayerMovement : PlayerHandler
         yield return new WaitForSeconds(stopTime);
         _rigidbody.gravityScale = originGravityScale;
         IsStopped = false;
+        Callback?.Invoke();
     }
 }

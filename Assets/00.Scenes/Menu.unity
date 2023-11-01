@@ -420,6 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32baa5776b268e743bbe7d09b0881b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerTempalte: {fileID: 9197481963319205126, guid: 957536886f34c1246a90cd082725cb3f,
+    type: 3}
 --- !u!114 &1902926806
 MonoBehaviour:
   m_ObjectHideFlags: 0

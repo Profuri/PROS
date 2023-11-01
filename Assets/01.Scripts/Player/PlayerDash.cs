@@ -2,6 +2,7 @@ using System.Collections;
 using System.Data.Common;
 using UnityEngine;
 using static Ease;
+using static Define;
 public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
@@ -36,15 +37,15 @@ public class PlayerDash : PlayerHandler
         float timer = 0f;
         float prevValue = 0f;
         _brain.PlayerMovement.StopImmediately(dashTime);
-        
-        Vector3 mouseDir = (Camera.main.ScreenToWorldPoint((_brain.MousePos) - transform.position)).normalized;
+
+        Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
         float radius = _brain.Collider.bounds.size.x * 0.5f;
         Vector3 destination = transform.position + mouseDir * power;
         
         var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
-        
-        
-        _brain.PlayerMovement.SetRotationByDirection(mouseDir);
+
+        _brain.ActionData.IsDashing = true;
+                    
         //timer 말고 Stop 되어있는 만큼 이동하는 방식으로 바꾸는게 더 나아보임
         while (timer < dashTime)
         {
@@ -54,22 +55,26 @@ public class PlayerDash : PlayerHandler
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
+            
+            _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
 
             transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
             
             Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
-            
-            if (collider != null)
+            if (collider != default(Collider2D))
             {
                 if (collider.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.Damaged(transform.position,mouseDir);
+                    transform.rotation = Quaternion.identity;
+                    _brain.ActionData.IsDashing = false;
+
                     yield break;
                 }
             }
             yield return null;
         }
-
+        _brain.ActionData.IsDashing = false;
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,layer);
         if (cols.Length > 0)
         {
@@ -82,8 +87,6 @@ public class PlayerDash : PlayerHandler
                 }
             }
         }
-        
-        transform.rotation = Quaternion.identity;
     }
 
     public override void BrainUpdate()

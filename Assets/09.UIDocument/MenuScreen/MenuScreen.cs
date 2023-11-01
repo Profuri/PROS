@@ -117,6 +117,10 @@ public class MenuScreen : MonoBehaviour
     private void HandleStartGame(ClickEvent evt)
     {
         // Start Game
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            NetworkManager.Instance.LoadScene(ESceneName.Game);
+        }
     }
 
     private void HandleExitRoom(ClickEvent evt)

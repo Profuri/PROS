@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class PlayerHandler : MonoBehaviour
+using Photon.Pun;
+public abstract class PlayerHandler : MonoBehaviourPunCallbacks
 {
     protected PlayerBrain _brain;
     

@@ -19,6 +19,8 @@ public class MenuScreen : MonoBehaviour
 
     private VisualElement _lobbyPanel;
     private TextField _roomCodeField;
+    private Button _createRoomBtn;
+    private Button _joinRoomBtn;
 
     private VisualElement _roomPanel;
     private Label _roomNameLabel;
@@ -47,8 +49,8 @@ public class MenuScreen : MonoBehaviour
 
         _lobbyPanel = root.Q<VisualElement>("lobby-panel");
         _roomCodeField = root.Q<TextField>("room-name-field");
-        root.Q<Button>("btn-create-room").RegisterCallback<ClickEvent>(HandleCreateRoom);
-        root.Q<Button>("btn-join-room").RegisterCallback<ClickEvent>(HandleJoinRoom);
+        _createRoomBtn = root.Q<Button>("btn-create-room");
+        _joinRoomBtn = root.Q<Button>("btn-join-room");
 
         _roomPanel = root.Q<VisualElement>("room-panel");
         _roomNameLabel = root.Q<Label>("room-name");
@@ -60,15 +62,25 @@ public class MenuScreen : MonoBehaviour
 
         GoToLobbyPanel();
 
+        NetworkManager.Instance.OnJoinedLobbyEvent += HandleJoinedLobby;
         NetworkManager.Instance.OnJoinedRoomEvent += HandleJoinedRoom;
         NetworkManager.Instance.OnLeftRoomEvent += HandleLeftRoom;
         NetworkManager.Instance.OnPlayerEnteredRoomEvent += AddPlayer;
         NetworkManager.Instance.OnPlayerLeftRoomEvent += RemovePlayer;
     }
 
+    private void HandleJoinedLobby()
+    {
+        _createRoomBtn.RegisterCallback<ClickEvent>(HandleCreateRoom);
+        _joinRoomBtn.RegisterCallback<ClickEvent>(HandleJoinRoom);
+        _createRoomBtn.RemoveFromClassList("off");
+        _joinRoomBtn.RemoveFromClassList("off");
+    }
+
     private void OnDestroy()
     {
         if (NetworkManager.Instance == null) return;
+        NetworkManager.Instance.OnJoinedLobbyEvent -= HandleJoinedLobby;
         NetworkManager.Instance.OnJoinedRoomEvent -= HandleJoinedRoom;
         NetworkManager.Instance.OnLeftRoomEvent -= HandleLeftRoom;
         NetworkManager.Instance.OnPlayerEnteredRoomEvent -= AddPlayer;
@@ -126,6 +138,7 @@ public class MenuScreen : MonoBehaviour
 
     private void HandleStartGame(ClickEvent evt)
     {
+        if (NetworkManager.Instance.GetCurRoom == null) return;
         Debug.Log("Game Start");
         // Start Game
         if (NetworkManager.Instance.IsMasterClient)

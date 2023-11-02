@@ -59,7 +59,7 @@ public class PlayerMovement : PlayerHandler
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.collider.CompareTag("WALL"))
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
         {
             bool isLeft = transform.position.x - other.collider.transform.position.x > 0;
 
@@ -71,11 +71,6 @@ public class PlayerMovement : PlayerHandler
             {
                 _brain.Rigidbody.gravityScale = 0f;
             }
-        }
-
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
-        {
-            
         }
     }
 

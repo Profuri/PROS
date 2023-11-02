@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : PlayerHandler
@@ -8,10 +10,11 @@ public class PlayerMovement : PlayerHandler
     public Vector3 InputVec => _inputVec3;
     private Rigidbody2D _rigidbody;
     private Coroutine _stopCoroutine;
+
     public bool IsStopped { get; private set; }
     public bool IsGrounded => Physics2D.BoxCast(transform.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
-        
+                                                                                            
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -45,10 +48,18 @@ public class PlayerMovement : PlayerHandler
         if (IsStopped || !_brain.IsMine) return;
         Vector2 movement = _inputVec3;
         movement.y = 0f;
-        
+
+        _brain.ActionData.PreviousPos = transform.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
+        
+        //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
-    
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        //if(other.)
+    }
+
     #region RotationSystem
     public void SetRotationByDirection(Vector3 direction)
     {

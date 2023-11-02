@@ -67,7 +67,6 @@ public class PlayerDash : PlayerHandler
             prevValue = easingValue;
             
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
-
             transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
             
             Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
@@ -75,7 +74,7 @@ public class PlayerDash : PlayerHandler
             {
                 if (collider.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.Damaged(transform.position,mouseDir);
+                    damageable.Damaged(this.transform,mouseDir,null);
                     transform.rotation = Quaternion.identity;
                     _brain.ActionData.IsDashing = false;
 
@@ -94,8 +93,7 @@ public class PlayerDash : PlayerHandler
             {
                 if (col.TryGetComponent(out IDamageable damageable))
                 {
-                    Vector3 direction = mouseDir;
-                    damageable.Damaged(transform.position,direction);
+                    damageable.Damaged(this.transform,mouseDir,null);
                 }
             }
         }

@@ -5,4 +5,5 @@ using UnityEngine;
 public class PlayerActionData : MonoBehaviour
 {
     public bool IsDashing;
+    public Vector3 PreviousPos;
 }

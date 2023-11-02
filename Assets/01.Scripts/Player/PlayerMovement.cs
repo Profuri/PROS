@@ -57,19 +57,28 @@ public class PlayerMovement : PlayerHandler
         //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
         {
             bool isLeft = transform.position.x - other.collider.transform.position.x > 0;
-
+            
+            Action stopY = () =>
+            {
+                
+                Vector2 currentVelocity = _brain.Rigidbody.velocity;
+                currentVelocity.y = 0f;
+                _brain.Rigidbody.velocity = currentVelocity;
+                Debug.Log($"Velocity: {_brain.Rigidbody.velocity}");
+            };
+            
             if (isLeft && _inputVec3.x < 0)
             {
-                _brain.Rigidbody.gravityScale = 0f;
+                stopY();
             }
             else if(!isLeft && _inputVec3.x > 0)
             {
-                _brain.Rigidbody.gravityScale = 0f;
+                stopY();
             }
         }
     }

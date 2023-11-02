@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -28,5 +29,7 @@ public class GameManager : MonoBehaviour
         //NetworkManager.Instance = GetComponent<NetworkManager>();
         NetworkManager.Instance.Init();
         //UIManager.Instance.Init();
+        SceneManagement.Instance.Init(this.transform);
+        SceneManagement.Instance.OnGameSceneLoaded += () => PhotonNetwork.Instantiate("Player",transform.position,Quaternion.identity);
     }
 }

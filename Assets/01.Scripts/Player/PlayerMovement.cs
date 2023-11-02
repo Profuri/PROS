@@ -19,7 +19,6 @@ public class PlayerMovement : PlayerHandler
     {
         base.Init(brain);
 
-        _brain.Rigidbody = GetComponent<Rigidbody2D>();
         _brain.InputSO.OnJumpKeyPress += Jump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         StopAllCoroutines();

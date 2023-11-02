@@ -112,10 +112,21 @@ public class MenuScreen : MonoBehaviour
         _roomNameLabel.text = NetworkManager.Instance.GetCurRoom.Name;
         _roomPlayerList.Clear();
         NetworkManager.Instance.PlayerList.ForEach(p => AddPlayer(p));
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            _startGameBtn.pickingMode = PickingMode.Ignore;
+            _startGameBtn.AddToClassList("off");
+        }
+        else
+        {
+            _startGameBtn.pickingMode = PickingMode.Position;
+            _startGameBtn.RemoveFromClassList("off");
+        }
     }
 
     private void HandleStartGame(ClickEvent evt)
     {
+        Debug.Log("Game Start");
         // Start Game
         if (NetworkManager.Instance.IsMasterClient)
         {

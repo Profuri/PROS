@@ -17,7 +17,7 @@
                     <ui:ScrollView name="player-list" />
                     <ui:VisualElement name="button-row" style="flex-direction: row; justify-content: flex-end;">
                         <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start" class="btn" />
-                        <ui:Button text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit" class="btn" style="background-color: rgb(250, 83, 74);" />
+                        <ui:Button text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit" class="btn btn-exit" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

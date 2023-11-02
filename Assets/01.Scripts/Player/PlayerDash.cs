@@ -7,7 +7,7 @@ public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
     [SerializeField] private float _dashTime = 0.15f;
-
+    
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
     private bool _isDashed = false; 
     public override void Init(PlayerBrain brain)
@@ -31,7 +31,7 @@ public class PlayerDash : PlayerHandler
             _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower));
         }
     }
-    
+        
     private IEnumerator DashCoroutine(float dashTime,float power)
     {
         float timer = 0f;
@@ -45,8 +45,8 @@ public class PlayerDash : PlayerHandler
         var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
 
         _brain.ActionData.IsDashing = true;
-                    
-        //timer 말고 Stop 되어있는 만큼 이동하는 방식으로 바꾸는게 더 나아보임
+        //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
+        //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
         while (timer < dashTime)
         {
             timer += Time.deltaTime;
@@ -74,6 +74,8 @@ public class PlayerDash : PlayerHandler
             }
             yield return null;
         }
+        
+        //착륙 지점에 충돌체크를 한 번 더 해줌
         _brain.ActionData.IsDashing = false;
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,layer);
         if (cols.Length > 0)

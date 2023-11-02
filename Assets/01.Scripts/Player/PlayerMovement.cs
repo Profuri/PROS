@@ -49,7 +49,7 @@ public class PlayerMovement : PlayerHandler
             }
         }
     }
-
+    
     public override void BrainFixedUpdate()
     {
         // || !_brain.IsMine
@@ -72,12 +72,14 @@ public class PlayerMovement : PlayerHandler
         Quaternion targetRot = Quaternion.AngleAxis(desireAngle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation,targetRot,lerpValue);
     }
-    //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
+    
     public void StopImmediately(float stopTime,Action Callback = null) => _stopCoroutine = StartCoroutine(StopCoroutine(stopTime,Callback));
+    //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {
         float originGravityMultiplier = _rigidbody.gravityScale;
         _rigidbody.gravityScale = 0f;
+        _rigidbody.velocity = Vector3.zero;
         IsStopped = true;
         yield return new WaitForSeconds(stopTime);
         _rigidbody.gravityScale = originGravityMultiplier;

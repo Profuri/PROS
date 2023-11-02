@@ -65,7 +65,6 @@ public class PlayerMovement : PlayerHandler
             
             Action stopY = () =>
             {
-                
                 Vector2 currentVelocity = _brain.Rigidbody.velocity;
                 currentVelocity.y = 0f;
                 _brain.Rigidbody.velocity = currentVelocity;

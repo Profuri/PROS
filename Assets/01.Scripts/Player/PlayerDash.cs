@@ -1,6 +1,5 @@
 using System.Collections;
 using Photon.Pun;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Ease;
 public class PlayerDash : PlayerHandler
@@ -12,6 +11,8 @@ public class PlayerDash : PlayerHandler
 
     [SerializeField] private LayerMask _damageableLayer;
     [SerializeField] private LayerMask _obstacleLayer;
+
+    private IDamageable _currentDamageable;
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -60,6 +61,7 @@ public class PlayerDash : PlayerHandler
             
         _brain.ActionData.IsDashing = true;
 
+
         float percent = 0f;
         
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir,distanceFromDestination,_obstacleLayer);
@@ -67,7 +69,7 @@ public class PlayerDash : PlayerHandler
         if (hit.collider != null)
         {
             var obstacleCollider = hit.collider;
-            destination = obstacleCollider.transform.position - obstacleCollider.bounds.size;
+            destination = hit.point - (Vector2)mouseDir * (_brain.Collider.bounds.size / 2);
             timeToArrive = Vector3.Distance(transform.position, destination) / power * _dashTime; 
         }
 
@@ -96,14 +98,17 @@ public class PlayerDash : PlayerHandler
             
             if (collider != default(Collider2D))
             {
-                if (collider.TryGetComponent(out IDamageable damageable))
+                //찾은 콜라이더가 내 콜라이더가 아니여야 함
+                if (collider.Equals(_brain.Collider) == false)
                 {
-                    damageable.Damaged(this.transform,mouseDir,null);
-                    transform.rotation = Quaternion.identity;
-                    _brain.ActionData.IsDashing = false;
-                    _brain.Rigidbody.velocity = Vector3.zero;
-                    yield break;
+                    if (collider.TryGetComponent(out IDamageable damageable))
+                    {
+                        _currentDamageable = damageable;
+                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
+                        yield break;
+                    }
                 }
+
             }
             yield return null;
         }
@@ -118,14 +123,24 @@ public class PlayerDash : PlayerHandler
             {
                 if (col.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.Damaged(this.transform,mouseDir,null);
+                    _currentDamageable = damageable;
+                    _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
                 }
             }
         }
-
     }
     #endregion
 
+    [PunRPC]
+    private void OTCDamageable(Vector3 mouseDir)
+    {
+        _currentDamageable?.Damaged(this.transform,mouseDir,null);
+        
+        transform.rotation = Quaternion.identity;
+        _brain.ActionData.IsDashing = false;
+        _brain.Rigidbody.velocity = Vector3.zero;
+        _currentDamageable = null;
+    }
     public override void BrainUpdate()
     {
         if (_brain.PlayerMovement.IsGrounded) _isDashed = false;

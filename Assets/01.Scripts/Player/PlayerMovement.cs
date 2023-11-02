@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
@@ -63,19 +64,19 @@ public class PlayerMovement : PlayerHandler
         {
             bool isLeft = transform.position.x - other.collider.transform.position.x > 0;
             
-            Action stopY = () =>
-            {
-                Vector2 currentVelocity = _brain.Rigidbody.velocity;
-                currentVelocity.y = 0f;
-                _brain.Rigidbody.velocity = currentVelocity;
-                _brain.Rigidbody.gravityScale = 0f;
-                Debug.Log($"Velocity: {_brain.Rigidbody.velocity}");
-            };
-            
-            if (isLeft && _inputVec3.x < 0) stopY();
-            else if(!isLeft && _inputVec3.x > 0) stopY();
+            if (isLeft && _inputVec3.x < 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
+            else if(!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
             else _brain.Rigidbody.gravityScale = _originGravityScale;
         }
+    }
+
+    [PunRPC]
+    private void StopYSystem()
+    {
+        Vector2 currentVelocity = _brain.Rigidbody.velocity;
+        currentVelocity.y = 0f;
+        _brain.Rigidbody.velocity = currentVelocity;
+        _brain.Rigidbody.gravityScale = 0f;
     }
     
 

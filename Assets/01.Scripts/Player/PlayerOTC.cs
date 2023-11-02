@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using Photon.Pun;
 public class PlayerOTC : PlayerHandler,IDamageable
 {
     [SerializeField] private float _otcPower = 10f;
@@ -16,8 +16,11 @@ public class PlayerOTC : PlayerHandler,IDamageable
     /// <param name="attackDir"> Attack Object Moving Direction </param>
     /// <param name="otcPrevPos"> Otc Object Previous Moving Direction </param>
     /// <param name="otcCurPos"> Otc Object Current Moving Direction </param>
+    
+    [PunRPC]
     public void PlayOTC(Vector3 attackDir)
     {
+        _brain.Collider.enabled = false;
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);      
         Vector3 otcDir = CalcOTCDir(attackDir.normalized, otcMovingDir);
 
@@ -34,6 +37,7 @@ public class PlayerOTC : PlayerHandler,IDamageable
                 otcDir = attackDir;
                 isBounce = true;
             }
+            
             if (otcDir != Vector3.zero)
             {
                 if (otcDir.x == 0)
@@ -60,7 +64,10 @@ public class PlayerOTC : PlayerHandler,IDamageable
             otcDir.y *= -1;
 
         if (isBounce)
+        {
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
+            Debug.LogError("IsBounce");
+        }
         else
             _brain.Rigidbody.AddForce(otcDir * (_otcPower * _bouncePer), ForceMode2D.Impulse);
     }
@@ -81,6 +88,6 @@ public class PlayerOTC : PlayerHandler,IDamageable
     public void Damaged(Transform attackerTrm, Vector3 attackDirection, Action Callback = null)
     {
         Debug.Log($"{this.gameObject.name}: Damaged");
-        PlayOTC(attackDirection);
+        _brain.PhotonView.RPC("PlayOTC",RpcTarget.All,attackDirection);
     }
 }

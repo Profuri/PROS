@@ -42,6 +42,11 @@ MonoBehaviour:
   - Init
   - Jump
   - Dash
+  - StopYSystem
+  - PlayOTC
+  - DamagedDamageable
+  - Damageable
+  - OTCDamageable
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

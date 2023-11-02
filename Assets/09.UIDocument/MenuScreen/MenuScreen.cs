@@ -128,6 +128,10 @@ public class MenuScreen : MonoBehaviour
     {
         Debug.Log("Game Start");
         // Start Game
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            NetworkManager.Instance.LoadScene(ESceneName.Game);
+        }
     }
 
     private void HandleExitRoom(ClickEvent evt)

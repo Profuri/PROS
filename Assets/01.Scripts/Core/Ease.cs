@@ -1,6 +1,7 @@
 using System;
 public static class Ease
 {
+    public static float Linear(float x) => x;
     #region sine
     public static float EaseInSine(float x) => 1 - MathF.Cos((x * MathF.PI) / 2);
     public static float EaseOutSine(float x) => MathF.Sin((x * MathF.PI) / 2);

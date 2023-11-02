@@ -4,5 +4,5 @@ using UnityEngine;
 using System;
 public interface IDamageable
 {
-    public void Damaged(Vector3 originPos,Vector3 direction,Action Callback = null);
+    public void Damaged(Transform attackerTrm ,Vector3 attackDirection,Action Callback = null);
 }

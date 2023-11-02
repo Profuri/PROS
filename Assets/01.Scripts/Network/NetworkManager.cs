@@ -6,6 +6,10 @@ using Photon.Realtime;
 using Random = UnityEngine.Random;
 using System.Linq;
 
+public enum ESceneName
+{
+    Menu,Game,End
+}
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     private static NetworkManager _instance;
@@ -48,6 +52,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         OnRoomListUpdateEvent += (list) => _roomList = list;
         
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
     public override void OnConnectedToMaster()
     {
@@ -77,5 +82,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("OnRoomListUpdate");
         OnRoomListUpdateEvent?.Invoke(roomList);
+    }
+
+    public void LoadScene(ESceneName sceneType)
+    {
+        PhotonNetwork.LoadLevel(sceneType.ToString());
     }
 }

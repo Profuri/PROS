@@ -1,22 +1,33 @@
 using System.Collections;
-using System.Data.Common;
+using Photon.Pun;
 using UnityEngine;
 using static Ease;
 public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
     [SerializeField] private float _dashTime = 0.15f;
-
+    
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
     private bool _isDashed = false; 
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
-        _brain.InputSO.OnDashKeyPress += Dash;
+        _brain.InputSO.OnDashKeyPress += DashRPC;
+        _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         StopAllCoroutines();
     }
-
-    private void Dash()
+    #region Dash
+    private void DashRPC()
+    {
+        if (_brain.IsMine)
+        {
+            Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
+            _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
+        }
+    }
+        
+    [PunRPC]
+    private void Dash(Vector3 mouseDir)
     {
         if (CanDash)
         {
@@ -27,25 +38,25 @@ public class PlayerDash : PlayerHandler
             float dashPower = _brain.MovementSO.DashPower;
             _isDashed = true;
             
-            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower));
+            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower,mouseDir));
         }
     }
-    
-    private IEnumerator DashCoroutine(float dashTime,float power)
+        
+    private IEnumerator DashCoroutine(float dashTime,float power,Vector3 mouseDir)
     {
         float timer = 0f;
         float prevValue = 0f;
         _brain.PlayerMovement.StopImmediately(dashTime);
         
-        
         float radius = _brain.Collider.bounds.size.x * 0.5f;
-        Vector3 inputVec = _brain.PlayerMovement.InputVec;
-        Vector3 destination = transform.position + inputVec * power;
+        Vector3 destination = transform.position + mouseDir * power;
         
         var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
+
+        _brain.ActionData.IsDashing = true;
         
-        
-        //timer 말고 Stop 되어있는 만큼 이동하는 방식으로 바꾸는게 더 나아보임
+        //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
+        //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
         while (timer < dashTime)
         {
             timer += Time.deltaTime;
@@ -54,21 +65,27 @@ public class PlayerDash : PlayerHandler
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
-
-            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
-            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
             
-            if (collider != null)
+            _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
+            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
+            
+            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
+            if (collider != default(Collider2D))
             {
                 if (collider.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.Damaged(transform.position,inputVec);
+                    damageable.Damaged(this.transform,mouseDir,null);
+                    transform.rotation = Quaternion.identity;
+                    _brain.ActionData.IsDashing = false;
+
                     yield break;
                 }
             }
             yield return null;
         }
-
+        
+        //착륙 지점에 충돌체크를 한 번 더 해줌
+        _brain.ActionData.IsDashing = false;
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,layer);
         if (cols.Length > 0)
         {
@@ -76,12 +93,12 @@ public class PlayerDash : PlayerHandler
             {
                 if (col.TryGetComponent(out IDamageable damageable))
                 {
-                    Vector3 direction = inputVec;
-                    damageable.Damaged(transform.position,direction);
+                    damageable.Damaged(this.transform,mouseDir,null);
                 }
             }
         }
     }
+    #endregion
 
     public override void BrainUpdate()
     {

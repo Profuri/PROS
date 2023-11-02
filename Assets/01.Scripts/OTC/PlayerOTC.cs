@@ -2,40 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OTCManager : MonoBehaviour
+public class PlayerOTC : PlayerHandler
 {
-    private static OTCManager _instance;
-
-    public static OTCManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<OTCManager>();
-            }
-            return _instance;
-        }
-    }
-
     [SerializeField] private float _otcPower = 10f;
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
-
-    [Header("Test Parameters")]
-    public GameObject _otcObj;
-    public Vector3 _otcPrevPos;
-    public Vector3 _otcCurPos;
-    public Vector3 _attackDir;
-
-    private void Update()
-    {
-        // TestFuncTion
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            PlayOTC(_otcObj, _otcPrevPos, _otcCurPos, _attackDir);
-        }
-    }
 
     /// <summary>
     /// OTC Dropout Execution Function
@@ -43,24 +14,19 @@ public class OTCManager : MonoBehaviour
     /// <param name="attackDir"> Attack Object Moving Direction </param>
     /// <param name="otcPrevPos"> Otc Object Previous Moving Direction </param>
     /// <param name="otcCurPos"> Otc Object Current Moving Direction </param>
-    public void PlayOTC(GameObject otcObj, Vector3 otcPrevPos, Vector3 otcCurPos, Vector3 attackDir)
+    public void PlayOTC(Vector3 attackDir)
     {
-        Vector3 otcMovingDir = CalcMovingDir(otcPrevPos, otcCurPos);
+        Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);      
         Vector3 otcDir = CalcOTCDir(attackDir.normalized, otcMovingDir);
+
         bool isBounce = false;
 
         // Cases with OTC Direction X or Y of Zero
-
-        Debug.Log(otcDir);
-
         if (otcDir == Vector3.zero)
         {
             otcDir = attackDir;
             isBounce = true;
         }
-
-        Debug.Log(otcDir);
-
         if (otcDir != Vector3.zero)
         {
             if (otcDir.x == 0)
@@ -80,13 +46,12 @@ public class OTCManager : MonoBehaviour
                 otcDir.y++;
         }
         
-
         // ToDo : There should be a value to check if it has fallen below the floor. (Need Bool Parameter)**
         // Protect flying to the floor
         if (otcDir.y < 0)
             otcDir.y *= -1;
 
-        if (otcObj.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        if (transform.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
             if (isBounce)
                 rb.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
@@ -107,8 +72,7 @@ public class OTCManager : MonoBehaviour
         return (curPos - prevPos).normalized;
     }
 
-    private void OnDrawGizmos()
-    {
-        //Test Draw
-    }
+    public override void BrainUpdate(){}
+    public override void BrainFixedUpdate(){}
+
 }

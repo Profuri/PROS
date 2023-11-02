@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using static Define;
+
 [RequireComponent(typeof(Collider2D))]
 public class PlayerBrain : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class PlayerBrain : MonoBehaviour
     
     private Collider2D _collider;
     public Collider2D Collider => _collider;
+    
+    private Rigidbody2D _rigidbody;
+    public Rigidbody2D Rigidbody => _rigidbody;
 
     [SerializeField] private InputSO _inputSO;
     public InputSO InputSO => _inputSO;
@@ -36,6 +40,7 @@ public class PlayerBrain : MonoBehaviour
         _collider = GetComponent<Collider2D>();
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
+        _rigidbody = GetComponent<Rigidbody2D>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();

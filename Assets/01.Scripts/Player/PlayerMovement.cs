@@ -8,7 +8,7 @@ public class PlayerMovement : PlayerHandler
 {
     private Vector3 _inputVec3;
     public Vector3 InputVec => _inputVec3;
-    private Rigidbody2D _rigidbody;
+    
     private Coroutine _stopCoroutine;
 
     public bool IsStopped { get; private set; }
@@ -19,7 +19,6 @@ public class PlayerMovement : PlayerHandler
     {
         base.Init(brain);
 
-        _rigidbody = GetComponent<Rigidbody2D>();
         _brain.InputSO.OnJumpKeyPress += Jump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         StopAllCoroutines();
@@ -29,7 +28,7 @@ public class PlayerMovement : PlayerHandler
     {
         if (!IsGrounded || !_brain.IsMine) return;
         Debug.Log("Jump");
-        _rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
+        _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
     public override void BrainUpdate()
     {
@@ -49,15 +48,30 @@ public class PlayerMovement : PlayerHandler
         Vector2 movement = _inputVec3;
         movement.y = 0f;
 
-        _brain.ActionData.PreviousPos = transform.position;
+        var actionData = _brain.ActionData;
+        actionData.PreviousPos = transform.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
-        
+        actionData.CurrentPos = transform.position;
+        Debug.Log(actionData.PreviousPos +actionData.CurrentPos);
+
         //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        //if(other.)
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
+        {
+            bool isLeft = transform.position.x - other.collider.transform.position.x > 0;
+
+            if (isLeft && _inputVec3.x < 0)
+            {
+                _brain.Rigidbody.gravityScale = 0f;
+            }
+            else if(!isLeft && _inputVec3.x > 0)
+            {
+                _brain.Rigidbody.gravityScale = 0f;
+            }
+        }
     }
 
     #region RotationSystem
@@ -86,12 +100,12 @@ public class PlayerMovement : PlayerHandler
     //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {
-        float originGravityMultiplier = _rigidbody.gravityScale;
-        _rigidbody.gravityScale = 0f;
-        _rigidbody.velocity = Vector3.zero;
+        float originGravityMultiplier = _brain.Rigidbody.gravityScale;
+        _brain.Rigidbody.gravityScale = 0f;
+        _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;
         yield return new WaitForSeconds(stopTime);
-        _rigidbody.gravityScale = originGravityMultiplier;
+        _brain.Rigidbody.gravityScale = originGravityMultiplier;
         IsStopped = false;
         Callback?.Invoke();
     }

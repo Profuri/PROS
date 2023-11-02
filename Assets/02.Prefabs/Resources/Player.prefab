@@ -97,11 +97,11 @@ GameObject:
   - component: {fileID: 4819359668335100309}
   - component: {fileID: 842959739725013937}
   - component: {fileID: 765062226798054693}
+  - component: {fileID: 5095394103232121666}
+  - component: {fileID: 3694932203432191698}
   - component: {fileID: 3326587547981535648}
   - component: {fileID: 948541001048123046}
-  - component: {fileID: 3694932203432191698}
   - component: {fileID: 7816524900850498564}
-  - component: {fileID: 5095394103232121666}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -163,7 +163,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7547ae2e9ccbb4db68c9fbfa61fc67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dashTime: 0.3
+  _dashTime: 0.5
+--- !u!114 &5095394103232121666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676416624467227294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c41221256068f545b3c76d57a47ef57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsDashing: 0
+--- !u!50 &3694932203432191698
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676416624467227294}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 2
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &3326587547981535648
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -232,33 +272,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!50 &3694932203432191698
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2676416624467227294}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 2
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &7816524900850498564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,17 +287,4 @@ MonoBehaviour:
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &5095394103232121666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2676416624467227294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c41221256068f545b3c76d57a47ef57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsDashing: 0
+  m_TeleportIfDistanceGreaterThan: 10

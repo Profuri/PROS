@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Data.Common;
+using Photon.Pun;
 using UnityEngine;
 using static Ease;
-using static Define;
 public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
@@ -13,11 +12,22 @@ public class PlayerDash : PlayerHandler
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
-        _brain.InputSO.OnDashKeyPress += Dash;
+        _brain.InputSO.OnDashKeyPress += DashRPC;
+        _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         StopAllCoroutines();
     }
-
-    private void Dash()
+    #region Dash
+    private void DashRPC()
+    {
+        if (_brain.IsMine)
+        {
+            Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
+            _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
+        }
+    }
+        
+    [PunRPC]
+    private void Dash(Vector3 mouseDir)
     {
         if (CanDash)
         {
@@ -28,23 +38,23 @@ public class PlayerDash : PlayerHandler
             float dashPower = _brain.MovementSO.DashPower;
             _isDashed = true;
             
-            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower));
+            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower,mouseDir));
         }
     }
         
-    private IEnumerator DashCoroutine(float dashTime,float power)
+    private IEnumerator DashCoroutine(float dashTime,float power,Vector3 mouseDir)
     {
         float timer = 0f;
         float prevValue = 0f;
         _brain.PlayerMovement.StopImmediately(dashTime);
-
-        Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
+        
         float radius = _brain.Collider.bounds.size.x * 0.5f;
         Vector3 destination = transform.position + mouseDir * power;
         
         var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
 
         _brain.ActionData.IsDashing = true;
+        
         //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
         //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
         while (timer < dashTime)
@@ -90,6 +100,7 @@ public class PlayerDash : PlayerHandler
             }
         }
     }
+    #endregion
 
     public override void BrainUpdate()
     {

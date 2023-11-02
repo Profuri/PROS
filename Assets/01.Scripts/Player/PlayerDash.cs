@@ -1,16 +1,17 @@
 using System.Collections;
 using Photon.Pun;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static Ease;
 public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
-    [SerializeField] private float _dashTime = 0.15f;
-    
+    [SerializeField] private float _dashTime = 0.3f;
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
     private bool _isDashed = false;
 
-    [SerializeField] private LayerMask _layer;
+    [SerializeField] private LayerMask _damageableLayer;
+    [SerializeField] private LayerMask _obstacleLayer;
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -40,60 +41,68 @@ public class PlayerDash : PlayerHandler
             float dashPower = _brain.MovementSO.DashPower;
             _isDashed = true;
             
-            _dashCoroutine = StartCoroutine(DashCoroutine(_dashTime,dashPower,mouseDir));
+            _dashCoroutine = StartCoroutine(DashCoroutine(dashPower,mouseDir));
         }
     }
         
-    private IEnumerator DashCoroutine(float dashTime,float power,Vector3 mouseDir)
+    private IEnumerator DashCoroutine(float power,Vector3 mouseDir)
     {
-        float timer = 0f;
         float prevValue = 0f;
-        _brain.PlayerMovement.StopImmediately(dashTime);
+        float timer = 0f;
+        
+        Vector3 destination = transform.position + mouseDir * power;
+        float distanceFromDestination = Vector3.Distance(transform.position, destination);
+        
+        float timeToArrive = distanceFromDestination / power * _dashTime; 
+        Debug.Log($"TimeToArrive: {timeToArrive}");
         
         float radius = _brain.Collider.bounds.size.x * 0.5f;
-        Vector3 destination = transform.position + mouseDir * power;
-        
+            
         _brain.ActionData.IsDashing = true;
+
+        float percent = 0f;
         
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir,distanceFromDestination,_obstacleLayer);
+        
+        if (hit.collider != null)
+        {
+            var obstacleCollider = hit.collider;
+            destination = obstacleCollider.transform.position - obstacleCollider.bounds.size;
+            timeToArrive = Vector3.Distance(transform.position, destination) / power * _dashTime; 
+        }
+
         //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
         //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
 
-        while (timer < dashTime)
+        _brain.PlayerMovement.StopImmediately(timeToArrive);
+        while (timer < timeToArrive)
         {
             timer += Time.deltaTime;
-            float percent = Mathf.Lerp(0,1,timer / dashTime);
-            float easingValue = EaseOutExpo(percent);
+
+            percent = timer / timeToArrive;
+            
+            float easingValue = EaseOutCubic(percent);
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
+            
             transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
 
-            
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
+
             
-            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,_layer);
+            //CheckCollisionRealtime 현재 플레이어가 움직이면서 부딪히는 것을 확인하는 코드
+            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,_damageableLayer);
             
             if (collider != default(Collider2D))
             {
-                int curLayer = collider.gameObject.layer;
-                if (curLayer == LayerMask.NameToLayer("DAMAGEABLE"))
+                if (collider.TryGetComponent(out IDamageable damageable))
                 {
-                    if (collider.TryGetComponent(out IDamageable damageable))
-                    {
-                        damageable.Damaged(this.transform,mouseDir,null);
-                        transform.rotation = Quaternion.identity;
-                        _brain.ActionData.IsDashing = false;
-                        _brain.Rigidbody.velocity = Vector3.zero;
-                        yield break;
-                    }
-                }
-                else if (curLayer == LayerMask.NameToLayer("GROUND"))
-                {
+                    damageable.Damaged(this.transform,mouseDir,null);
+                    transform.rotation = Quaternion.identity;
+                    _brain.ActionData.IsDashing = false;
                     _brain.Rigidbody.velocity = Vector3.zero;
-                }
-                else if (curLayer == LayerMask.NameToLayer("WALL"))
-                {
-                    _brain.Rigidbody.velocity = Vector3.zero;
+                    yield break;
                 }
             }
             yield return null;
@@ -102,7 +111,7 @@ public class PlayerDash : PlayerHandler
         //착륙 지점에 충돌체크를 한 번 더 해줌
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,_layer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,_damageableLayer);
         if (cols.Length > 0)
         {
             foreach (var col in cols)

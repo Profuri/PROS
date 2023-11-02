@@ -54,8 +54,6 @@ public class PlayerMovement : PlayerHandler
         actionData.PreviousPos = transform.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
         actionData.CurrentPos = transform.position;
-        Debug.Log(actionData.PreviousPos +actionData.CurrentPos);
-
         //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
 

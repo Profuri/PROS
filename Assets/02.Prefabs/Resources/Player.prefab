@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 3326587547981535648}
   - component: {fileID: 948541001048123046}
   - component: {fileID: 7816524900850498564}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,6 +329,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dashTime: 0.5
+  _layer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5095394103232121666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsDashing: 0
   PreviousPos: {x: 0, y: 0, z: 0}
+  CurrentPos: {x: 0, y: 0, z: 0}
 --- !u!50 &3694932203432191698
 Rigidbody2D:
   serializedVersion: 4
@@ -368,7 +372,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &3326587547981535648
 BoxCollider2D:

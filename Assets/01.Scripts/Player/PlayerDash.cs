@@ -8,7 +8,9 @@ public class PlayerDash : PlayerHandler
     [SerializeField] private float _dashTime = 0.15f;
     
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
-    private bool _isDashed = false; 
+    private bool _isDashed = false;
+
+    [SerializeField] private LayerMask _layer;
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -51,12 +53,11 @@ public class PlayerDash : PlayerHandler
         float radius = _brain.Collider.bounds.size.x * 0.5f;
         Vector3 destination = transform.position + mouseDir * power;
         
-        var layer = 1 << LayerMask.NameToLayer("DAMAGEABLE");
-
         _brain.ActionData.IsDashing = true;
         
         //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
         //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
+
         while (timer < dashTime)
         {
             timer += Time.deltaTime;
@@ -65,28 +66,43 @@ public class PlayerDash : PlayerHandler
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
+            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
+
             
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
-            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
             
-            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,layer);
+            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,_layer);
+            
             if (collider != default(Collider2D))
             {
-                if (collider.TryGetComponent(out IDamageable damageable))
+                int curLayer = collider.gameObject.layer;
+                if (curLayer == LayerMask.NameToLayer("DAMAGEABLE"))
                 {
-                    damageable.Damaged(this.transform,mouseDir,null);
-                    transform.rotation = Quaternion.identity;
-                    _brain.ActionData.IsDashing = false;
-
-                    yield break;
+                    if (collider.TryGetComponent(out IDamageable damageable))
+                    {
+                        damageable.Damaged(this.transform,mouseDir,null);
+                        transform.rotation = Quaternion.identity;
+                        _brain.ActionData.IsDashing = false;
+                        _brain.Rigidbody.velocity = Vector3.zero;
+                        yield break;
+                    }
+                }
+                else if (curLayer == LayerMask.NameToLayer("GROUND"))
+                {
+                    _brain.Rigidbody.velocity = Vector3.zero;
+                }
+                else if (curLayer == LayerMask.NameToLayer("WALL"))
+                {
+                    _brain.Rigidbody.velocity = Vector3.zero;
                 }
             }
             yield return null;
         }
         
         //착륙 지점에 충돌체크를 한 번 더 해줌
+        _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,layer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,_layer);
         if (cols.Length > 0)
         {
             foreach (var col in cols)
@@ -97,6 +113,7 @@ public class PlayerDash : PlayerHandler
                 }
             }
         }
+
     }
     #endregion
 

@@ -10,6 +10,7 @@ public class PlayerMovement : PlayerHandler
     public Vector3 InputVec => _inputVec3;
     
     private Coroutine _stopCoroutine;
+    private float _originGravityScale;
 
     public bool IsStopped { get; private set; }
     public bool IsGrounded => Physics2D.BoxCast(transform.position,
@@ -21,6 +22,7 @@ public class PlayerMovement : PlayerHandler
 
         _brain.InputSO.OnJumpKeyPress += Jump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
+        _originGravityScale = _brain.Rigidbody.gravityScale;
         StopAllCoroutines();
     }
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
@@ -68,19 +70,16 @@ public class PlayerMovement : PlayerHandler
                 Vector2 currentVelocity = _brain.Rigidbody.velocity;
                 currentVelocity.y = 0f;
                 _brain.Rigidbody.velocity = currentVelocity;
+                _brain.Rigidbody.gravityScale = 0f;
                 Debug.Log($"Velocity: {_brain.Rigidbody.velocity}");
             };
             
-            if (isLeft && _inputVec3.x < 0)
-            {
-                stopY();
-            }
-            else if(!isLeft && _inputVec3.x > 0)
-            {
-                stopY();
-            }
+            if (isLeft && _inputVec3.x < 0) stopY();
+            else if(!isLeft && _inputVec3.x > 0) stopY();
+            else _brain.Rigidbody.gravityScale = _originGravityScale;
         }
     }
+    
 
     #region RotationSystem
     public void SetRotationByDirection(Vector3 direction)

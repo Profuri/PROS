@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class PlayerOTC : PlayerHandler
+public class PlayerOTC : PlayerHandler,IDamageable
 {
     [SerializeField] private float _otcPower = 10f;
     [Range(0f, 1f)]
@@ -60,7 +62,7 @@ public class PlayerOTC : PlayerHandler
         if (isBounce)
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         else
-            _brain.Rigidbody.AddForce(otcDir * _otcPower * _bouncePer, ForceMode2D.Impulse);
+            _brain.Rigidbody.AddForce(otcDir * (_otcPower * _bouncePer), ForceMode2D.Impulse);
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)
@@ -76,4 +78,9 @@ public class PlayerOTC : PlayerHandler
     public override void BrainUpdate(){}
     public override void BrainFixedUpdate(){}
 
+    public void Damaged(Transform attackerTrm, Vector3 attackDirection, Action Callback = null)
+    {
+        Debug.Log($"{this.gameObject.name}: Damaged");
+        PlayOTC(attackDirection);
+    }
 }

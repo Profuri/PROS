@@ -20,46 +20,47 @@ public class PlayerOTC : PlayerHandler
         Vector3 otcDir = CalcOTCDir(attackDir.normalized, otcMovingDir);
 
         bool isBounce = false;
-
-        // Cases with OTC Direction X or Y of Zero
-        if (otcDir == Vector3.zero)
+        if (!_brain.ActionData.IsDashing)
         {
             otcDir = attackDir;
-            isBounce = true;
         }
-        if (otcDir != Vector3.zero)
+        else
         {
-            if (otcDir.x == 0)
+            // Cases with OTC Direction X or Y of Zero
+            if (otcDir == Vector3.zero)
             {
-                int random = Random.Range(0, 2);
-                switch (random)
-                {
-                    case 0:
-                        otcDir.x++;
-                        break;
-                    case 1:
-                        otcDir.x--;
-                        break;
-                }
+                otcDir = attackDir;
+                isBounce = true;
             }
-            if (otcDir.y == 0)
-                otcDir.y++;
+            if (otcDir != Vector3.zero)
+            {
+                if (otcDir.x == 0)
+                {
+                    int random = Random.Range(0, 2);
+                    switch (random)
+                    {
+                        case 0:
+                            otcDir.x++;
+                            break;
+                        case 1:
+                            otcDir.x--;
+                            break;
+                    }
+                }
+                if (otcDir.y == 0)
+                    otcDir.y++;
+            }
         }
-        
+
         // ToDo : There should be a value to check if it has fallen below the floor. (Need Bool Parameter)**
         // Protect flying to the floor
         if (otcDir.y < 0)
             otcDir.y *= -1;
 
-        if (transform.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-        {
-            if (isBounce)
-                rb.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
-            else
-                rb.AddForce(otcDir * _otcPower * _bouncePer, ForceMode2D.Impulse);
-        }
+        if (isBounce)
+            _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         else
-            Debug.LogError("Otc Object Rigidbody2D not Found");
+            _brain.Rigidbody.AddForce(otcDir * _otcPower * _bouncePer, ForceMode2D.Impulse);
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

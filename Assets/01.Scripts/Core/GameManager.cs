@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-
+using MonoPlayer;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
             _instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-        //NetworkManager.Instance = GetComponent<NetworkManager>();
         //UIManager.Instance.Init();
         
         NetworkManager.Instance.Init();

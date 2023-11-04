@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class SceneManagement : MonoBehaviour
 {
     private static SceneManagement _instance;
-
     public static SceneManagement Instance
     {
         get
@@ -17,7 +16,6 @@ public class SceneManagement : MonoBehaviour
             {
                 _instance = FindObjectOfType<SceneManagement>();
             }
-
             return _instance;
         }
     }
@@ -34,7 +32,6 @@ public class SceneManagement : MonoBehaviour
         if (scene.name == ESceneName.Game.ToString())
         {
             OnGameSceneLoaded?.Invoke();
-            //PhotonNetwork.Instantiate();
         }
     }
     

@@ -27,6 +27,9 @@ public class PlayerBrain : MonoBehaviour
     private PlayerMovement _playerMovement;
     public PlayerMovement PlayerMovement => _playerMovement;
 
+    private PlayerOTC _playerOTC;
+    public PlayerOTC PlayerOTC => _playerOTC;
+
     private PlayerActionData _playerActionData;
     public PlayerActionData ActionData => _playerActionData;
 

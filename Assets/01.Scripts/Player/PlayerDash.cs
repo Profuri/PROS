@@ -12,7 +12,6 @@ public class PlayerDash : PlayerHandler
     [SerializeField] private LayerMask _damageableLayer;
     [SerializeField] private LayerMask _obstacleLayer;
 
-    private IDamageable _currentDamageable;
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -20,6 +19,7 @@ public class PlayerDash : PlayerHandler
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         StopAllCoroutines();
     }
+    
     #region Dash
     private void DashRPC()
     {
@@ -103,8 +103,7 @@ public class PlayerDash : PlayerHandler
                 {
                     if (collider.TryGetComponent(out IDamageable damageable))
                     {
-                        _currentDamageable = damageable;
-                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
+                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,damageable,mouseDir);
                         yield break;
                     }
                 }
@@ -123,8 +122,10 @@ public class PlayerDash : PlayerHandler
             {
                 if (col.TryGetComponent(out IDamageable damageable))
                 {
-                    _currentDamageable = damageable;
-                    _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
+                    if (_brain.PhotonView.IsMine)
+                    {
+                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
+                    }
                 }
             }
         }
@@ -134,12 +135,11 @@ public class PlayerDash : PlayerHandler
     [PunRPC]
     private void OTCDamageable(Vector3 mouseDir)
     {
-        _currentDamageable?.Damaged(this.transform,mouseDir,null);
+        //damageable?.Damaged(this.transform,mouseDir,null);
         
         transform.rotation = Quaternion.identity;
         _brain.ActionData.IsDashing = false;
         _brain.Rigidbody.velocity = Vector3.zero;
-        _currentDamageable = null;
     }
     public override void BrainUpdate()
     {

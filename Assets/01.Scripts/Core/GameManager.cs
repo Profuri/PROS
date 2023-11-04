@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-
     public static GameManager Instance
     {
         get
@@ -27,9 +26,10 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this.gameObject);
         //NetworkManager.Instance = GetComponent<NetworkManager>();
-        NetworkManager.Instance.Init();
         //UIManager.Instance.Init();
+        
+        NetworkManager.Instance.Init();
         SceneManagement.Instance.Init(this.transform);
-        SceneManagement.Instance.OnGameSceneLoaded += () => PhotonNetwork.Instantiate("Player",transform.position,Quaternion.identity);
+        PlayerManager.Instance.Init();
     }
 }

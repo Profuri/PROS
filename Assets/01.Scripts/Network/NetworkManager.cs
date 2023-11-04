@@ -34,6 +34,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         
     
     private PhotonView _photonView;
+    public PhotonView PhotonView => _photonView;
     private List<RoomInfo> _roomList;
 
     public event Action OnConnectedToMasterEvent;
@@ -69,6 +70,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom() => OnLeftRoomEvent?.Invoke();
     public override void OnMasterClientSwitched(Player newMasterClient){ }
     public override void OnCreateRoomFailed(short returnCode, string message){ }
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         OnPlayerEnteredRoomEvent?.Invoke(newPlayer);

@@ -27,7 +27,6 @@ public class SceneManagement : MonoBehaviour
     public void Init(Transform agent)
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WalkBack
+  m_Name: WalkLeft
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -60,8 +60,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: targetRotation
-    path: RightLegTop
+    attribute: TargetRotation
+    path: LeftLeg/LeftLegTop
     classID: 114
     script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
     flags: 0
@@ -108,8 +108,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: targetRotation
-    path: LeftLegTop
+    attribute: TargetRotation
+    path: RightLeg/RightLegTop
     classID: 114
     script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
     flags: 0
@@ -122,8 +122,8 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 333456448
-      attribute: 1865065137
+      path: 1532482663
+      attribute: 2723076713
       script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
       typeID: 114
       customType: 0
@@ -131,8 +131,8 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 691497759
-      attribute: 1865065137
+      path: 3684694551
+      attribute: 2723076713
       script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
       typeID: 114
       customType: 0
@@ -204,8 +204,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: targetRotation
-    path: RightLegTop
+    attribute: TargetRotation
+    path: LeftLeg/LeftLegTop
     classID: 114
     script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
     flags: 0
@@ -252,8 +252,8 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: targetRotation
-    path: LeftLegTop
+    attribute: TargetRotation
+    path: RightLeg/RightLegTop
     classID: 114
     script: {fileID: 11500000, guid: b1bd051733cb60643952f18575634301, type: 3}
     flags: 0

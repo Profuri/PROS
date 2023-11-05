@@ -171,7 +171,7 @@
     color: rgb(255, 242, 0);
 }
 
-#btn-start.off {
+.btn.off {
     background-color: rgb(58, 108, 149);
     color: rgb(108, 108, 108);
 }

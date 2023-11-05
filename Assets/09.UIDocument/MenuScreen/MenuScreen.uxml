@@ -6,9 +6,9 @@
                 <ui:VisualElement name="box">
                     <ui:VisualElement name="join-row" style="flex-direction: row; width: 80%; height: 75px; margin-bottom: 10px;">
                         <ui:TextField picking-mode="Ignore" value="write join code" name="room-name-field" style="font-size: 32px; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.38); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; flex-basis: 350px;" />
-                        <ui:Button text="Join" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join-room" class="btn" style="flex-grow: 1;" />
+                        <ui:Button text="Join" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join-room" class="btn off" style="flex-grow: 1;" />
                     </ui:VisualElement>
-                    <ui:Button text="Create Room" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create-room" class="btn" style="width: 80%;" />
+                    <ui:Button text="Create Room" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create-room" class="btn off" style="width: 80%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="room-panel" class="panel">

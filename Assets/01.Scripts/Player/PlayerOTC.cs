@@ -85,7 +85,7 @@ public class PlayerOTC : PlayerHandler,IDamageable
     public override void BrainUpdate(){}
     public override void BrainFixedUpdate(){}
 
-    public void Damaged(Transform attackerTrm, Vector3 attackDirection, Action Callback = null)
+    public void Damaged(Vector3 attackDirection, Action Callback = null)
     {
         Debug.Log($"{this.gameObject.name}: Damaged");
         _brain.PhotonView.RPC("PlayOTC",RpcTarget.All,attackDirection);

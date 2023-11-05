@@ -44,6 +44,7 @@ public class PlayerBrain : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
         _rigidbody = GetComponent<Rigidbody2D>();
+        _playerOTC = GetComponent<PlayerOTC>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();

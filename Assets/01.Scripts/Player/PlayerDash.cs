@@ -1,5 +1,7 @@
 using System.Collections;
+using MonoPlayer;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using static Ease;
 public class PlayerDash : PlayerHandler
@@ -120,11 +122,11 @@ public class PlayerDash : PlayerHandler
         {
             foreach (var col in cols)
             {
-                if (col.TryGetComponent(out IDamageable damageable))
+                if (col.TryGetComponent(out PlayerBrain brain))
                 {
                     if (_brain.PhotonView.IsMine)
                     {
-                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,mouseDir);
+                        _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,brain.PhotonView.Owner,mouseDir);
                     }
                 }
             }
@@ -133,11 +135,12 @@ public class PlayerDash : PlayerHandler
     #endregion
 
     [PunRPC]
-    private void OTCDamageable(Vector3 mouseDir)
+    private void OTCPlayer(Player player,Vector3 attackDir)
     {
-        //damageable?.Damaged(this.transform,mouseDir,null);
+        PlayerManager.Instance.OTCPlayer(player,attackDir);
         
         transform.rotation = Quaternion.identity;
+        
         _brain.ActionData.IsDashing = false;
         _brain.Rigidbody.velocity = Vector3.zero;
     }

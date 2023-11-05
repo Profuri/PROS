@@ -44,6 +44,7 @@ namespace MonoPlayer
             SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
             GameStartEvent -= ConvertToDictionary;
         }
+        #region PlayerDictionarySetting
         private void OnGameSceneLoad()
         {
             if (NetworkManager.Instance.IsMasterClient)
@@ -105,7 +106,14 @@ namespace MonoPlayer
                 Debug.Log($"KVP: {a}");
             }
         }
-    }
+        #endregion
+        #region OTCSystem
 
+        public void OTCPlayer(Player player,Vector3 attackDir)
+        {
+            BrainDictionary[player].PlayerOTC.Damaged(attackDir);
+        }
+        #endregion
+    }
 }
 

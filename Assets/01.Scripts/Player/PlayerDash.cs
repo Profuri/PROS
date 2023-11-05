@@ -103,9 +103,10 @@ public class PlayerDash : PlayerHandler
                 //찾은 콜라이더가 내 콜라이더가 아니여야 함
                 if (collider.Equals(_brain.Collider) == false)
                 {
-                    if (collider.TryGetComponent(out IDamageable damageable))
+                    if (collider.TryGetComponent(out PlayerBrain brain))
                     {
-                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,damageable,mouseDir);
+                        _brain.PlayerMovement.StopImmediately(0f);
+                        _brain.PhotonView.RPC("OTCDamageable",RpcTarget.All,brain,mouseDir);
                         yield break;
                     }
                 }

@@ -31,14 +31,14 @@ public class TestPlayerController : MonoBehaviour
             {
                 float x = Input.GetAxisRaw("Horizontal");
                 transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
-                if(_isJumping)
+                if(!_isJumping)
                     _animator.Play("WalkRight");
             }
             else
             {
                 float x = Input.GetAxisRaw("Horizontal");
                 transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
-                if (_isJumping)
+                if (!_isJumping)
                     _animator.Play("WalkLeft");
             }
         }
@@ -53,6 +53,7 @@ public class TestPlayerController : MonoBehaviour
             _isJumping = false;
             if(Input.GetKeyDown(KeyCode.Space))
             {
+                _jumpingTime = 0f;
                 _clampInput = true;
                 _animator.Play("Jump");
                 _isOnGround = false;

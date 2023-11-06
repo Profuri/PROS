@@ -118,10 +118,10 @@ public class PlayerMovement : PlayerHandler
         }
         _stopCoroutine = StartCoroutine(StopCoroutine(stopTime, Callback));
     }
-    //ì½”ë£¨í‹´ì´ ë©ˆì¶°ìˆëŠ”ì§€ bool ê°’ìœ¼ë¡œ í™•ì¸í•  ìˆ˜ ìˆê²Œ í•´ì•¼í•¨
+    //ÄÚ·çÆ¾ÀÌ ¸ØÃçÀÖ´ÂÁö bool °ªÀ¸·Î È®ÀÎÇÒ ¼ö ÀÖ°Ô ÇØ¾ßÇÔ
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
-    {
-        //ì—¬ê¸°ì„œ 0ì¸ ìƒíƒœë¡œ ê°€ì ¸ì™€ë²„ë¦¬ê²Œ ë˜ë©´ ê·¸ëŒ€ë¡œ 0ì—ì„œ 0ìœ¼ë¡œ ë°”ê¿”ì£¼ëŠ” ê¼´ì´ ë˜ë²„ë¦¼
+    {  
+        //¿©±â¼­ 0ÀÎ »óÅÂ·Î °¡Á®¿Í¹ö¸®°Ô µÇ¸é ±×´ë·Î 0¿¡¼­ 0À¸·Î ¹Ù²ãÁÖ´Â ²ÃÀÌ µÇ¹ö¸²
         _brain.Rigidbody.gravityScale = 0f;
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;

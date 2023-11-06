@@ -30,6 +30,9 @@ public class PlayerBrain : MonoBehaviour
     private PlayerOTC _playerOTC;
     public PlayerOTC PlayerOTC => _playerOTC;
 
+    private PlayerDefend _playerDefend;
+    public PlayerDefend PlayerDefend => _playerDefend;
+
     private PlayerActionData _playerActionData;
     public PlayerActionData ActionData => _playerActionData;
 
@@ -45,6 +48,7 @@ public class PlayerBrain : MonoBehaviour
         _playerActionData = GetComponent<PlayerActionData>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerOTC = GetComponent<PlayerOTC>();
+        _playerDefend = GetComponent<PlayerDefend>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();

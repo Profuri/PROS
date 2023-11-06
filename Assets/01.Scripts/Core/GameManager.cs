@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-
+    
+    [SerializeField]
+    private PoolingListSO _poolingListSO;
     private void Awake()
     {
         if (_instance == null)
@@ -30,5 +32,9 @@ public class GameManager : MonoBehaviour
         NetworkManager.Instance.Init();
         SceneManagement.Instance.Init(this.transform);
         PlayerManager.Instance.Init();
+        ParticleManager.Instance.Init();
+        PoolManager.Instance = new PoolManager(this.transform);
+
+        _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
     }
 }

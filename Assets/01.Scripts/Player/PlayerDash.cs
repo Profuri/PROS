@@ -106,6 +106,7 @@ public class PlayerDash : PlayerHandler
                     //_brain.PlayerMovement.StopAllCoroutines();
                     _brain.PlayerMovement.StopImmediately(0f);
                     _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
+                    _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.transform.position,(int)EPARTICLE_TYPE.EXPLOSION);
                     yield break;
                 }
             }
@@ -126,6 +127,7 @@ public class PlayerDash : PlayerHandler
                     {
                         var player = brain.PhotonView.Owner;
                         _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
+                        _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.transform.position,(int)EPARTICLE_TYPE.EXPLOSION);
                     }
                 }
             }
@@ -139,6 +141,15 @@ public class PlayerDash : PlayerHandler
     {
         PlayerManager.Instance.OTCPlayer(player,attackDir);
         transform.rotation = Quaternion.identity;
+    }
+
+    [PunRPC]
+    private void SpawnParticle(Vector3 pos,int particleType)
+    {
+        var particle = ParticleManager.Instance.GetParticle((EPARTICLE_TYPE)particleType);
+
+        ParticleAgent spawnParticle = PoolManager.Instance.Pop(particle.gameObject.name) as ParticleAgent;
+        spawnParticle.PlayerParticle(pos);
     }
     public override void BrainUpdate()
     {

@@ -16,24 +16,30 @@ public class TestPlayerController : MonoBehaviour
 
     //[SerializeField] float _stepwait = 0.3f; 
     private bool _isOnGround = false;   
+    private bool _clampInput = false;
     private bool _isJumping = false;
+
+    private float _jumpingTime = float.MaxValue;
 
     private void Update()
     {
-        if (_isJumping) return;
+        if(_isJumping) _jumpingTime += Time.deltaTime;
+        if (_clampInput) return;
         if (Input.GetAxisRaw("Horizontal") != 0)
         {
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
                 float x = Input.GetAxisRaw("Horizontal");
                 transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
-                _animator.Play("WalkRight");
+                if(_isJumping)
+                    _animator.Play("WalkRight");
             }
             else
             {
                 float x = Input.GetAxisRaw("Horizontal");
                 transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
-                _animator.Play("WalkLeft");
+                if (_isJumping)
+                    _animator.Play("WalkLeft");
             }
         }
         else
@@ -42,18 +48,21 @@ public class TestPlayerController : MonoBehaviour
         }
 
         _isOnGround = Physics2D.OverlapCircle(_playerPos.position, positionRadius, _ground);
-        if (_isOnGround == true && Input.GetKeyDown(KeyCode.Space))
+        if (_isOnGround && _jumpingTime > 0.2f)
         {
-            _isJumping = true;
-            _animator.Play("Jump");
-            _isOnGround = false;
+            _isJumping = false;
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                _clampInput = true;
+                _animator.Play("Jump");
+                _isOnGround = false;
+            }
         }
-
-
     }
     public void Jump()
     {
-        _isJumping = false;
+        _clampInput = false;
+        _isJumping = true;
         _rb.AddForce(Vector2.up * _jumpForce);
         Debug.Log("Jump");
     }

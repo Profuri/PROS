@@ -66,7 +66,8 @@ public class PlayerMovement : PlayerHandler
             
             if (isLeft && _inputVec3.x < 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
             else if (!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem", RpcTarget.All);
-            else _brain.Rigidbody.gravityScale = _originGravityScale;
+            else _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
+
         }
     }
 
@@ -74,7 +75,7 @@ public class PlayerMovement : PlayerHandler
     {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
         {
-            _brain.Rigidbody.gravityScale = _originGravityScale;
+            _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
         }
     }
 
@@ -85,6 +86,12 @@ public class PlayerMovement : PlayerHandler
         currentVelocity.y = 0f;
         _brain.Rigidbody.velocity = currentVelocity;
         _brain.Rigidbody.gravityScale = 0f;
+    }
+
+    [PunRPC]
+    private void ResumeGravity()
+    {
+        _brain.Rigidbody.gravityScale = _originGravityScale;
     }
     
 

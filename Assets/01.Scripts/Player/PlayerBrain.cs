@@ -77,4 +77,8 @@ public class PlayerBrain : MonoBehaviour
         worldMousePos.z = 0f;
         _mousePos = worldMousePos;
     }
+
+    public void SetName(string nickName) => _photonView.RPC("SetNameRPC",RpcTarget.All,nickName);
+    [PunRPC]
+    private void SetNameRPC(string nickName) => this.gameObject.name = nickName;
 }

@@ -65,8 +65,16 @@ public class PlayerMovement : PlayerHandler
             bool isLeft = transform.position.x - other.collider.transform.position.x > 0;
             
             if (isLeft && _inputVec3.x < 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
-            else if(!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
+            else if (!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem", RpcTarget.All);
             else _brain.Rigidbody.gravityScale = _originGravityScale;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
+        {
+            _brain.Rigidbody.gravityScale = _originGravityScale;
         }
     }
 
@@ -106,12 +114,12 @@ public class PlayerMovement : PlayerHandler
     //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {
-        float originGravityMultiplier = _brain.Rigidbody.gravityScale;
+        //여기서 0인 상태로 가져와버리게 되면 그대로 0에서 0으로 바꿔주는 꼴이 되버림
         _brain.Rigidbody.gravityScale = 0f;
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;
         yield return new WaitForSeconds(stopTime);
-        _brain.Rigidbody.gravityScale = originGravityMultiplier;
+        _brain.Rigidbody.gravityScale = _originGravityScale;
         IsStopped = false;
         Callback?.Invoke();
     }

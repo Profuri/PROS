@@ -38,8 +38,9 @@ namespace MonoPlayer
             _brainDictionary = new Dictionary<Player, PlayerBrain>();
         }
     
-        private void OnDisable()
+        public override void OnDisable()
         {
+            base.OnDisable();
             SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
             GameStartEvent -= ConvertToDictionary;
         }
@@ -72,19 +73,19 @@ namespace MonoPlayer
         }
         
 
-        //Add된 플레이어를 바탕으로 현재 게임에있는 플레이어 브레인을 
-        //각각에 맞는 플레이어와 로컬플레이어랑 비교해서
-        //dictionary에 넣어주는 작업을 해 줌
+        //Add???�레?�어�?바탕?�로 ?�재 게임?�있???�레?�어 브레?�을.
+        //각각??맞는 ?�레?�어?� 로컬?�레?�어??비교?�서.
+        //dictionary???�어주는 ?�업????�?.
         private void ConvertToDictionary()
         {
-            //애초에 brain을 제대로 안 찾아와 줌
+            //?�초??brain???��?�???찾아?� �?
             var brainList = FindObjectsOfType<PlayerBrain>();
             
             foreach (var player in _playerDictionary.Keys)
             {
                 foreach (var brain in brainList)
                 {
-                    //혹시나 해서 키 같은거 있으면 막아줌
+                    //?�시???�서 ??같�?�??�으�?막아�?.
                     if (_brainDictionary.ContainsKey(player)) return;
 
                     

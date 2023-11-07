@@ -118,10 +118,10 @@ public class PlayerMovement : PlayerHandler
         }
         _stopCoroutine = StartCoroutine(StopCoroutine(stopTime, Callback));
     }
-    //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함
+    //코루틴이 멈춰있는지 bool 값으로 확인할 수 있게 해야함.
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {  
-        //여기서 0인 상태로 가져와버리게 되면 그대로 0에서 0으로 바꿔주는 꼴이 되버림
+        //여기서 0인 상태로 가져와버리게 되면 그대로 0에서 0으로 바꿔주는 꼴이 되버림.
         _brain.Rigidbody.gravityScale = 0f;
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;

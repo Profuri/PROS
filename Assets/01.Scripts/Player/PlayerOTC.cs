@@ -58,7 +58,7 @@ public class PlayerOTC : PlayerHandler,IDamageable
             }
         }
 
-        // ToDo : There should be a value to check if it has fallen below the floor. (Need Bool Parameter)**
+        // ToDo : There should be a value to check if it has fallen below the floor. (Need Bool Parameter).
         // Protect flying to the floor
         if (otcDir.y < 0)
             otcDir.y *= -1;

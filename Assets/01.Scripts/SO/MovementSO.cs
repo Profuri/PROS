@@ -8,7 +8,7 @@ public class MovementSO : ScriptableObject
     public float Speed;
     public float JumpPower;
     
-    [Tooltip("1ì„ ê¸°ì¤€ìœ¼ë¡œ ê³±í•´ì§ˆ ê°’, ex) 2 => Vector2(2,2)")]
+    [Tooltip("1À» ±âÁØÀ¸·Î °öÇØÁú °ª, ex) 2 => Vector2(2,2)")]
     public float DashPower;
     
 }

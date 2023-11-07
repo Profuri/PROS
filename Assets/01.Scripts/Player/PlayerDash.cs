@@ -72,9 +72,9 @@ public class PlayerDash : PlayerHandler
             timeToArrive = Vector3.Distance(transform.position, destination) / power * _dashTime;
         }
 
-        //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
-        //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
-        //제대로된 PLAYER의 Brain과 Player를 찾아옴
+        //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌.
+        //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌.
+        //제대로된 PLAYER의 Brain과 Player를 찾아옴.
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         while (timer < timeToArrive)
         {
@@ -93,11 +93,11 @@ public class PlayerDash : PlayerHandler
 
 
             //CheckCollisionRealtime
-            //현재 플레이어가 움직이면서 부딪히는 것을 확인하는 코드
+            //현재 플레이어가 움직이면서 부딪히는 것을 확인하는 코드.
             Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, _damageableLayer);
 
 
-            //찾은 콜라이더가 내 콜라이더가 아니여야 함
+            //찾은 콜라이더가 내 콜라이더가 아니여야 함.
             if (collider != default(Collider2D) && collider.Equals(_brain.Collider) == false)
             {
                 if (collider.TryGetComponent(out PlayerBrain brain))
@@ -106,10 +106,10 @@ public class PlayerDash : PlayerHandler
                     //_brain.PlayerMovement.StopAllCoroutines();
                     _brain.PlayerMovement.StopImmediately(0f);
 
-                    _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                    //if (!_brain.PlayerDefend.IsDefend)
-                    //else
-                    //    _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                    if (!brain.PlayerDefend.IsDefend)
+                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
+                    else
+                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
 
                     yield break;
                 }
@@ -117,7 +117,7 @@ public class PlayerDash : PlayerHandler
             yield return null;
         }
 
-        //착륙 지점에 충돌체크를 한 번 더 해줌
+        //착륙 지점에 충돌체크를 한 번 더 해줌.
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
         Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius * 1.3f, _damageableLayer);
@@ -131,10 +131,10 @@ public class PlayerDash : PlayerHandler
                     {
                         var player = brain.PhotonView.Owner;
 
-                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                        //if (!_brain.PlayerDefend.IsDefend)
-                        //else
-                        //    _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                        if (!brain.PlayerDefend.IsDefend)
+                            _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
+                        else
+                            _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
                     }
                 }
             }

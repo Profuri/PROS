@@ -51,8 +51,8 @@ public class PlayerDash : PlayerHandler
         float prevValue = 0f;
         float timer = 0f;
         
-        Vector3 destination = transform.position + mouseDir * power;
-        float distanceFromDestination = Vector3.Distance(transform.position, destination);
+        Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
+        float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
         
         float timeToArrive = distanceFromDestination / power * _dashTime; 
         
@@ -63,13 +63,13 @@ public class PlayerDash : PlayerHandler
 
         float percent = 0f;
         
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir,distanceFromDestination,_obstacleLayer);
+        RaycastHit2D hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination,_obstacleLayer);
         
         if (hit.collider != null)
         {
             var obstacleCollider = hit.collider;
             destination = hit.point - (Vector2)mouseDir * (_brain.Collider.bounds.size / 2);
-            timeToArrive = Vector3.Distance(transform.position, destination) / power * _dashTime; 
+            timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
         }
 
         //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
@@ -87,14 +87,14 @@ public class PlayerDash : PlayerHandler
             
             prevValue = easingValue;
             
-            transform.position = Vector3.Lerp(transform.position,destination,stepEasingValue);
+            _brain.AgentTrm.position = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
 
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
 
             
             //CheckCollisionRealtime
             //현재 플레이어가 움직이면서 부딪히는 것을 확인하는 코드
-            Collider2D collider = Physics2D.OverlapCircle(transform.position,radius,_damageableLayer);
+            Collider2D collider = Physics2D.OverlapCircle(_brain.AgentTrm.position,radius,_damageableLayer);
             
             
             //찾은 콜라이더가 내 콜라이더가 아니여야 함
@@ -106,7 +106,7 @@ public class PlayerDash : PlayerHandler
                     //_brain.PlayerMovement.StopAllCoroutines();
                     _brain.PlayerMovement.StopImmediately(0f);
                     _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
-                    _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.transform.position,(int)EPARTICLE_TYPE.EXPLOSION);
+                    _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
                     yield break;
                 }
             }
@@ -116,7 +116,7 @@ public class PlayerDash : PlayerHandler
         //착륙 지점에 충돌체크를 한 번 더 해줌
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position,radius * 1.3f,_damageableLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(_brain.AgentTrm.position,radius * 1.3f,_damageableLayer);
         if (cols.Length > 0)
         {
             foreach (var col in cols)
@@ -127,7 +127,7 @@ public class PlayerDash : PlayerHandler
                     {
                         var player = brain.PhotonView.Owner;
                         _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
-                        _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.transform.position,(int)EPARTICLE_TYPE.EXPLOSION);
+                        _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
                     }
                 }
             }

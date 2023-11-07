@@ -30,14 +30,14 @@ public class TestPlayerController : MonoBehaviour
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
                 float x = Input.GetAxisRaw("Horizontal");
-                transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
+                //transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
                 if(!_isJumping)
                     _animator.Play("WalkRight");
             }
             else
             {
                 float x = Input.GetAxisRaw("Horizontal");
-                transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
+               // transform.position += new Vector3(x, 0) * _playerSpeed * Time.deltaTime;
                 if (!_isJumping)
                     _animator.Play("WalkLeft");
             }
@@ -46,18 +46,20 @@ public class TestPlayerController : MonoBehaviour
         {
             _animator.Play("Idle");
         }
-
+                
+        
         _isOnGround = Physics2D.OverlapCircle(_playerPos.position, positionRadius, _ground);
+        
         if (_isOnGround && _jumpingTime > 0.2f)
         {
             _isJumping = false;
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                _jumpingTime = 0f;
-                _clampInput = true;
-                _animator.Play("Jump");
-                _isOnGround = false;
-            }
+            //if(Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    _jumpingTime = 0f;
+            //    _clampInput = true;
+            //    _animator.Play("Jump");
+            //    _isOnGround = false;
+            //}
         }
     }
     public void Jump()

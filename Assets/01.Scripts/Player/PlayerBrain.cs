@@ -4,13 +4,13 @@ using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using static Define;
-
-[RequireComponent(typeof(Collider2D))]
 public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
+    [SerializeField] private Transform _agentTrm;
+    public Transform AgentTrm => _agentTrm;
     
-    private Collider2D _collider;
+    [SerializeField] private Collider2D _collider;
     public Collider2D Collider => _collider;
     
     private Rigidbody2D _rigidbody;
@@ -38,9 +38,9 @@ public class PlayerBrain : MonoBehaviour
     private void Awake()
     {
         _handlers = new List<PlayerHandler>();
-        GetComponents(_handlers);
+        GetComponentsInChildren(_handlers);
         
-        _collider = GetComponent<Collider2D>();
+        //_collider = GetComponent<Collider2D>();
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
         _rigidbody = GetComponent<Rigidbody2D>();

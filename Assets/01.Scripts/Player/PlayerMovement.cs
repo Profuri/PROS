@@ -14,9 +14,9 @@ public class PlayerMovement : PlayerHandler
     private float _originGravityScale;
 
     public bool IsStopped { get; private set; }
-    public bool IsGrounded => Physics2D.BoxCast(transform.position,
+    public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
-                                                                                            
+
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -52,12 +52,12 @@ public class PlayerMovement : PlayerHandler
         movement.y = 0f;
 
         var actionData = _brain.ActionData;
-        actionData.PreviousPos = transform.position;
+        actionData.PreviousPos = _brain.AgentTrm.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
-        actionData.CurrentPos = transform.position;
+        actionData.CurrentPos = _brain.AgentTrm.position;
         //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
-
+    
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))

@@ -107,9 +107,15 @@ public class PlayerDash : PlayerHandler
                     _brain.PlayerMovement.StopImmediately(0f);
 
                     if (!brain.PlayerDefend.IsDefend)
+                    {
                         _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
+                        Debug.Log("Before Collision Not Defend");
+                    }
                     else
+                    {
                         _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                        Debug.Log("Before Collision isDefend");
+                    }
 
                     yield break;
                 }
@@ -132,9 +138,15 @@ public class PlayerDash : PlayerHandler
                         var player = brain.PhotonView.Owner;
 
                         if (!brain.PlayerDefend.IsDefend)
+                        {
                             _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
+                            Debug.Log("after Collision Not Defend");
+                        }
                         else
+                        {
                             _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                            Debug.Log("after Collision is Defend");
+                        }
                     }
                 }
             }

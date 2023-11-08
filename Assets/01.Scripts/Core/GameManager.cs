@@ -100,6 +100,8 @@ public class GameManager : MonoBehaviour
         _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
 
         PlayerManager.Instance.OnAllPlayerLoad += GameStart;
+        
+        ScoreManager.Instance.Init();
     }
     
     

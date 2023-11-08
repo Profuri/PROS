@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UIDocument/GameScene/GameScreen.uss?fileID=7433441132597879392&amp;guid=01894e7d5c55e4d6aa09cc228e516b46&amp;type=3#GameScreen" />
+    <Style src="project://database/Assets/09.UIDocument/GameScene/UserScoreBoard.uss?fileID=7433441132597879392&amp;guid=529c0b4e0fc7e4c37af93353b1ae3434&amp;type=3#UserScoreBoard" />
+    <ui:VisualElement name="container" style="flex-grow: 1;">
+        <ui:VisualElement name="scoreboard-container" class="scoreboard-container" />
+    </ui:VisualElement>
+</ui:UXML>

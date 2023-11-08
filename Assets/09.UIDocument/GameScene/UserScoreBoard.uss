@@ -1,0 +1,30 @@
+.user-scoreboard {
+    width: 100%;
+    height: 25%;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.user-scoreboard #score {
+    width: 30px;
+    height: 30px;
+    background-image: url('project://database/Assets/07.Animation/SamplePlayer/SamplePlayer.psb?fileID=3563796178151119671&guid=9602b8be6ec71ae4bb936a01f0490a60&type=3#Head');
+    margin-left: 15px;
+}
+
+.user-scoreboard.other #score {
+    -unity-background-image-tint-color: rgb(255, 71, 71);
+}
+
+.user-scoreboard.local #score {
+    -unity-background-image-tint-color: rgb(37, 101, 255);
+}
+
+.user-scoreboard.other #score.off {
+    -unity-background-image-tint-color: rgba(195, 52, 52, 0.59);
+}
+
+.user-scoreboard.local #score.off {
+    -unity-background-image-tint-color: rgba(26, 64, 156, 0.59);
+}

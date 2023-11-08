@@ -9,8 +9,9 @@ public class InvisiblePlatform : BasePlatform
     [SerializeField] private bool _isVisible = true;
     public bool IsVisible => _isVisible;
 
-    [SerializeField] private float _duration;
+    [SerializeField] private float _duration = 0.3f;
     [SerializeField] private float _term = 3f;
+    [SerializeField] private float _delay = 0f; 
 
     protected override void Awake()
     {
@@ -25,6 +26,7 @@ public class InvisiblePlatform : BasePlatform
 
     private IEnumerator ChangeVisibleCoroutine()
     {
+        yield return new WaitForSeconds(_delay);
         while(true)
         {
             yield return new WaitForSeconds(_term);

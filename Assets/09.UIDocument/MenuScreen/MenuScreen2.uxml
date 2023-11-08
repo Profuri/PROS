@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UIDocument/MenuScreen/MenuScreen2.uss?fileID=7433441132597879392&amp;guid=84a7a8b1e288aaa4d89f38441b2acb23&amp;type=3#MenuScreen2" />
+    <ui:VisualElement name="container" class="container">
+        <ui:VisualElement name="screen-container" class="screen-container">
+            <ui:VisualElement name="content" class="content" style="left: 0;">
+                <ui:VisualElement name="page-one" class="page" style="flex-grow: 1; background-color: rgb(250, 105, 105);" />
+                <ui:VisualElement name="page-two" class="page" style="flex-grow: 1; background-color: rgb(131, 242, 255);" />
+                <ui:VisualElement name="page-three" class="page" style="flex-grow: 1; background-color: rgb(219, 124, 255);" />
+            </ui:VisualElement>
+            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-left" class="btn font" style="position: absolute; top: 50%; left: 10px; translate: 0 -50%; -unity-font-style: bold; font-size: 60px; background-color: rgba(0, 0, 0, 0.4); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0);" />
+            <ui:Button text="&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-right" class="btn font" style="position: absolute; top: 50%; translate: 0 -50%; -unity-font-style: bold; font-size: 60px; background-color: rgba(0, 0, 0, 0.4); border-left-color: rgba(255, 255, 255, 0); border-right-color: rgba(255, 255, 255, 0); border-top-color: rgba(255, 255, 255, 0); border-bottom-color: rgba(255, 255, 255, 0); right: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="popup-panel" class="popup-panel off">
+            <ui:VisualElement name="inner-input" style="width: 30%; background-color: rgb(255, 255, 255); padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(10, 0, 144); border-right-color: rgb(10, 0, 144); border-top-color: rgb(10, 0, 144); border-bottom-color: rgb(10, 0, 144);">
+                <ui:TextField picking-mode="Ignore" value="이름을 입력하세요." name="name-field" class="font name-field" />
+                <ui:Button text="확인" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ok" class="font btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

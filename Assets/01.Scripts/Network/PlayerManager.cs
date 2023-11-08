@@ -23,26 +23,44 @@ namespace MonoPlayer
                 return _instance;
             }
         }
-    
-        private Dictionary<Player,bool> _playerDictionary;
-        
+
+        private List<Player> _loadedPlayerList;
+        public List<Player> LoadedPlayerList => _loadedPlayerList;
         private Dictionary<Player, PlayerBrain> _brainDictionary;
         public Dictionary<Player, PlayerBrain> BrainDictionary => _brainDictionary;
-        public event Action GameStartEvent;
+        private Dictionary<string, Player> _userIDDictionary;
+        public Dictionary<string, Player> UserIDDictionary;
+        public event Action OnAllPlayerLoad;
+        #region Init
         public void Init()
         {
             SceneManagement.Instance.OnGameSceneLoaded += OnGameSceneLoad;
-            GameStartEvent += ConvertToDictionary;
+            NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
+            
+            OnAllPlayerLoad += ConvertToDictionary;
 
-            _playerDictionary = new Dictionary<Player, bool>();
+            _loadedPlayerList = new List<Player>();
             _brainDictionary = new Dictionary<Player, PlayerBrain>();
+            _userIDDictionary = new Dictionary<string, Player>();
         }
-    
         private void OnDisable()
         {
             SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
-            GameStartEvent -= ConvertToDictionary;
+            NetworkManager.Instance.OnPlayerLeftRoomEvent -= OnLeftPlayer;
+
+            OnAllPlayerLoad -= ConvertToDictionary;
         }
+        #endregion
+
+        
+        private void OnLeftPlayer(Player leftPlayer)
+        {
+            if (_loadedPlayerList.Contains(leftPlayer))
+            {
+                _loadedPlayerList.Remove(leftPlayer);
+            }
+        }
+        
         
         #region PlayerDictionarySetting
         private void OnGameSceneLoad()
@@ -57,17 +75,19 @@ namespace MonoPlayer
             brain.SetName(NetworkManager.Instance.LocalPlayer.NickName);
 
             var player = NetworkManager.Instance.LocalPlayer;
-            NetworkManager.Instance.PhotonView.RPC("AddPlayerToDictionary",RpcTarget.All,player,true);
+            _userIDDictionary.Add(player.UserId,player);
+
+            NetworkManager.Instance.PhotonView.RPC("AddPlayerToDictionary",RpcTarget.All,player);
         }
         
         
         [PunRPC]
-        private void AddPlayerToDictionary(Player player, bool value)
+        private void AddPlayerToDictionary(Player player)
         {
-            _playerDictionary.Add(player,value);
-            if (_playerDictionary.Count == NetworkManager.Instance.PlayerList.Count)
+            _loadedPlayerList.Add(player);
+            if (_loadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
-                GameStartEvent?.Invoke();
+                OnAllPlayerLoad?.Invoke();
             }
         }
         
@@ -80,14 +100,12 @@ namespace MonoPlayer
             //애초에 brain을 제대로 안 찾아와 줌
             var brainList = FindObjectsOfType<PlayerBrain>();
             
-            foreach (var player in _playerDictionary.Keys)
+            foreach (var player in _loadedPlayerList)
             {
                 foreach (var brain in brainList)
                 {
                     //혹시나 해서 키 같은거 있으면 막아줌
                     if (_brainDictionary.ContainsKey(player)) return;
-
-                    
                     if (brain.gameObject.name == player.NickName)
                     {
                         _brainDictionary.Add(player,brain);
@@ -97,13 +115,6 @@ namespace MonoPlayer
         }
         #endregion
         
-        #region OTCSystem
-        
-        public void OTCPlayer(Player player,Vector3 attackDir)
-        {
-            BrainDictionary[player].PlayerOTC.Damaged(attackDir);
-        }
-        #endregion
     }
 }
 

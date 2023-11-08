@@ -29,6 +29,14 @@ public class PlayerMovement : PlayerHandler
     private void Jump()
     {
         //if (!IsGrounded || !_brain.IsMine) return;
+        if(!_brain.IsMine) return;
+        //Debug.Log("Jump");
+        //_brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
+        _brain.PhotonView.RPC("JumpRPC",RpcTarget.All);
+    }
+    [PunRPC]
+    private void JumpRPC()
+    {
         Debug.Log("Jump");
         _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }

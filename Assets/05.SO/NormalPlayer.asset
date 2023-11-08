@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: NormalPlayer
   m_EditorClassIdentifier: 
   Speed: 5
-  JumpPower: 55
-  DashPower: 200
+  JumpPower: 15
+  DashPower: 10

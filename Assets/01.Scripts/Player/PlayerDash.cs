@@ -79,6 +79,7 @@ public class PlayerDash : PlayerHandler
         //목표 위치까지 현재 시간을 대쉬 타임만큼 나누어서 0 ~ 1로 만들어줌
         //그 위치마다 충돌체클르 해주고 로테이션을 돌려줌
         //제대로된 PLAYER의 Brain과 Player를 찾아옴
+        
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         while (timer < timeToArrive)
         {
@@ -92,7 +93,8 @@ public class PlayerDash : PlayerHandler
             prevValue = easingValue;
             
             var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
-            _brain.Rigidbody.MovePosition(pos);
+            transform.position = pos;
+            //_brain.Rigidbody.MovePosition(pos);
 
 
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
@@ -119,7 +121,6 @@ public class PlayerDash : PlayerHandler
             yield return null;
         }
         
-        Debug.LogError("IsHitGournd");
         //착륙 지점에 충돌체크를 한 번 더 해줌
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
@@ -144,11 +145,10 @@ public class PlayerDash : PlayerHandler
     }
     #endregion
     
-    
     [PunRPC]
     private void OTCPlayer(Player player,Vector3 attackDir)
     {
-        PlayerManager.Instance.OTCPlayer(player,attackDir);
+        GameManager.Instance.OTCPlayer(player,attackDir);
         transform.rotation = Quaternion.identity;
     }
 
@@ -167,5 +167,6 @@ public class PlayerDash : PlayerHandler
 
     public override void BrainFixedUpdate()
     {
+
     }
 }

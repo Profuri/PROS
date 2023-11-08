@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,19 +18,20 @@ public class PlayerDefend : PlayerHandler
     {
         base.Init(brain);
         _prevTime = Time.time;
+        _brain.InputSO.OnDefendKeyPress += DefendRPC;
+        _brain.OnDisableEvent += () => _brain.InputSO.OnDefendKeyPress -= DefendRPC;
+        StopAllCoroutines();
     }
-
-    public override void BrainFixedUpdate(){}
-    public override void BrainUpdate()
+    
+    private void DefendRPC()
     {
-        // will be added to the input system
-        if (Input.GetKeyDown(KeyCode.F))
+        if (_brain.IsMine)
         {
-            PlayDefense();
+            _brain.PhotonView.RPC("Defend", RpcTarget.All);
         }
     }
-
-    public void PlayDefense()
+    [PunRPC]
+    private void Defend()
     {
         if (_prevTime + _coolTime >= Time.time) return;
         if (_defendCoroutine != null)
@@ -41,6 +43,10 @@ public class PlayerDefend : PlayerHandler
         _prevTime = Time.time;
         _defendCoroutine = StartCoroutine(DefendCoroutine());
     }
+
+    public override void BrainFixedUpdate(){}
+    public override void BrainUpdate(){}
+
 
     IEnumerator DefendCoroutine()
     {        

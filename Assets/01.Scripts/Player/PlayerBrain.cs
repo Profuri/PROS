@@ -48,10 +48,10 @@ public class PlayerBrain : MonoBehaviour
         _playerActionData = GetComponent<PlayerActionData>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerOTC = GetComponent<PlayerOTC>();
-        _playerDefend = GetComponent<PlayerDefend>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();
+        _playerDefend = GetComponent<PlayerDefend>();
         
         
         _inputSO.OnMouseAim += AimToWorldPoint;

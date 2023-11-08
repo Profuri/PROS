@@ -262,10 +262,10 @@ GameObject:
   - component: {fileID: 5095394103232121666}
   - component: {fileID: 3694932203432191698}
   - component: {fileID: -5827563157986748990}
+  - component: {fileID: 6876439816529138062}
   - component: {fileID: 3326587547981535648}
   - component: {fileID: 948541001048123046}
   - component: {fileID: 7816524900850498564}
-  - component: {fileID: 6876439816529138062}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -392,7 +392,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _otcPower: 500
-  _bouncePer: 0.096
+  _bouncePer: 0.02
+--- !u!114 &6876439816529138062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676416624467227294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017fb996e0a47bf46a45fc0f0e99359f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coolTime: 2
+  _defendTime: 1000
 --- !u!61 &3326587547981535648
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -477,20 +491,6 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 10
---- !u!114 &6876439816529138062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2676416624467227294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 017fb996e0a47bf46a45fc0f0e99359f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _coolTime: 2
-  _defendTime: 1.5
 --- !u!1 &9040222277087064246
 GameObject:
   m_ObjectHideFlags: 0

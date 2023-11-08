@@ -20,8 +20,9 @@ public class PlayerOTC : PlayerHandler,IDamageable
     [PunRPC]
     public void PlayOTC(Vector3 attackDir)
     {
-        _brain.Collider.enabled = false;
-        Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);      
+        if (_brain.PlayerDefend.IsDefend) return;
+
+        Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDir.normalized, otcMovingDir);
 
         bool isBounce = false;
@@ -65,11 +66,14 @@ public class PlayerOTC : PlayerHandler,IDamageable
 
         if (isBounce)
         {
-            _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
-            Debug.LogError("IsBounce");
+            _brain.Rigidbody.AddForce(otcDir * (_otcPower * _bouncePer), ForceMode2D.Impulse);
+            Debug.Log("IsBounce");
         }
         else
-            _brain.Rigidbody.AddForce(otcDir * (_otcPower * _bouncePer), ForceMode2D.Impulse);
+        {
+            _brain.Collider.enabled = false;
+            _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
+        }
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

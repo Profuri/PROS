@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using static Define;
 using System;
+using Random = UnityEngine.Random;
 
 public class PlayerBrain : MonoBehaviour
 {
@@ -102,28 +103,37 @@ public class PlayerBrain : MonoBehaviour
     [PunRPC]
     private void ReviveRPC()
     {
-        transform.position = Vector3.zero;
-        _rigidbody.velocity = Vector3.zero;
+        Transform points = GameObject.Find("Level/Points/SpawnPoints").transform;
+        Vector3 pos = points.GetChild(Random.Range(0, points.childCount)).position;
         _rigidbody.gravityScale = 0;
 
-        StartCoroutine(BlinkAndDrop());
+        StartCoroutine(BlinkAndDrop(pos));
     }
 
-    private IEnumerator BlinkAndDrop()
+    private IEnumerator BlinkAndDrop(Vector3 spawnPos)
     {
         var blink = new WaitForSeconds(0.2f);
-        var term = new WaitForSeconds(0.75f);
-        SpriteRenderer sp = GetComponent<SpriteRenderer>();
-        for(int i = 0; i < 3; i++)
+        var term = new WaitForSeconds(0.4f);
+
+        yield return new WaitForSeconds(1.5f);
+
+        TrailRenderer tr = transform.Find("Trail").GetComponent<TrailRenderer>();
+        tr.Clear();
+        _rigidbody.velocity = Vector3.zero;
+        transform.position = spawnPos;
+        SpriteRenderer sp = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        for (int i = 0; i < 3; i++)
         {
             Color old = sp.color;
-            old.a = 0.5f;
+            old.a = 0.25f;
             sp.color = old;
             yield return blink;
             old.a = 1f;
+            sp.color = old;
             yield return term;
         }
 
+        Collider.enabled = true;
         _rigidbody.gravityScale = _originGravityScale;
     }
 }

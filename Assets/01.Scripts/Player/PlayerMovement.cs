@@ -11,7 +11,7 @@ public class PlayerMovement : PlayerHandler
     
     private Coroutine _stopCoroutine;
 
-    public bool IsStopped { get; private set; }
+    public bool IsStopped { get; set; }
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
 
@@ -24,14 +24,14 @@ public class PlayerMovement : PlayerHandler
         StopAllCoroutines();
     }
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
+    
     private void Jump()
     {
         //if (!IsGrounded || !_brain.IsMine) return;
         if(!_brain.IsMine) return;
-        //Debug.Log("Jump");
-        //_brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
         _brain.PhotonView.RPC("JumpRPC",RpcTarget.All);
     }
+    
     [PunRPC]
     private void JumpRPC()
     {
@@ -60,7 +60,6 @@ public class PlayerMovement : PlayerHandler
         actionData.PreviousPos = _brain.AgentTrm.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
         actionData.CurrentPos = _brain.AgentTrm.position;
-        //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
     
     private void OnCollisionStay2D(Collision2D other)
@@ -77,10 +76,8 @@ public class PlayerMovement : PlayerHandler
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
-        {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL")) 
             _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
-        }
     }
 
     [PunRPC]
@@ -93,12 +90,8 @@ public class PlayerMovement : PlayerHandler
     }
 
     [PunRPC]
-    private void ResumeGravity()
-    {
-        _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
-    }
+    private void ResumeGravity() => _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
     
-
     #region RotationSystem
     public void SetRotationByDirection(Vector3 direction)
     {
@@ -112,6 +105,7 @@ public class PlayerMovement : PlayerHandler
         transform.rotation = Quaternion.Slerp(transform.rotation,targetRot,lerpValue);
     }
     #endregion
+    
     
     #region StopSystem
     public void StopImmediately(float stopTime, Action Callback = null)

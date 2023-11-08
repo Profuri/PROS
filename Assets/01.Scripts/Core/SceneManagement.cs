@@ -34,5 +34,4 @@ public class SceneManagement : MonoBehaviour
             OnGameSceneLoaded?.Invoke();
         }
     }
-    
 }

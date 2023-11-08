@@ -220,7 +220,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _agentTrm: {fileID: 1396529052882425272}
   _collider: {fileID: 7309052249021770781}
-  _ragdollCols: []
   _rigidbody: {fileID: 3694932203432191698}
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
   _movementSO: {fileID: 11400000, guid: c1f88746544a496448ba65d86a696a10, type: 2}

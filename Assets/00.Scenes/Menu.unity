@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52675c2593426aa4a8e0813c81e0dcea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetWinCnt: 3
   _poolingListSO: {fileID: 11400000, guid: 4cd556d99a8153245a12a54d930d8d80, type: 2}
 --- !u!4 &148809869
 Transform:

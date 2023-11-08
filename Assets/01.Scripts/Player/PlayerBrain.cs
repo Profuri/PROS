@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using static Define;
+using System;
+
 public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
@@ -91,4 +93,37 @@ public class PlayerBrain : MonoBehaviour
     public void SetName(string nickName) => _photonView.RPC("SetNameRPC",RpcTarget.All,nickName);
     [PunRPC]
     private void SetNameRPC(string nickName) => this.gameObject.name = nickName;
+
+    public void Revive()
+    {
+        _photonView.RPC("ReviveRPC", RpcTarget.Others);
+    }
+
+    [PunRPC]
+    private void ReviveRPC()
+    {
+        transform.position = Vector3.zero;
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.gravityScale = 0;
+
+        StartCoroutine(BlinkAndDrop());
+    }
+
+    private IEnumerator BlinkAndDrop()
+    {
+        var blink = new WaitForSeconds(0.2f);
+        var term = new WaitForSeconds(0.75f);
+        SpriteRenderer sp = GetComponent<SpriteRenderer>();
+        for(int i = 0; i < 3; i++)
+        {
+            Color old = sp.color;
+            old.a = 0.5f;
+            sp.color = old;
+            yield return blink;
+            old.a = 1f;
+            yield return term;
+        }
+
+        _rigidbody.gravityScale = _originGravityScale;
+    }
 }

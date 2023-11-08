@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
                 break;
             case EGAME_MODE.AREA_SEIZE:
                 // Todo : Player가 다시 소환 되어야 함
-                
+                playerBrain.Revive();
                 break;
         }
     }

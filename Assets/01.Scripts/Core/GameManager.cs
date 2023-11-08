@@ -30,5 +30,6 @@ public class GameManager : MonoBehaviour
         NetworkManager.Instance.Init();
         SceneManagement.Instance.Init(this.transform);
         PlayerManager.Instance.Init();
+        ScoreManager.Instance.Init();
     }
 }

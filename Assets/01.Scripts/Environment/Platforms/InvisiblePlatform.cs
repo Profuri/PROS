@@ -6,21 +6,29 @@ using UnityEngine;
 
 public class InvisiblePlatform : BasePlatform
 {
-    private bool _isVisible = true;
+    [SerializeField] private bool _isVisible = true;
     public bool IsVisible => _isVisible;
 
     [SerializeField] private float _duration;
+    [SerializeField] private float _term = 3f;
 
-    private void Update()
+    protected override void Awake()
     {
-        // Debug
-        if(Input.GetKeyDown(KeyCode.S))
+        base.Awake();
+        SetVisible(_isVisible);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(ChangeVisibleCoroutine());
+    }
+
+    private IEnumerator ChangeVisibleCoroutine()
+    {
+        while(true)
         {
-            SetVisible(true);
-        }
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            SetVisible(false);
+            yield return new WaitForSeconds(_term);
+            SetVisible(!_isVisible);
         }
     }
 

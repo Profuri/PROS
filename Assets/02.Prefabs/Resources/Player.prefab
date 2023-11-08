@@ -407,6 +407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _coolTime: 2
   _defendTime: 1000
+  IsDefendBounce: 0
 --- !u!61 &3326587547981535648
 BoxCollider2D:
   m_ObjectHideFlags: 0

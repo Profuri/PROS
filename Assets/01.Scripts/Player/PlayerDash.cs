@@ -108,7 +108,9 @@ public class PlayerDash : PlayerHandler
 
                     _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
                     if (brain.PlayerDefend.IsDefend)
+                    {
                         _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                    }
                     
                     yield break;
                 }
@@ -132,7 +134,9 @@ public class PlayerDash : PlayerHandler
 
                         _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
                         if (brain.PlayerDefend.IsDefend)
+                        {
                             _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
+                        }
                     }
                 }
             }
@@ -144,6 +148,7 @@ public class PlayerDash : PlayerHandler
     [PunRPC]
     private void OTCPlayer(Player player, Vector3 attackDir)
     {
+        if (player == photonView.Owner) _brain.PlayerDefend.IsDefendBounce = true;
         PlayerManager.Instance.OTCPlayer(player, attackDir);
         transform.rotation = Quaternion.identity;
     }

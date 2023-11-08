@@ -64,16 +64,24 @@ public class PlayerOTC : PlayerHandler,IDamageable
         if (otcDir.y < 0)
             otcDir.y *= -1;
 
+        if (_brain.PlayerDefend.IsDefendBounce)
+        {
+            isBounce = true;
+            otcDir = attackDir.normalized;
+        }
+
         if (isBounce)
         {
             _brain.Rigidbody.AddForce(otcDir * (_otcPower * _bouncePer), ForceMode2D.Impulse);
-            Debug.Log("IsBounce");
         }
         else
         {
+            Debug.Log("Collider Enable False");
             _brain.Collider.enabled = false;
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
+
+        _brain.PlayerDefend.IsDefendBounce = false;
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

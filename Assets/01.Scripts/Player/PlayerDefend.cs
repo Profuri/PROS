@@ -13,7 +13,9 @@ public class PlayerDefend : PlayerHandler
 
     private bool _isDefend;
     public bool IsDefend => _isDefend;
-  
+
+    public bool IsDefendBounce = false;
+
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);

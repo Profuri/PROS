@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
-[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : PlayerHandler
 {
     private Vector3 _inputVec3;
@@ -29,7 +28,7 @@ public class PlayerMovement : PlayerHandler
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
     private void Jump()
     {
-        if (!IsGrounded || !_brain.IsMine) return;
+        //if (!IsGrounded || !_brain.IsMine) return;
         Debug.Log("Jump");
         _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
@@ -67,7 +66,6 @@ public class PlayerMovement : PlayerHandler
             if (isLeft && _inputVec3.x < 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
             else if (!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem", RpcTarget.All);
             else _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
-
         }
     }
 

@@ -27,7 +27,7 @@ public class PlayerDash : PlayerHandler
     {
         if (_brain.IsMine)
         {
-            Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
+            Vector3 mouseDir = (_brain.MousePos - _brain.AgentTrm.position).normalized;
             _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
         }
     }
@@ -51,7 +51,9 @@ public class PlayerDash : PlayerHandler
         float prevValue = 0f;
         float timer = 0f;
         
+        //Debug.LogError($"Curpos: {_brain.AgentTrm.position}");
         Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
+        //Debug.LogError($"Destination {destination}");
         float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
         
         float timeToArrive = distanceFromDestination / power * _dashTime; 
@@ -62,6 +64,8 @@ public class PlayerDash : PlayerHandler
 
 
         float percent = 0f;
+
+        _brain.SetRagdollColsEnable(false);
         
         RaycastHit2D hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination,_obstacleLayer);
         
@@ -87,7 +91,9 @@ public class PlayerDash : PlayerHandler
             
             prevValue = easingValue;
             
-            _brain.AgentTrm.position = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
+            var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
+            _brain.Rigidbody.MovePosition(pos);
+
 
             _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
 
@@ -95,7 +101,6 @@ public class PlayerDash : PlayerHandler
             //CheckCollisionRealtime
             //현재 플레이어가 움직이면서 부딪히는 것을 확인하는 코드
             Collider2D collider = Physics2D.OverlapCircle(_brain.AgentTrm.position,radius,_damageableLayer);
-            
             
             //찾은 콜라이더가 내 콜라이더가 아니여야 함
             if (collider != default(Collider2D) && collider.Equals(_brain.Collider) == false)
@@ -107,12 +112,14 @@ public class PlayerDash : PlayerHandler
                     _brain.PlayerMovement.StopImmediately(0f);
                     _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
                     _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
+                    _brain.SetRagdollColsEnable(true);
                     yield break;
                 }
             }
             yield return null;
         }
         
+        Debug.LogError("IsHitGournd");
         //착륙 지점에 충돌체크를 한 번 더 해줌
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
@@ -132,6 +139,8 @@ public class PlayerDash : PlayerHandler
                 }
             }
         }
+        _brain.SetRagdollColsEnable(true);
+
     }
     #endregion
     

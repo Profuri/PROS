@@ -11,9 +11,10 @@ public class PlayerBrain : MonoBehaviour
     public Transform AgentTrm => _agentTrm;
     
     [SerializeField] private Collider2D _collider;
+    [SerializeField] private List<Collider2D> _ragdollCols;
     public Collider2D Collider => _collider;
     
-    private Rigidbody2D _rigidbody;
+    [SerializeField] private Rigidbody2D _rigidbody;
     public Rigidbody2D Rigidbody => _rigidbody;
 
     [SerializeField] private InputSO _inputSO;
@@ -41,9 +42,10 @@ public class PlayerBrain : MonoBehaviour
         GetComponentsInChildren(_handlers);
         
         //_collider = GetComponent<Collider2D>();
+        //_rigidbody = GetComponent<Rigidbody2D>();
+        
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
-        _rigidbody = GetComponent<Rigidbody2D>();
         _playerOTC = GetComponent<PlayerOTC>();
         
         _handlers.ForEach(h => h.Init(this));
@@ -77,7 +79,7 @@ public class PlayerBrain : MonoBehaviour
         worldMousePos.z = 0f;
         _mousePos = worldMousePos;
     }
-
+    public void SetRagdollColsEnable(bool active) => _ragdollCols.ForEach(c => c.enabled = active);
     public void SetName(string nickName) => _photonView.RPC("SetNameRPC",RpcTarget.All,nickName);
     [PunRPC]
     private void SetNameRPC(string nickName) => this.gameObject.name = nickName;

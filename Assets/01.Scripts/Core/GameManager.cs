@@ -113,7 +113,11 @@ public class GameManager : MonoBehaviour
     {
         //플레이어의 상태 초기화
         //InvalidOperationException
-        
+
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            PlayerManager.Instance.SetBrainRandomPos();
+        }
         foreach (var pair in _playerGameDictionary.ToList())
         {
             _playerGameDictionary[pair.Key] = (int)EPLAYER_STATE.NORMAL;
@@ -152,7 +156,13 @@ public class GameManager : MonoBehaviour
         {
             Player winPlayer = alivePlayers.First();
             ScorePlayer(winPlayer);
-            OnRoundEnd?.Invoke(winPlayer);
+            if (_gameCoroutine != null)
+            {
+                StopCoroutine(_gameCoroutine);
+            }
+
+            StartCoroutine(Test(winPlayer));
+            //OnRoundEnd?.Invoke(winPlayer);
         } 
     }
 
@@ -168,14 +178,19 @@ public class GameManager : MonoBehaviour
         {
             if (kvp.Value >= (int)EPLAYER_STATE.WIN)
             {
-                //Player winPlayer = PlayerManager.Instance.UserIDDictionary[kvp.Key];
                 ScorePlayer(kvp.Key);
-                RoundStart();
-                OnRoundEnd?.Invoke(kvp.Key);
+                //OnRoundEnd?.Invoke(kvp.Key);
+
+                StartCoroutine(Test(kvp.Key));
             }
         }
     }
 
+    private IEnumerator Test(Player player)
+    {
+        yield return new WaitForSeconds(5f);
+        OnRoundEnd?.Invoke(player);
+    }
     private void ScorePlayer(Player player)
     {
         _score.GetScore(player);
@@ -202,8 +217,6 @@ public class GameManager : MonoBehaviour
         {
             case EGAME_MODE.DEATH_MATCH:
                 _playerGameDictionary[player] = (int)EPLAYER_STATE.DEAD;
-                Debug.LogError(_playerGameDictionary[player]);
-                Debug.Log("Init");
                 break;
             case EGAME_MODE.AREA_SEIZE:
                 // Todo : Player가 다시 소환 되어야 함

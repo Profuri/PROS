@@ -10,7 +10,6 @@ public class PlayerMovement : PlayerHandler
     public Vector3 InputVec => _inputVec3;
     
     private Coroutine _stopCoroutine;
-    private float _originGravityScale;
 
     public bool IsStopped { get; private set; }
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
@@ -22,7 +21,6 @@ public class PlayerMovement : PlayerHandler
 
         _brain.InputSO.OnJumpKeyPress += Jump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
-        _originGravityScale = _brain.Rigidbody.gravityScale;
         StopAllCoroutines();
     }
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
@@ -97,7 +95,7 @@ public class PlayerMovement : PlayerHandler
     [PunRPC]
     private void ResumeGravity()
     {
-        _brain.Rigidbody.gravityScale = _originGravityScale;
+        _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
     }
     
 
@@ -132,7 +130,7 @@ public class PlayerMovement : PlayerHandler
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;
         yield return new WaitForSeconds(stopTime);
-        _brain.Rigidbody.gravityScale = _originGravityScale;
+        _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
         IsStopped = false;
         Callback?.Invoke();
     }

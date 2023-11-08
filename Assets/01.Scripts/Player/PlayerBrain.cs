@@ -7,6 +7,9 @@ using static Define;
 public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
+
+    private float _originGravityScale;
+    public float OriginGravityScale => _originGravityScale;
     [SerializeField] private Transform _agentTrm;
     public Transform AgentTrm => _agentTrm;
     
@@ -40,22 +43,27 @@ public class PlayerBrain : MonoBehaviour
     {
         _handlers = new List<PlayerHandler>();
         GetComponentsInChildren(_handlers);
-        
-        //_collider = GetComponent<Collider2D>();
-        //_rigidbody = GetComponent<Rigidbody2D>();
-        
+
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
         _playerOTC = GetComponent<PlayerOTC>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();
-        
+
+        _originGravityScale = _rigidbody.gravityScale;
         
         _inputSO.OnMouseAim += AimToWorldPoint;
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
     }
-
+    
+    public void Init(Vector3 spawnPos)
+    {
+        transform.position = spawnPos;
+        _collider.enabled = true;
+        _rigidbody.gravityScale = _originGravityScale;
+        _rigidbody.velocity = Vector3.zero;
+    }
     public delegate void UnityMessageListener();
     public event UnityMessageListener OnEnableEvent;
     public event UnityMessageListener OnDisableEvent;

@@ -41,6 +41,9 @@ public class Score
     public void GetScore(Player player)
     {
         ++_winRoundDictionary[player];
-        Debug.LogError($"{player} GetScores!!");
+        foreach (var kvp in _winRoundDictionary)
+        {
+            Debug.LogError($"Key: {kvp.Key} Value: {kvp.Value}");
+        }
     }
 }

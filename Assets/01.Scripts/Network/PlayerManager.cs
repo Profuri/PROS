@@ -24,10 +24,10 @@ namespace MonoPlayer
             }
         }
 
-        private List<Player> _loadedPlayerList;
-        public List<Player> LoadedPlayerList => _loadedPlayerList;
-        private Dictionary<Player, PlayerBrain> _brainDictionary;
-        public Dictionary<Player, PlayerBrain> BrainDictionary => _brainDictionary;
+        public List<Player> LoadedPlayerList { get; private set; }
+        public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
+
+        public bool IsAllOfPlayerLoad { get; private set; } = false;
         public event Action OnAllPlayerLoad;
         
         #region Init
@@ -35,74 +35,125 @@ namespace MonoPlayer
         {
             SceneManagement.Instance.OnGameSceneLoaded += OnGameSceneLoad;
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
-            
-            OnAllPlayerLoad += ConvertToDictionary;
+            OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
 
-            _loadedPlayerList = new List<Player>();
-            _brainDictionary = new Dictionary<Player, PlayerBrain>();
+            
+            LoadedPlayerList = new List<Player>();
+            BrainDictionary = new Dictionary<Player, PlayerBrain>();
         }
+        
         private void OnDisable()
         {
             SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
             NetworkManager.Instance.OnPlayerLeftRoomEvent -= OnLeftPlayer;
             
-            OnAllPlayerLoad -= ConvertToDictionary;
         }
+
         #endregion
 
         
         private void OnLeftPlayer(Player leftPlayer)
         {
-            if (_loadedPlayerList.Contains(leftPlayer))
+            if (LoadedPlayerList.Contains(leftPlayer))
             {
-                _loadedPlayerList.Remove(leftPlayer);
+                LoadedPlayerList.Remove(leftPlayer);
+            }
+            if (BrainDictionary.ContainsKey(leftPlayer))
+            {
+                BrainDictionary.Remove(leftPlayer);
             }
         }
         
         
         #region PlayerDictionarySetting
-        private void OnGameSceneLoad()
-        {
-            var prefab = PhotonNetwork.Instantiate("Player",new Vector3(100,100,100),Quaternion.identity);
-            prefab.GetComponent<PlayerBrain>().SetName(NetworkManager.Instance.LocalPlayer.NickName);
 
-            var player = NetworkManager.Instance.LocalPlayer;
-            NetworkManager.Instance.PhotonView.RPC("AddPlayerListRPC",RpcTarget.All,player);
+        public void RoundRestart()
+        {
+            if (!NetworkManager.Instance.IsMasterClient)
+                return;
+            
+            NetworkManager.Instance.PhotonView.RPC("RoundRestartRPC", RpcTarget.All);
         }
         
         [PunRPC]
-        private void AddPlayerListRPC(Player player)
+        private void RoundRestartRPC()
         {
-            _loadedPlayerList.Add(player);
+            ResetPlayer();
+            var randomPos = new Vector3(Random.Range(-5f,5f),0f,0f);
+            CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
+        }
 
-            if (_loadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
-            {
-                ConvertToDictionary();
-                OnAllPlayerLoad?.Invoke();
-            }
+        private void OnGameSceneLoad()
+        {
+            RoundRestart();
+        }
 
+        private void ResetPlayer()
+        {
+            IsAllOfPlayerLoad = false;
+            RemovePlayerRPC(NetworkManager.Instance.LocalPlayer);
         }
         
-        //Add된 플레이어를 바탕으로 현재 게임에있는 플레이어 브레인을 
-        //각각에 맞는 플레이어와 로컬플레이어랑 비교해서
-        //dictionary에 넣어주는 작업을 해 줌
-        private void ConvertToDictionary()
+        private void CreatePlayer(Player player,Vector3 spawnPos)
         {
-            //애초에 brain을 제대로 안 찾아와 줌
-            var brainList = FindObjectsOfType<PlayerBrain>();
-            
-            foreach (var player in _loadedPlayerList)
+            var prefab = PhotonNetwork.Instantiate("Player",spawnPos,Quaternion.identity);
+            var localPlayer = NetworkManager.Instance.LocalPlayer;
+                        
+            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC",RpcTarget.All,localPlayer);
+        }
+        
+        public void RemovePlayerRPC(Player player)
+        {
+            if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
+
+            var playerBrain = BrainDictionary[player];
+
+            if (playerBrain.PhotonView.IsMine)
             {
-                foreach (var brain in brainList)
-                {
-                    //혹시나 해서 키 같은거 있으면 막아줌
-                    if (_brainDictionary.ContainsKey(player)) return;
-                    if (brain.gameObject.name == player.NickName)
-                    {
-                        _brainDictionary.Add(player,brain);
-                    }
-                }
+                var obj = playerBrain.gameObject;
+            
+                LoadedPlayerList.Remove(player);
+                BrainDictionary.Remove(player);
+            
+                PhotonNetwork.Destroy(obj);
             }
+        }
+                
+        [PunRPC]
+        private void LoadPlayerListRPC(Player player)
+        {
+            if (!LoadedPlayerList.Contains(player))
+            {
+                LoadedPlayerList.Add(player);
+            }
+
+            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
+            {
+                OnAllPlayerLoad?.Invoke();
+                IsAllOfPlayerLoad = true;
+            }
+        }
+        
+        [PunRPC]
+        private void LoadBrainDictionaryRPC(Player player)
+        {
+            var players = FindObjectsOfType<PlayerBrain>().ToList();
+            PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
+            playerBrain.SetName(player.NickName);
+            
+     
+            bool result = BrainDictionary.TryAdd(player, playerBrain);
+            if (result == false)
+            {
+                Debug.Log($"BrainDictionary has a same key: {player}");
+            }
+            
+        }
+        
+        private void A(Player player)
+        {
+           
+
         }
         #endregion
         

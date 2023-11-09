@@ -21,8 +21,8 @@ public class StageManager : MonoBehaviourPunCallbacks
     
     private readonly List<BaseStageSystem> _stageSystems = new List<BaseStageSystem>();
     
-    [SerializeField] private int _stageTypeCnt;
-    public int StageTypeCnt => _stageTypeCnt;
+    [SerializeField] private int _mapCnt;
+    public int MapCnt => _mapCnt;
 
     private BaseStageSystem _curStage = null;
     public BaseStageSystem CurStage => _curStage;
@@ -30,6 +30,7 @@ public class StageManager : MonoBehaviourPunCallbacks
     public void Init()
     {
         _stageSystems.Add(new NormalStageSystem(EStageMode.NORMAL));
+        _stageSystems.Add(new OccupationStageSystem(EStageMode.OCCUPATION));
         SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
     }
 
@@ -49,7 +50,7 @@ public class StageManager : MonoBehaviourPunCallbacks
             return;
 
         var stageIndex = Random.Range(0, _stageSystems.Count);
-        var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        var mapIndex = Random.Range(0, StageManager.Instance.MapCnt) + 1;
         NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
     

@@ -267,6 +267,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsDashing: 0
+  IsJumping: 0
+  IsLanding: 0
   PreviousPos: {x: 0, y: 0, z: 0}
   CurrentPos: {x: 0, y: 0, z: 0}
 --- !u!50 &3694932203432191698

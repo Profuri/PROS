@@ -2,23 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Photon.Realtime;
 public class OccupationStageSystem : BaseStageSystem
 {
     private OccupationSystem _occupationSystem;
     [SerializeField] private LayerMask _targetLayerMask;
 
     public Action OnTargetChangeTime;
+
+    public OccupationStageSystem(EStageMode mode) : base(mode)
+    {
+    }
+
+
     public override void StageUpdate()
     {
         base.StageUpdate();
     }
-    public override bool RoundCheck()
+
+    public override bool RoundCheck(out Player winnerPlayer)
     {
+        winnerPlayer = null;
         return true;
     }
 
-    public override void GenerateNewStage()
+    public override void GenerateNewStage(int index)
     {
+        base.GenerateNewStage(index);
         OccupationStruct data = new OccupationStruct(targetOccupationTime: 10f,
                         minChangeTime: 20f,maxChangeTime: 40f,5f,_targetLayerMask);
         
@@ -28,11 +38,6 @@ public class OccupationStageSystem : BaseStageSystem
         OnTargetChangeTime += SetRandomOccupationPos;
     }
 
-    public override void RemoveCurStage()
-    {
-        
-    }
-
     private void SetRandomOccupationPos()
     {
         //It will be changed by fixed value
@@ -40,5 +45,4 @@ public class OccupationStageSystem : BaseStageSystem
         
         _occupationSystem.SetOccupationPos(randomPos);
     }
-    
 }

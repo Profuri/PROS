@@ -43,14 +43,17 @@ public class OccupationSystem
 
         if (_coroutine != null)
         {
-            _stageSystem.StopCoroutine(_coroutine);
+            GameManager.Instance.StopCoroutine(_coroutine);
         }
-        _coroutine = _stageSystem.StartCoroutine(DetectPlayers());
+        _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
 
     public void Init()
     {
-        _stageSystem.StopAllCoroutines();
+        if(_coroutine != null)
+        {
+            GameManager.Instance.StopCoroutine(_coroutine);
+        }
         PoolManager.Instance.Push(_areaObj);
     }
 

@@ -22,7 +22,7 @@ public class PlayerMovement : PlayerHandler
         base.Init(brain);
 
         Debug.Log(_brain.AnimationController);
-        _brain.InputSO.OnJumpKeyPress += _brain.AnimationController.PlayJumpAnim;
+        //_brain.InputSO.OnJumpKeyPress += _brain.AnimationController.PlayJumpAnim;
         _brain.InputSO.OnJumpKeyPress += SetJumping;
 
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
@@ -71,8 +71,8 @@ public class PlayerMovement : PlayerHandler
         Vector2 movement = _inputVec3;
         movement.y = 0f;
 
-        if(_brain.ActionData.IsJumping == false && _brain.ActionData.IsLanding == false)
-            _brain.AnimationController.PlayMoveAnim(movement);
+        //if(_brain.ActionData.IsJumping == false && _brain.ActionData.IsLanding == false)
+        //    _brain.AnimationController.PlayMoveAnim(movement);
 
         var actionData = _brain.ActionData;
         actionData.PreviousPos = _brain.AgentTrm.position;
@@ -140,10 +140,10 @@ public class PlayerMovement : PlayerHandler
         }
         _stopCoroutine = StartCoroutine(StopCoroutine(stopTime, Callback));
     }
-    //ÄÚ·çÆ¾ÀÌ ¸ØÃçÀÖ´ÂÁö bool °ªÀ¸·Î È®ÀÎÇÒ ¼ö ÀÖ°Ô ÇØ¾ßÇÔ.
+    //ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ bool ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½.
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {  
-        //¿©±â¼­ 0ÀÎ »óÅÂ·Î °¡Á®¿Í¹ö¸®°Ô µÇ¸é ±×´ë·Î 0¿¡¼­ 0À¸·Î ¹Ù²ãÁÖ´Â ²ÃÀÌ µÇ¹ö¸².
+        //ï¿½ï¿½ï¿½â¼­ 0ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½×´ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½ï¿½.
         _brain.Rigidbody.gravityScale = 0f;
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;

@@ -1,4 +1,5 @@
 using MonoPlayer;
+
 using Photon.Realtime;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ public abstract class BaseStageSystem : IStageSystem
             Scoring(roundWinner);
             RemoveCurStage();
             
-            var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+            var type = Random.Range(0, StageManager.Instance.MapCnt) + 1;
             GenerateNewStage(type);
         }
     }

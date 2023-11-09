@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe725cbc81374354bb1952ade3ce1c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reviveTimer: 1.5
+  _reviveTimer: 0
 --- !u!114 &148809872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b605bfcb66d24d20b32b8860f928fc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageTypeCnt: 3
+  _mapCnt: 0
 --- !u!1 &1409238413
 GameObject:
   m_ObjectHideFlags: 0

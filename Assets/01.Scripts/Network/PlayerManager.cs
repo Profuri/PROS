@@ -91,10 +91,10 @@ namespace MonoPlayer
         private void ResetPlayer()
         {
             IsAllOfPlayerLoad = false;
-            RemovePlayerRPC(NetworkManager.Instance.LocalPlayer);
+            RemovePlayer(NetworkManager.Instance.LocalPlayer);
         }
         
-        private void CreatePlayer(Player player,Vector3 spawnPos)
+        public void CreatePlayer(Player player,Vector3 spawnPos)
         {
             var prefab = PhotonNetwork.Instantiate("Player",spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
@@ -102,7 +102,7 @@ namespace MonoPlayer
             NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC",RpcTarget.All,localPlayer);
         }
         
-        public void RemovePlayerRPC(Player player)
+        public void RemovePlayer(Player player)
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
 
@@ -148,12 +148,6 @@ namespace MonoPlayer
                 Debug.Log($"BrainDictionary has a same key: {player}");
             }
             
-        }
-        
-        private void A(Player player)
-        {
-           
-
         }
         #endregion
         

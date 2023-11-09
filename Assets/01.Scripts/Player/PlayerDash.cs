@@ -65,7 +65,7 @@ public class PlayerDash : PlayerHandler
 
         float percent = 0f;
 
-        _brain.SetRagdollColsEnable(false);
+        //_brain.SetRagdollColsEnable(false);
         
         RaycastHit2D hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination,_obstacleLayer);
         
@@ -114,7 +114,7 @@ public class PlayerDash : PlayerHandler
                     _brain.PlayerMovement.StopImmediately(0f);
                     _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
                     _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
-                    _brain.SetRagdollColsEnable(true);
+                   // _brain.SetRagdollColsEnable(true);
                     yield break;
                 }
             }
@@ -140,7 +140,7 @@ public class PlayerDash : PlayerHandler
                 }
             }
         }
-        _brain.SetRagdollColsEnable(true);
+       // _brain.SetRagdollColsEnable(true);
 
     }
     #endregion

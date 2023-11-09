@@ -29,6 +29,7 @@ namespace MonoPlayer
         private Dictionary<Player, PlayerBrain> _brainDictionary;
         public Dictionary<Player, PlayerBrain> BrainDictionary => _brainDictionary;
         public event Action OnAllPlayerLoad;
+        
         #region Init
         public void Init()
         {
@@ -44,7 +45,7 @@ namespace MonoPlayer
         {
             SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
             NetworkManager.Instance.OnPlayerLeftRoomEvent -= OnLeftPlayer;
-
+            
             OnAllPlayerLoad -= ConvertToDictionary;
         }
         #endregion
@@ -62,48 +63,26 @@ namespace MonoPlayer
         #region PlayerDictionarySetting
         private void OnGameSceneLoad()
         {
-
-            
-            var prefab = PhotonNetwork.Instantiate("Player",Vector3.zero,Quaternion.identity);
-            
-            PlayerBrain brain = prefab.GetComponent<PlayerBrain>();
-            brain.SetName(NetworkManager.Instance.LocalPlayer.NickName);
+            var prefab = PhotonNetwork.Instantiate("Player",new Vector3(100,100,100),Quaternion.identity);
+            prefab.GetComponent<PlayerBrain>().SetName(NetworkManager.Instance.LocalPlayer.NickName);
 
             var player = NetworkManager.Instance.LocalPlayer;
-
-            NetworkManager.Instance.PhotonView.RPC("AddPlayerToDictionary",RpcTarget.All,player);
+            NetworkManager.Instance.PhotonView.RPC("AddPlayerListRPC",RpcTarget.All,player);
         }
         
-        
         [PunRPC]
-        private void AddPlayerToDictionary(Player player)
+        private void AddPlayerListRPC(Player player)
         {
             _loadedPlayerList.Add(player);
+
             if (_loadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
+                ConvertToDictionary();
                 OnAllPlayerLoad?.Invoke();
             }
-        }
 
-        public void SetBrainRandomPos()
-        {
-            NetworkManager.Instance.PhotonView.RPC("SetBrainRandomPosRPC",RpcTarget.All);   
-        }
-        [PunRPC]
-        private void SetBrainRandomPosRPC()
-        {
-            foreach (var player in PlayerManager.Instance.LoadedPlayerList)
-            {
-                float randomX = Random.Range(-5, 5f);
-                float y = 5f;
-                Vector3 randomPos = new Vector3(randomX,y);
-
-                PlayerBrain brain = PlayerManager.Instance.BrainDictionary[player];
-                brain.Init(randomPos);
-            }
         }
         
-
         //Add된 플레이어를 바탕으로 현재 게임에있는 플레이어 브레인을 
         //각각에 맞는 플레이어와 로컬플레이어랑 비교해서
         //dictionary에 넣어주는 작업을 해 줌

@@ -3,13 +3,13 @@
     <Style src="project://database/Assets/09.UIDocument/MenuScreen/MenuScreen.uss?fileID=7433441132597879392&amp;guid=84a7a8b1e288aaa4d89f38441b2acb23&amp;type=3#MenuScreen" />
     <ui:VisualElement name="container" class="container">
         <ui:VisualElement name="screen-container" class="screen-container">
-            <ui:VisualElement name="content" class="content" style="left: -200%;">
+            <ui:VisualElement name="content" class="content" style="left: -100%;">
                 <ui:VisualElement name="page-one" class="page" style="align-items: center; justify-content: center;">
                     <ui:VisualElement name="page-panel" class="page-panel" style="background-color: rgb(224, 244, 255);">
                         <ui:Label tabindex="-1" text="Project-S" parse-escape-sequences="true" display-tooltip-when-elided="true" name="page-title" class="font page-title" style="color: rgb(57, 167, 255); font-size: 128px; margin-bottom: 30px;" />
                         <ui:VisualElement name="inner-box" style="width: 500px;">
-                            <ui:Button text="방 만들기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create" class="btn font" style="font-size: 64px; color: rgb(255, 238, 217); background-color: rgb(135, 196, 255); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; -unity-text-align: middle-center;" />
-                            <ui:Button text="방 찾기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-find" class="btn font" style="font-size: 64px; background-color: rgb(135, 196, 255); color: rgb(255, 238, 217); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; -unity-text-align: middle-center;" />
+                            <ui:Button text="방 만들기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create" picking-mode="Ignore" class="btn font" style="font-size: 64px; color: rgb(255, 238, 217); background-color: rgb(135, 196, 255); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; -unity-text-align: middle-center;" />
+                            <ui:Button text="방 찾기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-find" picking-mode="Ignore" class="btn font" style="font-size: 64px; background-color: rgb(135, 196, 255); color: rgb(255, 238, 217); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; -unity-text-align: middle-center;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -24,13 +24,14 @@
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:ScrollView>
-                        <ui:VisualElement name="inner-box" style="flex-direction: row; justify-content: center; width: 750px; align-items: center;">
+                        <ui:VisualElement name="inner-box" style="flex-direction: row; justify-content: space-between; width: 750px; align-items: center;">
                             <ui:Label tabindex="-1" text="또는 코드로 참여" parse-escape-sequences="true" display-tooltip-when-elided="true" name="join-label" class="font" />
                             <ui:VisualElement name="join-code" style="flex-direction: row; align-items: center; justify-content: flex-end;">
-                                <ui:TextField picking-mode="Ignore" value="코드를 입력하세요" name="join-code-field" class="font joincode-field" style="margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 4px; height: 100%; -unity-text-align: middle-left;" />
+                                <ui:TextField picking-mode="Ignore" value="코드를 입력하세요" name="join-code-field" class="font joincode-field" style="margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 4px; height: 100%; -unity-text-align: middle-left; width: 275px;" />
                                 <ui:Button text="참가하기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join-code" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-color: rgb(238, 224, 201);" />
                             </ui:VisualElement>
                         </ui:VisualElement>
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; top: 10px; right: 10px; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_iconundo.png?fileID=2800000&amp;guid=691dc543ff5b9ca44bf846657ba04161&amp;type=3#d_iconundo&apos;); -unity-background-image-tint-color: rgb(0, 0, 0);" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="page-three" class="page" style="align-items: center; justify-content: center;">
@@ -42,7 +43,7 @@
                         <ui:VisualElement name="inner-box" style="flex-direction: row; justify-content: space-between; width: 750px; align-items: center;">
                             <ui:Label tabindex="-1" text="1 / 4" parse-escape-sequences="true" display-tooltip-when-elided="true" name="player-count" class="font" style="color: rgb(216, 216, 216);" />
                             <ui:VisualElement name="btn-row" style="flex-direction: row; align-items: center;">
-                                <ui:Button text="게임 시작" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-strat-game" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(216, 216, 216);" />
+                                <ui:Button text="게임 시작" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start-game" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(216, 216, 216);" />
                                 <ui:Button text="나가기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit-room" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(228, 147, 147);" />
                             </ui:VisualElement>
                         </ui:VisualElement>

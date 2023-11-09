@@ -101,7 +101,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void Revive()
     {
-        _photonView.RPC("ReviveRPC", RpcTarget.All);
+        PhotonView.RPC("ReviveRPC", RpcTarget.All);
     }
 
     [PunRPC]
@@ -138,6 +138,6 @@ public class PlayerBrain : MonoBehaviour
         }
 
         Collider.enabled = true;
-        _rigidbody.gravityScale = _originGravityScale;
+        _rigidbody.gravityScale = OriginGravityScale;
     }
 }

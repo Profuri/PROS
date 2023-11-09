@@ -6,12 +6,6 @@ using UnityEngine;
 using MonoPlayer;
 using Random = UnityEngine.Random;
 
-public enum EPLAYER_STATE
-{
-    DEAD = -1,
-    NORMAL = 0,
-    WIN = 100,    
-}
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -27,7 +21,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public event Action<Player> OnGameEnd;
     public event Action<Player> OnRoundEnd;
 
@@ -40,11 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PoolingListSO _poolingListSO;
     
-    private Dictionary<Player, int> _playerGameDictionary;
-    private Dictionary<Player, int> _playerWinDictionary;
-    
     private Coroutine _gameCoroutine;
     #endregion
+
     private void Awake()
     {
         if (_instance == null)
@@ -53,22 +44,14 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(this.gameObject);
         
-        _playerGameDictionary = new Dictionary<Player, int>();
-        _playerWinDictionary = new Dictionary<Player, int>();
-        
-        OnGameEnd += (value) => Debug.LogError($"GameEnd :{value}");        
-        
         NetworkManager.Instance.Init();
         SceneManagement.Instance.Init(this.transform);
         PlayerManager.Instance.Init();
         ParticleManager.Instance.Init();
+        ScoreManager.Instance.Init();
         PoolManager.Instance = new PoolManager(this.transform);
 
         _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
-
-        PlayerManager.Instance.OnAllPlayerLoad += GameStart;
-        
-        ScoreManager.Instance.Init();
     }
 
     private void GameStart()
@@ -102,11 +85,11 @@ public class GameManager : MonoBehaviour
     {
         var playerBrain = PlayerManager.Instance.BrainDictionary[player];
         playerBrain.PlayerOTC.Damaged(attackDir);
-    
+
         // switch (CurrentGameMode)
         // {
         //     case EGAME_MODE.DEATH_MATCH:
-        //         _playerGameDictionary[player] = (int)EPLAYER_STATE.DEAD;
+        //         PlayerManager.Instance.RoundRestart();
         //         break;
         //     case EGAME_MODE.AREA_SEIZE:
         //         // Todo : Player가 다시 소환 되어야 함

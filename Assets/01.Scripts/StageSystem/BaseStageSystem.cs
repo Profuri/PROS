@@ -14,14 +14,14 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _mode = mode;
         _round = 1;
 
-        ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
+        //ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
 
         GenerateNewStage();
     }
 
     public virtual void StageLeave()
     {
-        ScoreManager.Instance.OnDecideWinnerEvent -= OnDecideWinner;
+        //ScoreManager.Instance.OnDecideWinnerEvent -= OnDecideWinner;
         RemoveCurStage();
     }
 

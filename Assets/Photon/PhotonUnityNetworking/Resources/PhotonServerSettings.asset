@@ -78,6 +78,10 @@ MonoBehaviour:
   - SetBrainDictionaryRPC
   - LoadBrainDictionaryRPC
   - RoundRestartRPC
+  - Defend
+  - RemoveScoreboard
+  - ReviveRPC
+  - UpdateScoreboard
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

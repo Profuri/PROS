@@ -12,7 +12,7 @@ public class PlayerMovement : PlayerHandler
     private Coroutine _stopCoroutine;
     private float _originGravityScale;
 
-    public bool IsStopped { get; private set; }
+    public bool IsStopped { get; set; }
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND"));
 

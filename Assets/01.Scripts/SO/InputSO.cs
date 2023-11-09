@@ -8,6 +8,7 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
 {
     private PlayerControls _playerControls;
     public event Action OnDashKeyPress;
+    public event Action OnDefendKeyPress;
     public event Action<Vector2> OnJumpKeyPress;
     public event Action<Vector2> OnMovementKeyPress;
     public event Action<Vector2> OnMouseAim;
@@ -49,6 +50,14 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
         if (context.performed)
         {
             OnDashKeyPress?.Invoke();
+        }
+    }
+
+    public void OnDefend(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnDefendKeyPress?.Invoke();
         }
     }
 

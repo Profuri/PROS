@@ -36,14 +36,15 @@ public class StageManager : MonoBehaviourPunCallbacks
         if (!NetworkManager.Instance.IsMasterClient)
             return;
 
-        var index = Random.Range(0, _stageSystems.Count);
-        NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, index);
+        var stageIndex = Random.Range(0, _stageSystems.Count);
+        var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
     
     [PunRPC]
-    private void GenerateStageRPC(int index)
+    private void GenerateStageRPC(int stageIndex, int mapIndex)
     {
-        var nextStage = _stageSystems[index];
+        var nextStage = _stageSystems[stageIndex];
         
         if (nextStage == null)
         {
@@ -58,7 +59,6 @@ public class StageManager : MonoBehaviourPunCallbacks
 
         _curStage = nextStage;
         
-        var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
-        _curStage.Init(type);
+        _curStage.Init(mapIndex);
     }
 }

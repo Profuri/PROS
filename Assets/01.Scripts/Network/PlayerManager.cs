@@ -135,6 +135,11 @@ namespace MonoPlayer
             
                 PhotonNetwork.Destroy(obj);
             }
+
+            if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
+            {
+                RevivePlayer(player);
+            }
         }
                 
         [PunRPC]

@@ -85,6 +85,7 @@ public class PlayerBrain : MonoBehaviour
         worldMousePos.z = 0f;
         MousePos = worldMousePos;
     }
+    
     //public void SetRagdollColsEnable(bool active) => _ragdollCols.ForEach(c => c.enabled = active);
     public void SetName(string nickName) => PhotonView.RPC("SetNameRPC",RpcTarget.All,nickName);
     [PunRPC]

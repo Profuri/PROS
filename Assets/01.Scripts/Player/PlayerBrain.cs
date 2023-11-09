@@ -34,6 +34,9 @@ public class PlayerBrain : MonoBehaviour
     private PlayerActionData _playerActionData;
     public PlayerActionData ActionData => _playerActionData;
 
+    private AnimationController _animationController;
+    public AnimationController AnimationController => _animationController;
+
     private Vector3 _mousePos;
     public Vector3 MousePos => _mousePos;
     private void Awake()
@@ -47,10 +50,10 @@ public class PlayerBrain : MonoBehaviour
         _photonView = GetComponent<PhotonView>();
         _playerActionData = GetComponent<PlayerActionData>();
         _playerOTC = GetComponent<PlayerOTC>();
+        _animationController = GetComponent<AnimationController>();
         
         _handlers.ForEach(h => h.Init(this));
         _playerMovement = GetHandlerComponent<PlayerMovement>();
-        
         
         _inputSO.OnMouseAim += AimToWorldPoint;
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;

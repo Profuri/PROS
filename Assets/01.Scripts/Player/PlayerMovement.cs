@@ -14,19 +14,26 @@ public class PlayerMovement : PlayerHandler
 
     public bool IsStopped { get; private set; }
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
-        _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
+        _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND"));
 
+    private float _jumpingTime = 0f;
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
 
-        _brain.InputSO.OnJumpKeyPress += Jump;
+        Debug.Log(_brain.AnimationController);
+        _brain.InputSO.OnJumpKeyPress += _brain.AnimationController.PlayJumpAnim;
+        _brain.InputSO.OnJumpKeyPress += SetJumping;
+
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         _originGravityScale = _brain.Rigidbody.gravityScale;
+        _jumpingTime = 0f;
         StopAllCoroutines();
     }
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
-    private void Jump()
+
+    private void SetJumping(Vector2 value) => _brain.ActionData.IsJumping = true; 
+    public void JumpAction()
     {
         //if (!IsGrounded || !_brain.IsMine) return;
         Debug.Log("Jump");
@@ -35,6 +42,8 @@ public class PlayerMovement : PlayerHandler
     public override void BrainUpdate()
     {
         //If not dashing rotate to origin rotation
+        if(_brain.ActionData.IsJumping) _jumpingTime += Time.deltaTime;
+       
         if (_brain.ActionData.IsDashing == false)
         {
             if (transform.rotation != Quaternion.identity)
@@ -43,12 +52,27 @@ public class PlayerMovement : PlayerHandler
                 SetRotationByDirection(Vector3.up,percent);
             }
         }
+
+        if(IsGrounded)
+        {
+            if(_brain.ActionData.IsJumping == true && _jumpingTime >= 0.5f)
+            {
+                _brain.ActionData.IsLanding = true;
+                _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
+                _brain.ActionData.IsJumping = false;
+                _jumpingTime = 0f;
+            }
+        }
+
     }
     public override void BrainFixedUpdate()
     {
         if (IsStopped || !_brain.IsMine) return;
         Vector2 movement = _inputVec3;
         movement.y = 0f;
+
+        if(_brain.ActionData.IsJumping == false && _brain.ActionData.IsLanding == false)
+            _brain.AnimationController.PlayMoveAnim(movement);
 
         var actionData = _brain.ActionData;
         actionData.PreviousPos = _brain.AgentTrm.position;

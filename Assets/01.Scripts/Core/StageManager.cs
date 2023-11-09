@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class StageManager : MonoBehaviourPunCallbacks
 {
@@ -29,6 +31,16 @@ public class StageManager : MonoBehaviourPunCallbacks
     {
         _stageSystems.Add(new NormalStageSystem(EStageMode.NORMAL));
         SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
+    }
+
+    private void Update()
+    {
+        if (_curStage is null)
+        {
+            return;
+        }
+        
+        _curStage.StageUpdate();
     }
 
     private void GenerateStage()

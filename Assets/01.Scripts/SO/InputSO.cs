@@ -8,10 +8,12 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
 {
     private PlayerControls _playerControls;
     public event Action OnDashKeyPress;
-    public event Action OnJumpKeyPress;
-    public event Action OnDefendKeyPress;
+    public event Action<Vector2> OnJumpKeyPress;
     public event Action<Vector2> OnMovementKeyPress;
     public event Action<Vector2> OnMouseAim;
+
+    Vector2 _inputValue = Vector2.zero;
+    public Vector2 CurrentInputValue => _inputValue;
     public void OnEnable()
     {
         if (_playerControls == null)
@@ -32,14 +34,14 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     {
         if (context.performed)
         {
-            OnJumpKeyPress?.Invoke();
+            OnJumpKeyPress?.Invoke(_inputValue);
         }
     }
 
     public void OnMovement(InputAction.CallbackContext context)
     {
-        Vector2 inputValue = context.ReadValue<Vector2>();
-        OnMovementKeyPress?.Invoke(inputValue);
+        _inputValue = context.ReadValue<Vector2>();
+        OnMovementKeyPress?.Invoke(_inputValue);
     }
 
     public void OnDash(InputAction.CallbackContext context)
@@ -54,13 +56,5 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     {
         Vector2 mouseValue = context.ReadValue<Vector2>();
         OnMouseAim?.Invoke(mouseValue);
-    }
-
-    public void OnDefend(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            OnDefendKeyPress?.Invoke();
-        }
     }
 }

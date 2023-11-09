@@ -36,6 +36,7 @@ public class PlayerDash : PlayerHandler
     {
         if (CanDash)
         {
+            _brain.AnimationController.PlayDashAnim();
             if (_dashCoroutine != null)
             {
                 StopCoroutine(_dashCoroutine);
@@ -178,7 +179,11 @@ public class PlayerDash : PlayerHandler
     }
     public override void BrainUpdate()
     {
-        if (_brain.PlayerMovement.IsGrounded) _isDashed = false;
+        if (_brain.PlayerMovement.IsGrounded)
+        {
+            if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
+            _isDashed = false;
+        }
     }
 
     public override void BrainFixedUpdate()

@@ -32,6 +32,7 @@ public class PlayerDefend : PlayerHandler
             _brain.PhotonView.RPC("Defend", RpcTarget.All);
         }
     }
+
     [PunRPC]
     private void Defend()
     {
@@ -46,13 +47,14 @@ public class PlayerDefend : PlayerHandler
         _defendCoroutine = StartCoroutine(DefendCoroutine());
     }
 
-    public override void BrainFixedUpdate(){}
-    public override void BrainUpdate(){}
-
-
     IEnumerator DefendCoroutine()
     {        
         yield return new WaitForSeconds(_defendTime);
         _isDefend = false;
     }
+
+    public override void BrainFixedUpdate(){}
+    public override void BrainUpdate(){}
+
+
 }

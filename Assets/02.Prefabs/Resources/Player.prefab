@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 5095394103232121666}
   - component: {fileID: 3694932203432191698}
   - component: {fileID: -5827563157986748990}
+  - component: {fileID: 5915237473273111943}
   - component: {fileID: 948541001048123046}
   - component: {fileID: 7816524900850498564}
   - component: {fileID: 7309052249021770781}
@@ -309,7 +310,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _otcPower: 500
-  _bouncePer: 0.096
+  _bouncePer: 0.02
+--- !u!114 &5915237473273111943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676416624467227294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017fb996e0a47bf46a45fc0f0e99359f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coolTime: 5
+  _defendTime: 248.44
+  IsDefendBounce: 0
 --- !u!114 &948541001048123046
 MonoBehaviour:
   m_ObjectHideFlags: 0

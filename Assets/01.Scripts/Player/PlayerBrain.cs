@@ -21,6 +21,7 @@ public class PlayerBrain : MonoBehaviour
     public PhotonView PhotonView { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }    
     public PlayerOTC PlayerOTC { get; private set; }
+    public PlayerDefend PlayerDefend { get; private set; }
     public PlayerActionData ActionData { get; private set; }
     public float OriginGravityScale { get; private set; }
     public Vector3 MousePos { get; private set; }
@@ -45,6 +46,7 @@ public class PlayerBrain : MonoBehaviour
         
         _handlers.ForEach(h => h.Init(this));
         PlayerMovement = GetHandlerComponent<PlayerMovement>();
+        PlayerDefend = GetComponent<PlayerDefend>();
 
         OriginGravityScale = _rigidbody.gravityScale;
         

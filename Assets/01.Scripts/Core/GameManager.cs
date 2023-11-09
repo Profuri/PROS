@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviour
             _instance = this;
         }
         DontDestroyOnLoad(this.gameObject);
-        
-        //GameModeì— ë§ëŠ” ë©”ì†Œë“œ ê°€ì ¸ì˜¤ê¸°
+
+        //GameMode¿¡ ¸Â´Â ¸Ş¼Òµå °¡Á®¿À±â.
         _gameMethodDictionary = new Dictionary<EGAME_MODE, MethodInfo>();
         _playerGameDictionary = new Dictionary<Player, int>();
         _playerWinDictionary = new Dictionary<Player, int>();
@@ -108,8 +108,8 @@ public class GameManager : MonoBehaviour
     private void GameStart()
     {
         Debug.Log("GameStart");
-        
-        //ì´ê±° ì†Œí™˜í•˜ëŠ”ê±° PlayerManagerì—ì„œ Dictionaryì— ì¶”ê°€í•˜ê³  ê²Œì„ì„ ì‹œì‘í•˜ëŠ” ë°©í–¥ì´ ë” ë§ì„ìˆ˜ë„ ìˆì„ ê²ƒ ê°™ìŒ
+
+        //ÀÌ°Å ¼ÒÈ¯ÇÏ´Â°Å PlayerManager¿¡¼­ Dictionary¿¡ Ãß°¡ÇÏ°í °ÔÀÓÀ» ½ÃÀÛÇÏ´Â ¹æÇâÀÌ ´õ ¸ÂÀ»¼öµµ ÀÖÀ» °Í °°À½.
         if (NetworkManager.Instance.IsMasterClient)
         {
             foreach (var player in PlayerManager.Instance.LoadedPlayerList)
@@ -134,9 +134,9 @@ public class GameManager : MonoBehaviour
     
     public void RoundStart()
     {
-        //í”Œë ˆì´ì–´ì˜ ìƒíƒœ ì´ˆê¸°í™”
+        //ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ ÃÊ±âÈ­.
         //InvalidOperationException
-        
+
         if (_gameCoroutine != null)
         {
             StopCoroutine(_gameCoroutine);
@@ -179,13 +179,13 @@ public class GameManager : MonoBehaviour
     
     private void DoGameModeDEATH_MATCH()
     {
-        //í˜„ì¬ ì‚´ì•„ìˆëŠ” í”Œë ˆì´ì–´ë¥¼ ì „ë¶€ ì°¾ìŒ
+        //ÇöÀç »ì¾ÆÀÖ´Â ÇÃ·¹ÀÌ¾î¸¦ ÀüºÎ Ã£À½.
         var alivePlayers =
             from kvp in _playerGameDictionary
             where kvp.Value == (int)EPLAYER_STATE.NORMAL
             select kvp.Key;
 
-        //ì‚´ì•„ìˆëŠ” í”Œë ˆì´ì–´ê°€ í•œ ëª…ì´ë©´ í”Œë ˆì´ì–´ë¥¼ ì´ê²¼ë‹¤ê³  ì²˜ë¦¬í•´ì¤€ë‹¤.
+        //»ì¾ÆÀÖ´Â ÇÃ·¹ÀÌ¾î°¡ ÇÑ ¸íÀÌ¸é ÇÃ·¹ÀÌ¾î¸¦ ÀÌ°å´Ù°í Ã³¸®ÇØÁØ´Ù.
         if (alivePlayers.Count() == 1)
         {
             Player winPlayer = alivePlayers.First();
@@ -236,13 +236,18 @@ public class GameManager : MonoBehaviour
         var playerBrain = PlayerManager.Instance.BrainDictionary[player];
         playerBrain.PlayerOTC.Damaged(attackDir);
 
+        if (playerBrain.PlayerDefend.IsDefendBounce)
+        {
+            playerBrain.PlayerDefend.IsDefendBounce = false;
+            return;
+        }
         switch (CurrentGameMode)
         {
             case EGAME_MODE.DEATH_MATCH:
                 _playerGameDictionary[player] = (int)EPLAYER_STATE.DEAD;
                 break;
             case EGAME_MODE.AREA_SEIZE:
-                // Todo : Playerê°€ ë‹¤ì‹œ ì†Œí™˜ ë˜ì–´ì•¼ í•¨
+                // Todo : Player°¡ ´Ù½Ã ¼ÒÈ¯ µÇ¾î¾ß ÇÔ
                 break;
         }
     }

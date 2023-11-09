@@ -76,12 +76,11 @@ public class PlayerOTC : PlayerHandler,IDamageable
         }
         else
         {
-            Debug.Log("Collider Enable False");
             _brain.Collider.enabled = false;
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
 
-        _brain.PlayerDefend.IsDefendBounce = false;
+        //_brain.PlayerDefend.IsDefendBounce = false;
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

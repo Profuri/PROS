@@ -3,33 +3,49 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+public enum Panel
+{
+    Lobby = 0, Find = 1, Room = 2
+}
 
 public class MenuScreen : MonoBehaviour
 {
     private UIDocument _uiDocument;
 
     [SerializeField] private VisualTreeAsset _playerTempalte;
+    [SerializeField] private VisualTreeAsset _roomTemplate;
 
-    private VisualElement _popupContainer;
+    private readonly string _nameKey = "PLAYER_NAME";
+
+    private Panel _currentPanel;
+
+    private VisualElement _content;
+
+    // Popup Panel
+    private VisualElement _popupPanel;
     private TextField _nameField;
 
-    private VisualElement _panelBox;
+    // Lobby
+    private Button _createBtn;
+    private Button _findBtn;
 
-    private VisualElement _lobbyPanel;
-    private TextField _roomCodeField;
-    private Button _createRoomBtn;
-    private Button _joinRoomBtn;
+    // Find
+    private ScrollView _roomList;
+    private TextField _joinCodeField;
+    private Button _joinCodeBtn;
 
-    private VisualElement _roomPanel;
+    // Room
+    private ScrollView _playerList;
     private Label _roomNameLabel;
-    private ScrollView _roomPlayerList;
+    private Label _roomPlayerCount;
     private Button _startGameBtn;
     private Button _exitRoomBtn;
-
-    private VisualElement _currentPanel;
-
+    private Dictionary<Player, VisualElement> _playerDictionary = new Dictionary<Player, VisualElement>();
+    
     private void Awake()
     {
         _uiDocument = GetComponent<UIDocument>();
@@ -39,135 +55,215 @@ public class MenuScreen : MonoBehaviour
     {
         VisualElement root = _uiDocument.rootVisualElement;
 
-        _popupContainer = root.Q<VisualElement>("popup-container");
-        _popupContainer.RemoveFromClassList("off");
+        // Page Init
+        _content = root.Q<VisualElement>("content");
+        _content.style.left = new Length(0f, LengthUnit.Percent);
+        _currentPanel = Panel.Lobby;
 
-        _panelBox = root.Q<VisualElement>("panel-box");
+        #region Popup Panel
+        _popupPanel = root.Q<VisualElement>("popup-panel");
+        _popupPanel.RemoveFromClassList("off");
+        _nameField = _popupPanel.Q<TextField>("name-field");
+        _nameField.value = PlayerPrefs.GetString(_nameKey, "이름을 입력하세요.");
+        _popupPanel.Q<Button>("btn-ok").RegisterCallback<ClickEvent>(HandleConfirmName);
+        #endregion
 
-        _nameField = root.Q<TextField>("name-field");
-        root.Q<Button>("btn-confirm").RegisterCallback<ClickEvent>(HandleNameConfirm);
+        #region Lobby
+        _createBtn = root.Q<Button>("btn-create");
+        _createBtn.RegisterCallback<ClickEvent>(HandleCreateRoom);
 
-        _lobbyPanel = root.Q<VisualElement>("lobby-panel");
-        _roomCodeField = root.Q<TextField>("room-name-field");
-        _createRoomBtn = root.Q<Button>("btn-create-room");
-        _joinRoomBtn = root.Q<Button>("btn-join-room");
+        _findBtn = root.Q<Button>("btn-find");
+        _findBtn.RegisterCallback<ClickEvent>(HandleFindRoom);
+        #endregion
 
-        _roomPanel = root.Q<VisualElement>("room-panel");
-        _roomNameLabel = root.Q<Label>("room-name");
-        _roomPlayerList = root.Q<ScrollView>("player-list");
-        _startGameBtn = root.Q<Button>("btn-start");
-        _exitRoomBtn = root.Q<Button>("btn-exit");
+        #region Find
+        _roomList = root.Q<ScrollView>("room-list");
+        _roomList.Clear();
+
+        _joinCodeField = root.Q<TextField>("join-code-field");
+        _joinCodeBtn = root.Q<Button>("btn-join-code");
+        _joinCodeBtn.RegisterCallback<ClickEvent>(HandleJoinCode);
+        root.Q<Button>("btn-refresh").RegisterCallback<ClickEvent>(HandleRefresh);
+
+        root.Q<Button>("btn-back").RegisterCallback<ClickEvent>(evt =>
+        {
+            ChangePanel(Panel.Lobby);
+        });
+        #endregion
+
+        #region Room
+        _playerList = root.Q<ScrollView>("player-list");
+        _playerList.Clear();
+
+        _roomNameLabel = _playerList.parent.Q<Label>("page-title");
+        _roomPlayerCount = root.Q<Label>("player-count");
+
+        _startGameBtn = root.Q<Button>("btn-start-game");
+        _exitRoomBtn = root.Q<Button>("btn-exit-room");
         _startGameBtn.RegisterCallback<ClickEvent>(HandleStartGame);
         _exitRoomBtn.RegisterCallback<ClickEvent>(HandleExitRoom);
+        #endregion
 
-        GoToLobbyPanel();
-
+        #region Network Event
         NetworkManager.Instance.OnJoinedLobbyEvent += HandleJoinedLobby;
         NetworkManager.Instance.OnJoinedRoomEvent += HandleJoinedRoom;
         NetworkManager.Instance.OnLeftRoomEvent += HandleLeftRoom;
-        NetworkManager.Instance.OnPlayerEnteredRoomEvent += AddPlayer;
-        NetworkManager.Instance.OnPlayerLeftRoomEvent += RemovePlayer;
+        NetworkManager.Instance.OnPlayerEnteredRoomEvent += HandlePlayerEnterRoom;
+        NetworkManager.Instance.OnPlayerLeftRoomEvent += HandlePlayerLeftRoom;
+        NetworkManager.Instance.OnRoomListUpdateEvent += HandleRoomListUpdate;
+        #endregion
     }
 
-    private void HandleJoinedLobby()
+    private void OnDisable()
     {
-        _createRoomBtn.RegisterCallback<ClickEvent>(HandleCreateRoom);
-        _joinRoomBtn.RegisterCallback<ClickEvent>(HandleJoinRoom);
-        _createRoomBtn.RemoveFromClassList("off");
-        _joinRoomBtn.RemoveFromClassList("off");
+        
     }
 
-    private void OnDestroy()
+    private void ChangePanel(Panel panel)
     {
-        if (NetworkManager.Instance == null) return;
-        NetworkManager.Instance.OnJoinedLobbyEvent -= HandleJoinedLobby;
-        NetworkManager.Instance.OnJoinedRoomEvent -= HandleJoinedRoom;
-        NetworkManager.Instance.OnLeftRoomEvent -= HandleLeftRoom;
-        NetworkManager.Instance.OnPlayerEnteredRoomEvent -= AddPlayer;
-        NetworkManager.Instance.OnPlayerLeftRoomEvent -= RemovePlayer;
+        _currentPanel = panel;
+        _content.style.left = new Length((float)panel * -100f, LengthUnit.Percent);
     }
 
-    private void HandleLeftRoom()
+    private void HandleConfirmName(ClickEvent evt)
     {
-        GoToLobbyPanel();
-    }
-
-    private void GoToRoomPanel()
-    {
-        _panelBox.style.left = new Length(-100, LengthUnit.Percent);
-    }
-
-    private void GoToLobbyPanel()
-    {
-        _panelBox.style.left = new Length(0, LengthUnit.Percent);
-    }
-
-    private void HandleNameConfirm(ClickEvent evt)
-    {
-        _popupContainer.AddToClassList("off");
-        NetworkManager.Instance.LocalPlayer.NickName = _nameField.text;
+        if(string.IsNullOrEmpty(_nameField.value))
+        {
+            Debug.LogError("이름을 입력하세요.");
+            return;
+        }
+        NetworkManager.Instance.LocalPlayer.NickName = _nameField.value;
+        PlayerPrefs.SetString(_nameKey, _nameField.value);
+        _popupPanel.AddToClassList("off");
     }
 
     private void HandleCreateRoom(ClickEvent evt)
     {
+        if (_currentPanel != Panel.Lobby) return;
         NetworkManager.Instance.CreateRoom();
     }
 
-    private void HandleJoinRoom(ClickEvent evt)
+    private void HandleFindRoom(ClickEvent evt)
     {
-        NetworkManager.Instance.JoinRoom($"Room: {_roomCodeField.value}");
+        if (_currentPanel != Panel.Lobby) return;
+        ChangePanel(Panel.Find);
     }
 
-    private void HandleJoinedRoom()
+    private void HandleJoinCode(ClickEvent evt)
     {
-        GoToRoomPanel();
-        _roomNameLabel.text = NetworkManager.Instance.GetCurRoom.Name;
-        _roomPlayerList.Clear();
-        NetworkManager.Instance.PlayerList.ForEach(p => AddPlayer(p));
-        if(!PhotonNetwork.IsMasterClient)
+        if (NetworkManager.Instance.GetCurRoom != null)
         {
-            _startGameBtn.pickingMode = PickingMode.Ignore;
-            _startGameBtn.AddToClassList("off");
+            Debug.LogError("잘못된 접근입니다.");
+            return;
         }
-        else
+        if (string.IsNullOrEmpty(_joinCodeField.value))
         {
-            _startGameBtn.pickingMode = PickingMode.Position;
-            _startGameBtn.RemoveFromClassList("off");
+            Debug.LogError("방 코드를 입력하세요.");
+            return;
         }
+        NetworkManager.Instance.JoinRoom($"Room: {_joinCodeField.value}");
     }
 
-    private void HandleStartGame(ClickEvent evt)
+    private void HandleRefresh(ClickEvent evt)
     {
-        if (NetworkManager.Instance.GetCurRoom == null) return;
-        Debug.Log("Game Start");
-        // Start Game
-        if (NetworkManager.Instance.IsMasterClient)
-        {
-            NetworkManager.Instance.LoadScene(ESceneName.Game);
-        }
+        HandleRoomListUpdate(NetworkManager.Instance.RoomList);
     }
 
     private void HandleExitRoom(ClickEvent evt)
     {
-        if(NetworkManager.Instance.GetCurRoom != null)
-        NetworkManager.Instance.LeaveRoom();
-        GoToLobbyPanel();
-    }
-
-    public void AddPlayer(Player player)
-    {
-        VisualElement newPlayer = _playerTempalte.Instantiate();
-        newPlayer.name = player.NickName;
-        newPlayer.Q<Label>("player-name").text = player.NickName;
-        _roomPlayerList.Add(newPlayer);
-    }
-
-    private void RemovePlayer(Player player)
-    {
-        VisualElement e = _roomPlayerList.Q<VisualElement>(player.NickName);
-        if(e != null)
+        if (NetworkManager.Instance.GetCurRoom == null)
         {
-            _roomPlayerList.Remove(e);
+            Debug.LogError("잘못된 접근입니다.");
+            return;
+        }
+
+        NetworkManager.Instance.LeaveRoom();
+    }
+
+    private void HandleStartGame(ClickEvent evt)
+    {
+        if (NetworkManager.Instance.GetCurRoom == null)
+        {
+            Debug.LogError("잘못된 접근입니다.");
+            return;
         }
     }
+
+    #region Network Event
+
+    private void HandleRoomListUpdate(List<RoomInfo> updatedList)
+    {
+        _roomList.Clear();
+        foreach(var room in NetworkManager.Instance.RoomList)
+        {
+            VisualElement newRoom = _roomTemplate.Instantiate();
+            newRoom.Q<Label>("room-name").text = $"{room.masterClientId}'s Room";
+            newRoom.Q<Button>("btn-join").RegisterCallback<ClickEvent>(evt =>
+            {
+                NetworkManager.Instance.JoinRoom(room.Name);
+            });
+            _roomList.Add(newRoom);
+        }
+    }
+
+    private void HandlePlayerLeftRoom(Player other)
+    {
+        _playerList.Remove(_playerDictionary[other]);
+        _playerDictionary.Remove(other);
+    }
+
+    private void HandlePlayerEnterRoom(Player other)
+    {
+        VisualElement newPlayer = _playerTempalte.Instantiate();
+        newPlayer.Q<Label>("player-name").text = other.NickName;
+        _playerList.Add(newPlayer);
+        _playerDictionary.Add(other, newPlayer);
+    }
+
+    private void HandleLeftRoom()
+    {
+        ChangePanel(Panel.Find);
+
+        HandleRoomListUpdate(NetworkManager.Instance.RoomList);
+    }
+
+    private void HandleJoinedRoom()
+    {
+        RoomInfo room = NetworkManager.Instance.GetCurRoom;
+        _playerList.Clear();
+        _playerDictionary.Clear();
+        foreach(var player in NetworkManager.Instance.PlayerList)
+        {
+            VisualElement newPlayer = _playerTempalte.Instantiate();
+            newPlayer.Q<Label>("player-name").text = player.NickName;
+            if(player.IsMasterClient)
+            {
+                _roomNameLabel.text = $"{player.NickName}'s Room";
+                newPlayer.Q<VisualElement>("master-icon").style.visibility = Visibility.Visible;
+            }
+            _playerList.Add(newPlayer);
+            _playerDictionary.Add(player, newPlayer);
+        }
+
+        _roomPlayerCount.text = $"Join Code: {room.Name.Split(' ')[1]}";
+
+        if(NetworkManager.Instance.IsMasterClient)
+        {
+            _startGameBtn.pickingMode = PickingMode.Position;
+        }
+        else
+        {
+            _startGameBtn.pickingMode = PickingMode.Ignore;
+        }
+
+        ChangePanel(Panel.Room);
+    }
+
+    private void HandleJoinedLobby()
+    {
+        _createBtn.pickingMode = PickingMode.Position;
+        _findBtn.pickingMode = PickingMode.Position;
+    }
+
+    #endregion
 }

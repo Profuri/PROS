@@ -32,24 +32,37 @@ public class OccupationSystem
     
     private Collider2D _currentPlayer;
     private float _curOccupationTime;
-
-    private MonoBehaviour _agentMono;
+    private OccupationArea _areaObj;
+    private OccupationStageSystem _stageSystem;
     
-    public OccupationSystem(MonoBehaviour mono, OccupationStruct occupationData)
+
+    public OccupationSystem(OccupationStageSystem stageSystem, OccupationStruct occupationData)
     {
-        _agentMono = mono;
+        _stageSystem = stageSystem;
         _occupationData = occupationData;
 
         if (_coroutine != null)
         {
-            _agentMono.StopCoroutine(_coroutine);
+            _stageSystem.StopCoroutine(_coroutine);
         }
-        _coroutine = _agentMono.StartCoroutine(DetectPlayers());
+        _coroutine = _stageSystem.StartCoroutine(DetectPlayers());
+    }
+
+    public void Init()
+    {
+        _stageSystem.StopAllCoroutines();
+        PoolManager.Instance.Push(_areaObj);
     }
 
     public void SetOccupationPos(Vector3 targetPos)
     {
         _occupationPos = targetPos;
+
+        if(_areaObj != null)
+            PoolManager.Instance.Push(_areaObj);
+
+        _areaObj = PoolManager.Instance.Pop("OccupationArea") as OccupationArea;
+        _areaObj.transform.position = targetPos;
     }
 
     private IEnumerator DetectPlayers()
@@ -94,5 +107,6 @@ public class OccupationSystem
             }
             yield return null;
         }
+        _stageSystem.OnTargetChangeTime?.Invoke();
     }
 }

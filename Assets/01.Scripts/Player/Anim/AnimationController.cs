@@ -235,6 +235,7 @@ public class AnimationController : MonoBehaviour
     {
         _animator.Play(_dashHash);
     }
+    
     public void PlayLandAnim(Vector2 _input)
     {
         EKeyInputState inputstate;
@@ -257,6 +258,7 @@ public class AnimationController : MonoBehaviour
         }
         Debug.Log("Land");
     }
+    
     public void PlayMoveAnim(Vector2 _input)
     {
         EKeyInputState inputstate;
@@ -279,9 +281,9 @@ public class AnimationController : MonoBehaviour
         }
         Debug.Log("Move");
     }
+
     public void PlayJumpAnim(Vector2 _input)
     {
-        if (_brain.ActionData.IsJumping) return;
         EKeyInputState inputstate;
         if (_input.x != 0)
             inputstate = _input.x < 0 ? EKeyInputState.Left : EKeyInputState.Right;

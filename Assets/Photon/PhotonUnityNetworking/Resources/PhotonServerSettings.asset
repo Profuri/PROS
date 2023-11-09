@@ -63,9 +63,21 @@ MonoBehaviour:
   - ScorePlayerRPC
   - AddPlayerToList
   - AddPlayerListRPC
-  - RemoveScoreboard
-  - UpdateScoreboard
-  - Defend
+  - SpawnPlayer
+  - RemovePlayer
+  - RemovePlayerRPC
+  - CreatePlayerRPC
+  - SettingPlayer
+  - SettingPlayerData
+  - AddPlayerDataRPC
+  - ClearPlayerMapRPC
+  - AddPlayerList
+  - SetBrainDictionary
+  - LoadPlayerList
+  - LoadPlayerListRPC
+  - SetBrainDictionaryRPC
+  - LoadBrainDictionaryRPC
+  - RoundRestartRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

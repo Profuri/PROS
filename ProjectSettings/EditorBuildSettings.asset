@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00.Scenes/Game.unity
     guid: b627b80eebf351e419fc4efa61390613
+  - enabled: 1
+    path: Assets/00.Scenes/Revive.unity
+    guid: 9f02440598b0d8045ae85fe9691dc4cc
   m_configObjects: {}

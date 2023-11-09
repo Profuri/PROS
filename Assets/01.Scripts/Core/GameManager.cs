@@ -96,6 +96,12 @@ public class GameManager : MonoBehaviour
         var playerBrain = PlayerManager.Instance.BrainDictionary[player];
         playerBrain.PlayerOTC.Damaged(attackDir);
 
+        if (playerBrain.PlayerDefend.IsDefendBounce)
+        {
+            playerBrain.PlayerDefend.IsDefendBounce = false;
+            return;
+        }
+
         switch (CurrentGameMode)
         {
             case EGAME_MODE.DEATH_MATCH:

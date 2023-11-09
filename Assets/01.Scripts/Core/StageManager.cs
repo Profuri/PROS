@@ -29,18 +29,13 @@ public class StageManager : MonoBehaviourPunCallbacks
 
     public void Init()
     {
-        _stageSystems.Add(new NormalStageSystem(EStageMode.NORMAL));
+        _stageSystems.Add(GetComponent<NormalStageSystem>());
         SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
     }
 
     private void Update()
     {
-        if (_curStage is null)
-        {
-            return;
-        }
-        
-        _curStage.StageUpdate();
+        _curStage?.StageUpdate();
     }
 
     private void GenerateStage()

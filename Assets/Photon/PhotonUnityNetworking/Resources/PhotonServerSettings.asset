@@ -73,6 +73,10 @@ MonoBehaviour:
   - RoundEndRPC
   - RoundStartRPC
   - GenerateStageRPC
+  - GenerateNewStage
+  - RemoveCurStage
+  - GenerateNewStageCall
+  - RemoveCurStageCall
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

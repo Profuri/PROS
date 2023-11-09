@@ -97,7 +97,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void Revive()
     {
-        _photonView.RPC("ReviveRPC", RpcTarget.Others);
+        _photonView.RPC("ReviveRPC", RpcTarget.All);
     }
 
     [PunRPC]

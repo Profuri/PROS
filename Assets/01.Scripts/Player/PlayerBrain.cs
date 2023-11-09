@@ -5,6 +5,8 @@ using UnityEngine;
 using Photon.Pun;
 using static Define;
 using System;
+using Photon.Pun.Demo.PunBasics;
+using PlayerManager = MonoPlayer.PlayerManager;
 using Random = UnityEngine.Random;
 
 public class PlayerBrain : MonoBehaviour
@@ -16,11 +18,6 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
-
-    private bool _isDead;
-    private bool _isRevive;
-    [SerializeField] private float _reviveTimer;
-    private float _remainReviveTime;
 
     #region Property
     public PhotonView PhotonView { get; private set; }
@@ -37,8 +34,6 @@ public class PlayerBrain : MonoBehaviour
     public Transform AgentTrm => _agentTrm;
     
     public bool IsMine => PhotonView.IsMine;
-    public bool IsDead => _isDead;
-    public bool IsRevive => _isRevive;
     #endregion
 
     private void Awake()
@@ -59,51 +54,12 @@ public class PlayerBrain : MonoBehaviour
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
     }
 
-    private void Update()
-    {
-        if (_isDead && _isRevive)
-        {
-            _remainReviveTime -= Time.deltaTime;
-            if (_remainReviveTime <= 0f)
-            {
-                OnPlayerRevive();
-            }
-        }
-        
-        OnUpdateEvent?.Invoke();
-    }
-
     public void OnPlayerDead()
     {
-        _isDead = true;
-        _remainReviveTime = _reviveTimer;
         Debug.Log("주금");
+        PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
     }
 
-    private void OnPlayerRevive()
-    {
-        _isDead = false;
-        Debug.Log("다시 살아남");
-    }
-
-    public void Init(Vector3 spawnPos, bool isRevive)
-    {
-        _isRevive = isRevive;
-        PhotonView.RPC("InitRPC", RpcTarget.All, spawnPos);
-    }
-
-    [PunRPC]
-    private void InitRPC(Vector3 spawnPos)
-    {
-        _collider.enabled = true;
-        
-        _rigidbody.gravityScale = OriginGravityScale;
-        _rigidbody.velocity = Vector3.zero;
-        
-        PlayerMovement.IsStopped = false;
-        transform.position = spawnPos;
-    }
-    
     #region UnityMessage
     public delegate void UnityMessageListener();
     public event UnityMessageListener OnEnableEvent;
@@ -111,9 +67,11 @@ public class PlayerBrain : MonoBehaviour
     public event UnityMessageListener OnUpdateEvent;
     public event UnityMessageListener OnFixedUpdateEvent;
     private void OnEnable() => OnEnableEvent?.Invoke();
+    private void Update() => OnUpdateEvent?.Invoke();
     private void OnDisable() => OnDisableEvent?.Invoke(); 
     private void FixedUpdate() => OnFixedUpdateEvent?.Invoke();
     #endregion
+    
     public T GetHandlerComponent<T>() where T : PlayerHandler
     {
         var test = _handlers.Find(handle => handle.GetType() == typeof(T)) as T;
@@ -131,46 +89,4 @@ public class PlayerBrain : MonoBehaviour
     public void SetName(string nickName) => PhotonView.RPC("SetNameRPC",RpcTarget.All,nickName);
     [PunRPC]
     private void SetNameRPC(string nickName) => this.gameObject.name = nickName;
-
-    public void Revive()
-    {
-        PhotonView.RPC("ReviveRPC", RpcTarget.All);
-    }
-
-    [PunRPC]
-    private void ReviveRPC()
-    {
-        Transform points = GameObject.Find("Level/Points/SpawnPoints").transform;
-        Vector3 pos = points.GetChild(Random.Range(0, points.childCount)).position;
-        _rigidbody.gravityScale = 0;
-
-        StartCoroutine(BlinkAndDrop(pos));
-    }
-
-    private IEnumerator BlinkAndDrop(Vector3 spawnPos)
-    {
-        var blink = new WaitForSeconds(0.2f);
-        var term = new WaitForSeconds(0.4f);
-
-        yield return new WaitForSeconds(1.5f);
-
-        TrailRenderer tr = transform.Find("Trail").GetComponent<TrailRenderer>();
-        tr.Clear();
-        _rigidbody.velocity = Vector3.zero;
-        transform.position = spawnPos;
-        SpriteRenderer sp = transform.Find("Visual").GetComponent<SpriteRenderer>();
-        for (int i = 0; i < 3; i++)
-        {
-            Color old = sp.color;
-            old.a = 0.25f;
-            sp.color = old;
-            yield return blink;
-            old.a = 1f;
-            sp.color = old;
-            yield return term;
-        }
-
-        Collider.enabled = true;
-        _rigidbody.gravityScale = OriginGravityScale;
-    }
 }

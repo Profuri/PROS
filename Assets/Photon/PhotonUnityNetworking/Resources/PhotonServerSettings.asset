@@ -68,6 +68,11 @@ MonoBehaviour:
   - RemoveScoreboard
   - UpdateScoreboard
   - GenerateStage
+  - LoadBrainDictionaryRPC
+  - LoadPlayerListRPC
+  - RoundEndRPC
+  - RoundStartRPC
+  - GenerateStageRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

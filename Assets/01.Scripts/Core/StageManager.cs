@@ -16,24 +16,35 @@ public class StageManager : MonoBehaviourPunCallbacks
             return _instance;
         }
     }
+    
+    private readonly List<BaseStageSystem> _stageSystems = new List<BaseStageSystem>();
+    
+    [SerializeField] private int _stageTypeCnt;
+    public int StageTypeCnt => _stageTypeCnt;
 
-    [SerializeField] private List<BaseStageSystem> _stageSystems;
     private BaseStageSystem _curStage = null;
+    public BaseStageSystem CurStage => _curStage;
 
     public void Init()
     {
-        SceneManagement.Instance.OnGameSceneLoaded += GenerateStageRPC;
+        _stageSystems.Add(new NormalStageSystem(EStageMode.NORMAL));
+        SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
     }
 
-    private void GenerateStageRPC()
+    private void GenerateStage()
     {
-        var nextStage = _stageSystems[Random.Range(0, _stageSystems.Count)];
-        NetworkManager.Instance.PhotonView.RPC("GenerateStage", RpcTarget.All, nextStage);
+        if (!NetworkManager.Instance.IsMasterClient)
+            return;
+
+        var index = Random.Range(0, _stageSystems.Count);
+        NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, index);
     }
     
     [PunRPC]
-    private void GenerateStage(BaseStageSystem nextStage)
+    private void GenerateStageRPC(int index)
     {
+        var nextStage = _stageSystems[index];
+        
         if (nextStage == null)
         {
             return;
@@ -46,6 +57,8 @@ public class StageManager : MonoBehaviourPunCallbacks
         }
 
         _curStage = nextStage;
-        _curStage.Init();
+        
+        var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        _curStage.Init(type);
     }
 }

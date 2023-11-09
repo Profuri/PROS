@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 148809872}
   - component: {fileID: 148809873}
   - component: {fileID: 148809874}
+  - component: {fileID: 148809875}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -211,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe725cbc81374354bb1952ade3ce1c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _reviveTimer: 1.5
 --- !u!114 &148809872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +261,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e18cdc1b424738a6aeaa78aa2f7605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &148809875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148809866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b605bfcb66d24d20b32b8860f928fc4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageTypeCnt: 3
 --- !u!1 &1409238413
 GameObject:
   m_ObjectHideFlags: 0

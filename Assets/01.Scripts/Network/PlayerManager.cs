@@ -29,29 +29,40 @@ namespace MonoPlayer
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;
         public event Action OnAllPlayerLoad;
+
+        [SerializeField] private float _reviveTimer;
+        private WaitForSeconds _reviveWaitForSeconds;
         
         #region Init
         public void Init()
         {
-            SceneManagement.Instance.OnGameSceneLoaded += OnGameSceneLoad;
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
 
-            
             LoadedPlayerList = new List<Player>();
             BrainDictionary = new Dictionary<Player, PlayerBrain>();
+
+            _reviveWaitForSeconds = new WaitForSeconds(_reviveTimer);
         }
         
         private void OnDisable()
         {
-            SceneManagement.Instance.OnGameSceneLoaded -= OnGameSceneLoad;
             NetworkManager.Instance.OnPlayerLeftRoomEvent -= OnLeftPlayer;
-            
         }
 
         #endregion
 
-        
+        public void RevivePlayer(Player revivePlayer)
+        {
+            StartCoroutine(ReviveRoutine(revivePlayer));
+        }
+
+        private IEnumerator ReviveRoutine(Player revivePlayer)
+        {
+            yield return _reviveWaitForSeconds;
+            CreatePlayer(revivePlayer, StageManager.Instance.CurStage.GetRandomSpawnPoint());
+        }
+
         private void OnLeftPlayer(Player leftPlayer)
         {
             if (LoadedPlayerList.Contains(leftPlayer))
@@ -63,29 +74,36 @@ namespace MonoPlayer
                 BrainDictionary.Remove(leftPlayer);
             }
         }
-        
-        
+
         #region PlayerDictionarySetting
 
-        public void RoundRestart()
+        public void RoundStart()
         {
             if (!NetworkManager.Instance.IsMasterClient)
                 return;
             
-            NetworkManager.Instance.PhotonView.RPC("RoundRestartRPC", RpcTarget.All);
+            NetworkManager.Instance.PhotonView.RPC("RoundStartRPC", RpcTarget.All);
+        }
+
+        public void RoundEnd()
+        {
+            if (!NetworkManager.Instance.IsMasterClient)
+                return;
+            
+            NetworkManager.Instance.PhotonView.RPC("RoundEndRPC", RpcTarget.All);
         }
         
         [PunRPC]
-        private void RoundRestartRPC()
+        private void RoundStartRPC()
         {
-            ResetPlayer();
-            var randomPos = new Vector3(Random.Range(-5f,5f),0f,0f);
+            var randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
             CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
         }
 
-        private void OnGameSceneLoad()
+        [PunRPC]
+        private void RoundEndRPC()
         {
-            RoundRestart();
+            ResetPlayer();
         }
 
         private void ResetPlayer()
@@ -94,12 +112,12 @@ namespace MonoPlayer
             RemovePlayer(NetworkManager.Instance.LocalPlayer);
         }
         
-        public void CreatePlayer(Player player,Vector3 spawnPos)
+        private void CreatePlayer(Player player,Vector3 spawnPos)
         {
             var prefab = PhotonNetwork.Instantiate("Player",spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC",RpcTarget.All,localPlayer);
+            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer);
         }
         
         public void RemovePlayer(Player player)

@@ -1,20 +1,25 @@
-using System;
-using System.Collections.Generic;
+using MonoPlayer;
 using Photon.Realtime;
 using UnityEngine;
 
-public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
+public abstract class BaseStageSystem : IStageSystem
 {
-    [SerializeField] private EStageMode _mode;
+    private EStageMode _mode;
     public EStageMode Mode => _mode;
 
     private int _round;
+    private StageObject _currentStageObject;
 
-    public virtual void Init()
+    public BaseStageSystem(EStageMode mode)
+    {
+        _mode = mode;
+    }
+
+    public virtual void Init(int mapIndex)
     {
         _round = 1;
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
-        GenerateNewStage();
+        GenerateNewStage(mapIndex);
     }
 
     public virtual void StageLeave()
@@ -25,6 +30,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void StageUpdate()
     {
+        if (!NetworkManager.Instance.IsMasterClient)
+            return;
+        
         if (RoundCheck(out var roundWinner))
         {
             if (roundWinner == null)
@@ -35,7 +43,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             ++_round;
             Scoring(roundWinner);
             RemoveCurStage();
-            GenerateNewStage();
+            
+            var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+            GenerateNewStage(type);
         }
     }
 
@@ -49,7 +59,42 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         ScoreManager.Instance.AddScore(targetPlayer);
     }
 
+    public Vector3 GetRandomSpawnPoint()
+    {
+        if (!_currentStageObject)
+        {
+            Debug.LogError("Stage doesnt loaded");
+            return Vector3.zero;
+        }
+        
+        if (_currentStageObject.SpawnPoints.Count <= 0)
+        {
+            Debug.LogError("Stage spawn points is empty!");
+            return Vector3.zero;
+        }
+        
+        return _currentStageObject.SpawnPoints[Random.Range(0, _currentStageObject.SpawnPoints.Count)];
+    }
+
+    public virtual void GenerateNewStage(int index)
+    {
+        if (_currentStageObject)
+        {
+            return;
+        }
+
+        _currentStageObject = PoolManager.Instance.Pop($"Stage{index}") as StageObject;
+        _currentStageObject?.Setting();
+        
+        PlayerManager.Instance.RoundStart();
+    }
+
+    public virtual void RemoveCurStage()
+    {
+        PoolManager.Instance.Push(_currentStageObject);
+        _currentStageObject = null;
+        PlayerManager.Instance.RoundEnd();
+    }
+
     public abstract bool RoundCheck(out Player roundWinner);
-    public abstract void GenerateNewStage();
-    public abstract void RemoveCurStage();
 }

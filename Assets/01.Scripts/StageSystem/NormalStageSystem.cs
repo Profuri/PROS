@@ -3,6 +3,10 @@ using Photon.Realtime;
 
 public class NormalStageSystem : BaseStageSystem
 {
+    public NormalStageSystem(EStageMode mode) : base(mode)
+    {
+    }
+    
     public override bool RoundCheck(out Player roundWinner)
     {
         roundWinner = null;
@@ -15,15 +19,5 @@ public class NormalStageSystem : BaseStageSystem
         {
             return false;
         }
-    }
-
-    public override void GenerateNewStage()
-    {
-        
-    }
-
-    public override void RemoveCurStage()
-    {
-        
     }
 }

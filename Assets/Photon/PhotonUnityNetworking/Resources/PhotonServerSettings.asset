@@ -58,6 +58,8 @@ MonoBehaviour:
   - JumpRPC
   - SetBrainRandomPos
   - SetBrainRandomPosRPC
+  - Revive
+  - ReviveRPC
   - InitRPC
   - ScorePlayer
   - ScorePlayerRPC

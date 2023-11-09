@@ -59,16 +59,6 @@ public class GameManager : MonoBehaviour
     {
         var playerBrain = PlayerManager.Instance.BrainDictionary[player];
         playerBrain.PlayerOTC.Damaged(attackDir);
-
-        // switch (CurrentGameMode)
-        // {
-        //     case EGAME_MODE.DEATH_MATCH:
-        //         PlayerManager.Instance.RoundRestart();
-        //         break;
-        //     case EGAME_MODE.AREA_SEIZE:
-        //         // Todo : Player가 다시 소환 되어야 함
-        //         break;
-        // }
     }
 }
 

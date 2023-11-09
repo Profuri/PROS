@@ -11,7 +11,6 @@ public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
     
-    //[SerializeField] private List<Collider2D> _ragdollCols;
     [SerializeField] private Transform _agentTrm;
     [SerializeField] private Collider2D _collider;
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -135,7 +134,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void Revive()
     {
-        _photonView.RPC("ReviveRPC", RpcTarget.All);
+        PhotonView.RPC("ReviveRPC", RpcTarget.All);
     }
 
     [PunRPC]
@@ -172,6 +171,6 @@ public class PlayerBrain : MonoBehaviour
         }
 
         Collider.enabled = true;
-        _rigidbody.gravityScale = _originGravityScale;
+        _rigidbody.gravityScale = OriginGravityScale;
     }
 }

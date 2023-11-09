@@ -63,6 +63,8 @@ MonoBehaviour:
   - ScorePlayerRPC
   - AddPlayerToList
   - AddPlayerListRPC
+  - RemoveScoreboard
+  - UpdateScoreboard
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

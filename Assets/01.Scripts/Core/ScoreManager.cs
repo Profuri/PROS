@@ -21,6 +21,8 @@ public class ScoreManager : MonoBehaviourPunCallbacks
 
     private ScoreboardUI _scoreboard;
 
+    public event Action<Player> OnDecideWinnerEvent = null;
+
     public void Init()
     {
         NetworkManager.Instance.OnPlayerLeftRoomEvent += RPCCallRemoveScoreboard;
@@ -33,7 +35,7 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         // test
         if (Input.GetKeyDown(KeyCode.O))
         {
-            AddScore();
+            AddScore(NetworkManager.Instance.LocalPlayer);
         }
     }
 
@@ -66,14 +68,14 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         }
     }
     
-    public void AddScore()
+    public void AddScore(Player targetPlayer)
     {
-        NetworkManager.Instance.LocalPlayer.AddScore(1);
-        NetworkManager.Instance.PhotonView.RPC("UpdateScoreboard", RpcTarget.All, NetworkManager.Instance.LocalPlayer);
+        targetPlayer.AddScore(1);
+        NetworkManager.Instance.PhotonView.RPC("UpdateScoreboard", RpcTarget.All, targetPlayer);
         
-        if (NetworkManager.Instance.LocalPlayer.GetScore() >= 4)
+        if (targetPlayer.GetScore() >= 4)
         {
-            // win
+            OnDecideWinnerEvent?.Invoke(targetPlayer);
         }
     }
     

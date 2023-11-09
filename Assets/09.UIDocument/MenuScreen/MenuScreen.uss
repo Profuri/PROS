@@ -37,7 +37,7 @@
 }
 
 .font {
-    -unity-font: url('project://database/Assets/11.Fonts/Cafe24Classictype-v1.1.ttf?fileID=12800000&guid=9be7f5075fe40124da1ff81b4b58c45e&type=3#Cafe24Classictype-v1.1');
+    -unity-font: url('project://database/Assets/11.Fonts/%ED%95%9C%EA%B5%AD%EA%B8%B0%EA%B3%84%EC%97%B0%EA%B5%AC%EC%9B%90_bold.ttf?fileID=12800000&guid=7b2da476b4222f846841fd92451124e8&type=3#한국기계연구원_bold');
     font-size: 32px;
     -unity-font-definition: initial;
     color: rgb(27, 27, 27);

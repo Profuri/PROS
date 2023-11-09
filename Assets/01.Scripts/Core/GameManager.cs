@@ -85,13 +85,11 @@ public class GameManager : MonoBehaviour
         SceneManagement.Instance.Init(this.transform);
         PlayerManager.Instance.Init();
         ParticleManager.Instance.Init();
+        ScoreManager.Instance.Init();
         PoolManager.Instance = new PoolManager(this.transform);
 
         _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
     }
-    
-    
-
 
     public void OTCPlayer(Player player, Vector3 attackDir)
     {

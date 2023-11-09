@@ -44,6 +44,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public event Action<List<RoomInfo>> OnRoomListUpdateEvent;
     public event Action<Player> OnPlayerEnteredRoomEvent;
     public event Action<Player> OnPlayerLeftRoomEvent;
+    
     public void Init()
     {
         _photonView = GetComponent<PhotonView>();

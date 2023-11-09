@@ -165,7 +165,7 @@ public class PlayerDash : PlayerHandler
     {
         if (_brain.PlayerMovement.IsGrounded)
         {
-            if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
+            //if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
             _isDashed = false;
         }
     }

@@ -12,8 +12,11 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     public event Action<Vector2> OnMovementKeyPress;
     public event Action<Vector2> OnMouseAim;
 
-    Vector2 _inputValue = Vector2.zero;
+    private Vector2 _inputValue = Vector2.zero;
     public Vector2 CurrentInputValue => _inputValue;
+    private Vector2 _mousePos = Vector2.zero;
+    public Vector2 CurrentMousePos => _mousePos;
+    
     public void OnEnable()
     {
         if (_playerControls == null)
@@ -54,7 +57,7 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
 
     public void OnAim(InputAction.CallbackContext context)
     {
-        Vector2 mouseValue = context.ReadValue<Vector2>();
-        OnMouseAim?.Invoke(mouseValue);
+        _mousePos = context.ReadValue<Vector2>();
+        OnMouseAim?.Invoke(_mousePos);
     }
 }

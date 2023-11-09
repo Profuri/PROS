@@ -6,8 +6,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class PlayerMovement : PlayerHandler
 {
-    private Vector3 _inputVec3;
+    private Vector3 _inputVec3 = Vector3.zero;
     public Vector3 InputVec => _inputVec3;
+    private Vector2 _prevInputVec = Vector2.zero;
+    public Vector2 PrevInputVec => _prevInputVec;
     
     private Coroutine _stopCoroutine;
     private float _originGravityScale;
@@ -16,34 +18,104 @@ public class PlayerMovement : PlayerHandler
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND"));
 
+    public bool CanJump { get; private set; }
     private float _jumpingTime = 0f;
+    public bool CanMoveAnim { get; private set; } = false;
+
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
 
         Debug.Log(_brain.AnimationController);
-        _brain.InputSO.OnJumpKeyPress += _brain.AnimationController.PlayJumpAnim;
-        _brain.InputSO.OnJumpKeyPress += SetJumping;
-
+        _brain.InputSO.OnJumpKeyPress += SetCanJump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         _originGravityScale = _brain.Rigidbody.gravityScale;
         _jumpingTime = 0f;
         StopAllCoroutines();
     }
+    private void SetCanJump(Vector2 value) => CanJump = true;
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
+    public void PlayMoveAnim(Vector2 _input)
+    {
+        if(_brain.IsMine)
+            photonView.RPC(nameof(PlayMoveAnimRPC), RpcTarget.All, _input);
+    }
+    public void PlayJumpAnim(Vector2 _input)
+    {
+        if (_brain.IsMine)
+        {
+            _brain.ActionData.IsJumping = true;
+            photonView.RPC(nameof(PlayJumpAnimRPC), RpcTarget.All, _input);
+        }
+    }
+    public void PlayLandAnim(Vector2 _input)
+    {
+        if(_brain.IsMine)
+        {
+            photonView.RPC(nameof(PlayLandAnimRPC), RpcTarget.All, _input);
+            _brain.ActionData.IsLanding = true;
+            _brain.ActionData.IsJumping = false;
+            _jumpingTime = 0f;
+        }
+    }
+    
+    [PunRPC]
+    public void PlayJumpAnimRPC(Vector2 _input)
+    {
+        _brain.AnimationController.PlayJumpAnim(_input);
+    }
 
-    private void SetJumping(Vector2 value) => _brain.ActionData.IsJumping = true; 
-    public void JumpAction()
+    [PunRPC]
+    public void PlayMoveAnimRPC(Vector2 _input)
+    {
+        _brain.AnimationController.PlayMoveAnim(_input);
+    }
+
+    [PunRPC]
+    public void PlayLandAnimRPC(Vector2 _input)
+    {
+        _brain.AnimationController.PlayLandAnim(_input);
+        _prevInputVec = Vector2.zero;
+    }    
+
+    public void JumpAction() //Play Action in JumpAnim Event
     {
         //if (!IsGrounded || !_brain.IsMine) return;
         Debug.Log("Jump");
         _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
+
     public override void BrainUpdate()
     {
         //If not dashing rotate to origin rotation
         if(_brain.ActionData.IsJumping) _jumpingTime += Time.deltaTime;
-       
+
+        Vector2 movement = _inputVec3;
+        if (_brain.ActionData.IsJumping == false)
+        {
+            if (_prevInputVec != movement) //입력이 바꼇을때만 실행해줌
+                PlayMoveAnim(movement);
+        }
+
+        //if(_brain.ActionData.IsLanding == false)
+        //{
+
+        //}
+
+        if (IsGrounded)
+        {
+            if(CanJump)
+            {
+                PlayJumpAnim(movement);
+                CanJump = false;
+            }
+
+            if (_brain.ActionData.IsJumping == true && _jumpingTime >= 0.5f)
+            {
+                PlayLandAnim(movement);
+            }
+        }
+
         if (_brain.ActionData.IsDashing == false)
         {
             if (transform.rotation != Quaternion.identity)
@@ -52,32 +124,27 @@ public class PlayerMovement : PlayerHandler
                 SetRotationByDirection(Vector3.up,percent);
             }
         }
-
-        if(IsGrounded)
+        else
         {
-            if(_brain.ActionData.IsJumping == true && _jumpingTime >= 0.5f)
-            {
-                _brain.ActionData.IsLanding = true;
-                _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
-                _brain.ActionData.IsJumping = false;
-                _jumpingTime = 0f;
-            }
+            _brain.ActionData.IsJumping = false;
+            _jumpingTime = 0f;
         }
 
+      
+        _prevInputVec = _inputVec3; // 이전 입력 갱신. 
     }
+
     public override void BrainFixedUpdate()
     {
         if (IsStopped || !_brain.IsMine) return;
         Vector2 movement = _inputVec3;
         movement.y = 0f;
 
-        if(_brain.ActionData.IsJumping == false && _brain.ActionData.IsLanding == false)
-            _brain.AnimationController.PlayMoveAnim(movement);
-
         var actionData = _brain.ActionData;
         actionData.PreviousPos = _brain.AgentTrm.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
         actionData.CurrentPos = _brain.AgentTrm.position;
+    
         //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
     }
     

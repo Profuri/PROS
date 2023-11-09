@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResizingCircleCollider : MonoBehaviour
+public class CheckGroundColliderTransition : MonoBehaviour
 {
     [SerializeField] Transform LeftLegEndPos;
     [SerializeField] Transform RightLegEndPos;
@@ -16,12 +16,5 @@ public class ResizingCircleCollider : MonoBehaviour
 
         if (left) _checkgroundCollider.transform.position = LeftLegEndPos.position;
         else _checkgroundCollider.transform.position = RightLegEndPos.position;
-
-        //float radius = Mathf.Abs(Mathf.Max(Vector3.Distance(ColliderCenterPos.position, LeftLegEndPos.position)
-        //    , Vector3.Distance(ColliderCenterPos.position, RightLegEndPos.position)));
-
-        //Mathf.Clamp(radius, 0.0f, 1.0f);
-
-        //_collider.radius = radius * 2;
     }
 }

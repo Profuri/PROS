@@ -80,6 +80,13 @@ MonoBehaviour:
   - RoundRestartRPC
   - RemoveScoreboard
   - UpdateScoreboard
+  - PlayJumpAnim
+  - PlayMoveAnim
+  - LandAction
+  - SetJumping
+  - PlayJumpAnimRPC
+  - PlayLandAnimRPC
+  - PlayMoveAnimRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

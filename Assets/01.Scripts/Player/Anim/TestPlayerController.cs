@@ -62,13 +62,13 @@ public class TestPlayerController : MonoBehaviour
             //}
         }
     }
-    public void Jump()
-    {
-        _clampInput = false;
-        _isJumping = true;
-        _rb.AddForce(Vector2.up * _jumpForce);
-        Debug.Log("Jump");
-    }
+    //public void Jump()
+    //{
+    //    _clampInput = false;
+    //    _isJumping = true;
+    //    _rb.AddForce(Vector2.up * _jumpForce);
+    //    Debug.Log("Jump");
+    //}
 
     //IEnumerator MoveRight(float waitTime)
     //{

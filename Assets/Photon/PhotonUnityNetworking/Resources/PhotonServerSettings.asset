@@ -78,6 +78,7 @@ MonoBehaviour:
   - SetBrainDictionaryRPC
   - LoadBrainDictionaryRPC
   - RoundRestartRPC
+  - Defend
   - RemoveScoreboard
   - ReviveRPC
   - UpdateScoreboard

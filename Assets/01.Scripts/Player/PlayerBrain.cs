@@ -7,15 +7,18 @@ using static Define;
 public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
-
     
-
     //[SerializeField] private List<Collider2D> _ragdollCols;
     [SerializeField] private Transform _agentTrm;
     [SerializeField] private Collider2D _collider;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
+
+    private bool _isDead;
+    private bool _isRevive;
+    [SerializeField] private float _reviveTimer;
+    private float _remainReviveTime;
 
     #region Property
     public PhotonView PhotonView { get; private set; }
@@ -32,6 +35,8 @@ public class PlayerBrain : MonoBehaviour
     public Transform AgentTrm => _agentTrm;
     
     public bool IsMine => PhotonView.IsMine;
+    public bool IsDead => _isDead;
+    public bool IsRevive => _isRevive;
     #endregion
 
     private void Awake()
@@ -52,18 +57,39 @@ public class PlayerBrain : MonoBehaviour
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
     }
 
+    private void Update()
+    {
+        if (_isDead && _isRevive)
+        {
+            _remainReviveTime -= Time.deltaTime;
+            if (_remainReviveTime <= 0f)
+            {
+                OnPlayerRevive();
+            }
+        }
+        
+        OnUpdateEvent?.Invoke();
+    }
+
     public void OnPlayerDead()
     {
+        _isDead = true;
+        _remainReviveTime = _reviveTimer;
         Debug.Log("주금");
     }
 
-    public void OnPlayerRevive()
+    private void OnPlayerRevive()
     {
+        _isDead = false;
         Debug.Log("다시 살아남");
     }
 
-    public void Init(Vector3 spawnPos) => PhotonView.RPC("InitRPC", RpcTarget.All, spawnPos);
-    
+    public void Init(Vector3 spawnPos, bool isRevive)
+    {
+        _isRevive = isRevive;
+        PhotonView.RPC("InitRPC", RpcTarget.All, spawnPos);
+    }
+
     [PunRPC]
     private void InitRPC(Vector3 spawnPos)
     {
@@ -83,8 +109,7 @@ public class PlayerBrain : MonoBehaviour
     public event UnityMessageListener OnUpdateEvent;
     public event UnityMessageListener OnFixedUpdateEvent;
     private void OnEnable() => OnEnableEvent?.Invoke();
-    private void OnDisable() => OnDisableEvent?.Invoke();
-    private void Update() => OnUpdateEvent?.Invoke();
+    private void OnDisable() => OnDisableEvent?.Invoke(); 
     private void FixedUpdate() => OnFixedUpdateEvent?.Invoke();
     #endregion
     public T GetHandlerComponent<T>() where T : PlayerHandler

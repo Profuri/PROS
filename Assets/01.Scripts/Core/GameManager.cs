@@ -83,7 +83,8 @@ public class GameManager : MonoBehaviour
                 Vector3 randomPos = new Vector3(Random.Range(-5f,-5f),0,0);
                 
                 PlayerBrain brain = PlayerManager.Instance.BrainDictionary[player];
-                brain.Init(randomPos);
+                // 이 부분 수정 해야 함 bool 값 넘기는거 스테이지 속성에 따라서 넘겨야 해
+                brain.Init(randomPos, false);
             }
         }
 

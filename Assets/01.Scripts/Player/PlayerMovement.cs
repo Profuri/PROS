@@ -4,32 +4,37 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
-[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : PlayerHandler
 {
     private Vector3 _inputVec3;
     public Vector3 InputVec => _inputVec3;
     
     private Coroutine _stopCoroutine;
-    private float _originGravityScale;
 
-    public bool IsStopped { get; private set; }
-    public bool IsGrounded => Physics2D.BoxCast(transform.position,
+    public bool IsStopped { get; set; }
+    public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.1f, 1 << LayerMask.NameToLayer("GROUND"));
-                                                                                            
+
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
 
         _brain.InputSO.OnJumpKeyPress += Jump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
-        _originGravityScale = _brain.Rigidbody.gravityScale;
         StopAllCoroutines();
     }
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
+    
     private void Jump()
     {
-        if (!IsGrounded || !_brain.IsMine) return;
+        //if (!IsGrounded || !_brain.IsMine) return;
+        if(!_brain.IsMine) return;
+        _brain.PhotonView.RPC("JumpRPC",RpcTarget.All);
+    }
+    
+    [PunRPC]
+    private void JumpRPC()
+    {
         Debug.Log("Jump");
         _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
@@ -52,12 +57,11 @@ public class PlayerMovement : PlayerHandler
         movement.y = 0f;
 
         var actionData = _brain.ActionData;
-        actionData.PreviousPos = transform.position;
+        actionData.PreviousPos = _brain.AgentTrm.position;
         transform.position +=  (Vector3)( movement) * (_brain.MovementSO.Speed * Time.fixedDeltaTime);
-        actionData.CurrentPos = transform.position;
-        //Debug.Log("MoveDirection" + (transform.position - _brain.ActionData.PreviousPos).normalized);
+        actionData.CurrentPos = _brain.AgentTrm.position;
     }
-
+    
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
@@ -67,16 +71,13 @@ public class PlayerMovement : PlayerHandler
             if (isLeft && _inputVec3.x < 0) _brain.PhotonView.RPC("StopYSystem",RpcTarget.All);
             else if (!isLeft && _inputVec3.x > 0) _brain.PhotonView.RPC("StopYSystem", RpcTarget.All);
             else _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
-
         }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL"))
-        {
+        if (other.collider.gameObject.layer == LayerMask.NameToLayer("WALL")) 
             _brain.PhotonView.RPC("ResumeGravity", RpcTarget.All);
-        }
     }
 
     [PunRPC]
@@ -89,12 +90,8 @@ public class PlayerMovement : PlayerHandler
     }
 
     [PunRPC]
-    private void ResumeGravity()
-    {
-        _brain.Rigidbody.gravityScale = _originGravityScale;
-    }
+    private void ResumeGravity() => _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
     
-
     #region RotationSystem
     public void SetRotationByDirection(Vector3 direction)
     {
@@ -108,6 +105,7 @@ public class PlayerMovement : PlayerHandler
         transform.rotation = Quaternion.Slerp(transform.rotation,targetRot,lerpValue);
     }
     #endregion
+    
     
     #region StopSystem
     public void StopImmediately(float stopTime, Action Callback = null)
@@ -126,7 +124,7 @@ public class PlayerMovement : PlayerHandler
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;
         yield return new WaitForSeconds(stopTime);
-        _brain.Rigidbody.gravityScale = _originGravityScale;
+        _brain.Rigidbody.gravityScale = _brain.OriginGravityScale;
         IsStopped = false;
         Callback?.Invoke();
     }

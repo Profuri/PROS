@@ -21,14 +21,14 @@ public class PlayerDash : PlayerHandler
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         StopAllCoroutines();
     }
-
+    
     #region Dash
     private void DashRPC()
     {
         if (_brain.IsMine)
         {
-            Vector3 mouseDir = (_brain.MousePos - transform.position).normalized;
-            _brain.PhotonView.RPC("Dash", RpcTarget.All, mouseDir);
+            Vector3 mouseDir = (_brain.MousePos - _brain.AgentTrm.position).normalized;
+            _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
         }
     }
     [PunRPC]
@@ -42,62 +42,69 @@ public class PlayerDash : PlayerHandler
             }
             float dashPower = _brain.MovementSO.DashPower;
             _isDashed = true;
-
-            _dashCoroutine = StartCoroutine(DashCoroutine(dashPower, mouseDir));
+            
+            _dashCoroutine = StartCoroutine(DashCoroutine(dashPower,mouseDir));
         }
     }
-    private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
+    private IEnumerator DashCoroutine(float power,Vector3 mouseDir)
     {
         float prevValue = 0f;
         float timer = 0f;
-
-        Vector3 destination = transform.position + mouseDir * power;
-        float distanceFromDestination = Vector3.Distance(transform.position, destination);
-
-        float timeToArrive = distanceFromDestination / power * _dashTime;
-
+        
+        //Debug.LogError($"Curpos: {_brain.AgentTrm.position}");
+        Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
+        //Debug.LogError($"Destination {destination}");
+        float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
+        
+        float timeToArrive = distanceFromDestination / power * _dashTime; 
+        
         float radius = _brain.Collider.bounds.size.x * 0.5f;
-
+            
         _brain.ActionData.IsDashing = true;
 
 
         float percent = 0f;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, distanceFromDestination, _obstacleLayer);
-
+        //_brain.SetRagdollColsEnable(false);
+        
+        RaycastHit2D hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination,_obstacleLayer);
+        
         if (hit.collider != null)
         {
             var obstacleCollider = hit.collider;
             destination = hit.point - (Vector2)mouseDir * (_brain.Collider.bounds.size / 2);
-            timeToArrive = Vector3.Distance(transform.position, destination) / power * _dashTime;
+            timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
         }
 
-        //¸ñÇ¥ À§Ä¡±îÁö ÇöÀç ½Ã°£À» ´ë½¬ Å¸ÀÓ¸¸Å­ ³ª´©¾î¼­ 0 ~ 1·Î ¸¸µé¾îÁÜ.
-        //±× À§Ä¡¸¶´Ù Ãæµ¹Ã¼Å¬¸£ ÇØÁÖ°í ·ÎÅ×ÀÌ¼ÇÀ» µ¹·ÁÁÜ.
-        //Á¦´ë·ÎµÈ PLAYERÀÇ Brain°ú Player¸¦ Ã£¾Æ¿È.
+        //ëª©í‘œ ìœ„ì¹˜ê¹Œì§€ í˜„ì¬ ì‹œê°„ì„ ëŒ€ì‰¬ íƒ€ì„ë§Œí¼ ë‚˜ëˆ„ì–´ì„œ 0 ~ 1ë¡œ ë§Œë“¤ì–´ì¤Œ
+        //ê·¸ ìœ„ì¹˜ë§ˆë‹¤ ì¶©ëŒì²´í´ë¥´ í•´ì£¼ê³  ë¡œí…Œì´ì…˜ì„ ëŒë ¤ì¤Œ
+        //ì œëŒ€ë¡œëœ PLAYERì˜ Brainê³¼ Playerë¥¼ ì°¾ì•„ì˜´
+        
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         while (timer < timeToArrive)
         {
             timer += Time.deltaTime;
 
             percent = timer / timeToArrive;
-
+            
             float easingValue = EaseOutCubic(percent);
             float stepEasingValue = easingValue - prevValue;
-
+            
             prevValue = easingValue;
+            
+            var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
+            transform.position = pos;
+            //_brain.Rigidbody.MovePosition(pos);
 
-            transform.position = Vector3.Lerp(transform.position, destination, stepEasingValue);
 
-            _brain.PlayerMovement.SetRotationByDirection(mouseDir, easingValue);
+            _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
 
-
+            
             //CheckCollisionRealtime
-            //ÇöÀç ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ¸é¼­ ºÎµúÈ÷´Â °ÍÀ» È®ÀÎÇÏ´Â ÄÚµå.
-            Collider2D collider = Physics2D.OverlapCircle(transform.position, radius, _damageableLayer);
-
-
-            //Ã£Àº Äİ¶óÀÌ´õ°¡ ³» Äİ¶óÀÌ´õ°¡ ¾Æ´Ï¿©¾ß ÇÔ.
+            //í˜„ì¬ í”Œë ˆì´ì–´ê°€ ì›€ì§ì´ë©´ì„œ ë¶€ë”ªíˆëŠ” ê²ƒì„ í™•ì¸í•˜ëŠ” ì½”ë“œ
+            Collider2D collider = Physics2D.OverlapCircle(_brain.AgentTrm.position,radius,_damageableLayer);
+            
+            //ì°¾ì€ ì½œë¼ì´ë”ê°€ ë‚´ ì½œë¼ì´ë”ê°€ ì•„ë‹ˆì—¬ì•¼ í•¨
             if (collider != default(Collider2D) && collider.Equals(_brain.Collider) == false)
             {
                 if (collider.TryGetComponent(out PlayerBrain brain))
@@ -105,23 +112,19 @@ public class PlayerDash : PlayerHandler
                     var player = brain.PhotonView.Owner;
                     //_brain.PlayerMovement.StopAllCoroutines();
                     _brain.PlayerMovement.StopImmediately(0f);
-
-                    _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                    if (brain.PlayerDefend.IsDefend)
-                    {
-                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
-                    }
-                    
+                    _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
+                    _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
+                   // _brain.SetRagdollColsEnable(true);
                     yield break;
                 }
             }
             yield return null;
         }
-
-        //Âø·ú ÁöÁ¡¿¡ Ãæµ¹Ã¼Å©¸¦ ÇÑ ¹ø ´õ ÇØÁÜ.
+        
+        //ì°©ë¥™ ì§€ì ì— ì¶©ëŒì²´í¬ë¥¼ í•œ ë²ˆ ë” í•´ì¤Œ
         _brain.Rigidbody.velocity = Vector3.zero;
         _brain.ActionData.IsDashing = false;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, radius * 1.3f, _damageableLayer);
+        Collider2D[] cols = Physics2D.OverlapCircleAll(_brain.AgentTrm.position,radius * 1.3f,_damageableLayer);
         if (cols.Length > 0)
         {
             foreach (var col in cols)
@@ -131,26 +134,31 @@ public class PlayerDash : PlayerHandler
                     if (col.TryGetComponent(out PlayerBrain brain))
                     {
                         var player = brain.PhotonView.Owner;
-
-                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                        if (brain.PlayerDefend.IsDefend)
-                        {
-                            _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
-                        }
+                        _brain.PhotonView.RPC("OTCPlayer",RpcTarget.All,player,mouseDir);
+                        _brain.PhotonView.RPC("SpawnParticle",RpcTarget.All,brain.AgentTrm.position,(int)EPARTICLE_TYPE.EXPLOSION);
                     }
                 }
             }
         }
+       // _brain.SetRagdollColsEnable(true);
+
     }
     #endregion
-
+    
+    [PunRPC]
+    private void OTCPlayer(Player player,Vector3 attackDir)
+    {
+        GameManager.Instance.OTCPlayer(player,attackDir);
+        transform.rotation = Quaternion.identity;
+    }
 
     [PunRPC]
-    private void OTCPlayer(Player player, Vector3 attackDir)
+    private void SpawnParticle(Vector3 pos,int particleType)
     {
-        if (player == photonView.Owner) _brain.PlayerDefend.IsDefendBounce = true;
-        PlayerManager.Instance.OTCPlayer(player, attackDir);
-        transform.rotation = Quaternion.identity;
+        var particle = ParticleManager.Instance.GetParticle((EPARTICLE_TYPE)particleType);
+
+        ParticleAgent spawnParticle = PoolManager.Instance.Pop(particle.gameObject.name) as ParticleAgent;
+        spawnParticle.PlayerParticle(pos);
     }
     public override void BrainUpdate()
     {
@@ -159,5 +167,6 @@ public class PlayerDash : PlayerHandler
 
     public override void BrainFixedUpdate()
     {
+
     }
 }

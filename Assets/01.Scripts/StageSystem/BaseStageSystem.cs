@@ -1,21 +1,19 @@
+using System;
 using System.Collections.Generic;
 using Photon.Realtime;
 using UnityEngine;
 
 public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 {
-    private EStageMode _mode;
+    [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
     private int _round;
 
-    public virtual void Init(EStageMode mode)
+    public virtual void Init()
     {
-        _mode = mode;
         _round = 1;
-
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
-
         GenerateNewStage();
     }
 
@@ -27,9 +25,15 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void StageUpdate()
     {
-        if (RoundCheck())
+        if (RoundCheck(out var roundWinner))
         {
+            if (roundWinner == null)
+            {
+                return;
+            }
+            
             ++_round;
+            Scoring(roundWinner);
             RemoveCurStage();
             GenerateNewStage();
         }
@@ -45,7 +49,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         ScoreManager.Instance.AddScore(targetPlayer);
     }
 
-    public abstract bool RoundCheck();
+    public abstract bool RoundCheck(out Player roundWinner);
     public abstract void GenerateNewStage();
     public abstract void RemoveCurStage();
 }

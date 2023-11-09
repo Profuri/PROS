@@ -80,7 +80,6 @@ namespace MonoPlayer
                 ConvertToDictionary();
                 OnAllPlayerLoad?.Invoke();
             }
-
         }
         
         //Add된 플레이어를 바탕으로 현재 게임에있는 플레이어 브레인을 
@@ -105,7 +104,6 @@ namespace MonoPlayer
             }
         }
         #endregion
-        
     }
 }
 

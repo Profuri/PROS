@@ -52,6 +52,16 @@ public class PlayerBrain : MonoBehaviour
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
     }
 
+    public void OnPlayerDead()
+    {
+        Debug.Log("주금");
+    }
+
+    public void OnPlayerRevive()
+    {
+        Debug.Log("다시 살아남");
+    }
+
     public void Init(Vector3 spawnPos) => PhotonView.RPC("InitRPC", RpcTarget.All, spawnPos);
     
     [PunRPC]
@@ -65,6 +75,7 @@ public class PlayerBrain : MonoBehaviour
         PlayerMovement.IsStopped = false;
         transform.position = spawnPos;
     }
+    
     #region UnityMessage
     public delegate void UnityMessageListener();
     public event UnityMessageListener OnEnableEvent;

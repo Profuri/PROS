@@ -83,6 +83,7 @@ public class MenuScreen : MonoBehaviour
         _joinCodeField = root.Q<TextField>("join-code-field");
         _joinCodeBtn = root.Q<Button>("btn-join-code");
         _joinCodeBtn.RegisterCallback<ClickEvent>(HandleJoinCode);
+        root.Q<Button>("btn-refresh").RegisterCallback<ClickEvent>(HandleRefresh);
 
         root.Q<Button>("btn-back").RegisterCallback<ClickEvent>(evt =>
         {
@@ -161,6 +162,11 @@ public class MenuScreen : MonoBehaviour
             return;
         }
         NetworkManager.Instance.JoinRoom($"Room: {_joinCodeField.value}");
+    }
+
+    private void HandleRefresh(ClickEvent evt)
+    {
+        HandleRoomListUpdate(NetworkManager.Instance.RoomList);
     }
 
     private void HandleExitRoom(ClickEvent evt)

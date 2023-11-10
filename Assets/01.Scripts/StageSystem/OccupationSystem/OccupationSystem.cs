@@ -82,6 +82,7 @@ public class OccupationSystem
         
         while (timer <= changeTime)
         {
+            _areaObj.SetValue(_curOccupationTime);
             Debug.Log($"Timer: {timer}");
             Debug.Log($"CurOccupationTime: {_curOccupationTime}");
             Debug.Log($"CurrentPlayer: {_currentPlayer}");

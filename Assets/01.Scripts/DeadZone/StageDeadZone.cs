@@ -9,5 +9,9 @@ public class StageDeadZone : MonoBehaviour
         {
             brain.OnPlayerDead();
         }
+        else if (other.TryGetComponent<BaseItem>(out var item))
+        {
+            item.Used = true;
+        }
     }
 }

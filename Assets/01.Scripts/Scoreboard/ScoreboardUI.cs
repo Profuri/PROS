@@ -45,6 +45,12 @@ public class ScoreboardUI : MonoBehaviourPunCallbacks
     public void RemoveEntry(Player targetPlayer)
     {
         var targetEntry = _entries.Find(x => x.Player.Equals(targetPlayer));
+
+        if (targetEntry is null)
+        {
+            return;
+        }
+        
         targetEntry.Remove();
         _entries.Remove(targetEntry);
     }

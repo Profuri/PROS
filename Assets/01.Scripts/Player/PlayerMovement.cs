@@ -93,7 +93,7 @@ public class PlayerMovement : PlayerHandler
         Vector2 movement = _inputVec3;
         if (_brain.ActionData.IsJumping == false)
         {
-            if (_prevInputVec != movement) //입력이 바꼇을때만 실행해줌
+            if (_prevInputVec != movement) //?�력??바꼇?�때�??�행?�줌
                 PlayMoveAnim(movement);
         }
 
@@ -131,7 +131,7 @@ public class PlayerMovement : PlayerHandler
         }
 
       
-        _prevInputVec = _inputVec3; // 이전 입력 갱신. 
+        _prevInputVec = _inputVec3; // ?�전 ?�력 갱신. 
     }
 
     public override void BrainFixedUpdate()

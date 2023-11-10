@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public enum Panel
@@ -187,6 +188,18 @@ public class MenuScreen : MonoBehaviour
             Debug.LogError("잘못된 접근입니다.");
             return;
         }
+        if(!NetworkManager.Instance.IsMasterClient)
+        {
+            Debug.LogError("방장만 플레이 할 수 있습니다.");
+            return;
+        }
+        if(NetworkManager.Instance.GetCurRoom.PlayerCount <= 1)
+        {
+            Debug.LogError("게임을 플레이하려면 플레이어가 2인 이상 있어야 합니다.");
+            return;
+        }
+
+        NetworkManager.Instance.LoadScene(ESceneName.Game);
     }
 
     #region Network Event
@@ -249,10 +262,12 @@ public class MenuScreen : MonoBehaviour
 
         if(NetworkManager.Instance.IsMasterClient)
         {
+            _startGameBtn.RemoveFromClassList("off");
             _startGameBtn.pickingMode = PickingMode.Position;
         }
         else
         {
+            _startGameBtn.AddToClassList("off");
             _startGameBtn.pickingMode = PickingMode.Ignore;
         }
 
@@ -262,7 +277,9 @@ public class MenuScreen : MonoBehaviour
     private void HandleJoinedLobby()
     {
         _createBtn.pickingMode = PickingMode.Position;
+        _createBtn.RemoveFromClassList("off");
         _findBtn.pickingMode = PickingMode.Position;
+        _findBtn.RemoveFromClassList("off");
     }
 
     #endregion

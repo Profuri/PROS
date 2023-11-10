@@ -24,16 +24,14 @@ public class EyeTracking : MonoBehaviour
 
     void Update()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(_brain.InputSO.CurrentMousePos);
-    
-        Debug.Log("WorldMousePos : " + mousePosition);
-        Vector2 lookDir = mousePosition - (Vector2)_eyePupil.position;
+        Vector2 mousePosition = _brain.InputSO.CurrentMousePos;
+        Vector2 lookDir =  mousePosition - (Vector2)_mainCam.WorldToScreenPoint((Vector2)_eyePupil.position);
         lookDir.Normalize();
-        Debug.Log($"Lookdir : {lookDir}");
+        
         float pupilAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
             
         _eyePupil.localPosition = Vector2.Lerp(_eyePupil.localPosition, _moveFieldScale * lookDir, Time.deltaTime * pupilSpeed);
         //_eyePupil.rotation = Quaternion.AngleAxis(pupilAngle, Vector3.forward);
-        _eyePupil.localRotation = Quaternion.Lerp(_eyePupil.localRotation, Quaternion.Euler(0f, 0f, pupilAngle), Time.deltaTime * pupilSpeed);
+       _eyePupil.localRotation = Quaternion.Lerp(_eyePupil.localRotation, Quaternion.Euler(0f, 0f, pupilAngle), Time.deltaTime * pupilSpeed);
     }
 }

@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 148809873}
   - component: {fileID: 148809874}
   - component: {fileID: 148809875}
+  - component: {fileID: 148809876}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -212,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe725cbc81374354bb1952ade3ce1c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reviveTimer: 0
+  _reviveTimer: 1.5
 --- !u!114 &148809872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +274,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b605bfcb66d24d20b32b8860f928fc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapCnt: 0
+  _stageTypeCnt: 3
+--- !u!114 &148809876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148809866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7330568b3fb4a0db33882c829e8b0ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mode: 0
 --- !u!1 &1409238413
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,7 +573,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32baa5776b268e743bbe7d09b0881b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTempalte: {fileID: 9197481963319205126, guid: 957536886f34c1246a90cd082725cb3f,
+  _playerTempalte: {fileID: 9197481963319205126, guid: bfd9ecfb623e6f84e9e8cedb3d9a0746,
+    type: 3}
+  _roomTemplate: {fileID: 9197481963319205126, guid: e9e3456e70147654eae68bf551ab482e,
     type: 3}
 --- !u!114 &1902926806
 MonoBehaviour:
@@ -575,7 +591,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 0a81814604537274ca51f71e9b55b3ea, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 62b154e877a5f3b45b5d8a0a80cc1e56,
+  sourceAsset: {fileID: 9197481963319205126, guid: 1b94c3723fef8794bb3f13252d7d2bc0,
     type: 3}
   m_SortingOrder: 0
 --- !u!4 &1902926807

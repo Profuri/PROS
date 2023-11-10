@@ -1,32 +1,59 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/09.UIDocument/MenuScreen/MenuScreen.uss?fileID=7433441132597879392&amp;guid=53d303c7bc36b14448c9449203a1122a&amp;type=3#MenuScreen" />
-    <ui:VisualElement name="container" style="align-items: center; justify-content: center;">
-        <ui:VisualElement name="panel-box" style="flex-direction: row;">
-            <ui:VisualElement name="lobby-panel" class="panel">
-                <ui:VisualElement name="box">
-                    <ui:VisualElement name="join-row" style="flex-direction: row; width: 80%; height: 75px; margin-bottom: 10px;">
-                        <ui:TextField picking-mode="Ignore" value="write join code" name="room-name-field" style="font-size: 32px; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.38); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; flex-basis: 350px;" />
-                        <ui:Button text="Join" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join-room" class="btn off" style="flex-grow: 1;" />
+    <ui:Template name="RoomTemplate" src="project://database/Assets/09.UIDocument/MenuScreen/RoomTemplate.uxml?fileID=9197481963319205126&amp;guid=e9e3456e70147654eae68bf551ab482e&amp;type=3#RoomTemplate" />
+    <ui:Template name="PlayerTemplate" src="project://database/Assets/09.UIDocument/MenuScreen/PlayerTemplate.uxml?fileID=9197481963319205126&amp;guid=bfd9ecfb623e6f84e9e8cedb3d9a0746&amp;type=3#PlayerTemplate" />
+    <Style src="project://database/Assets/09.UIDocument/MenuScreen/MenuScreen.uss?fileID=7433441132597879392&amp;guid=84a7a8b1e288aaa4d89f38441b2acb23&amp;type=3#MenuScreen" />
+    <ui:VisualElement name="container" class="container">
+        <ui:VisualElement name="screen-container" class="screen-container">
+            <ui:VisualElement name="content" class="content" style="left: -200%;">
+                <ui:VisualElement name="page-one" class="page" style="align-items: center; justify-content: center;">
+                    <ui:VisualElement name="page-panel" class="page-panel" style="background-color: rgb(224, 244, 255);">
+                        <ui:Label tabindex="-1" text="Project-S" parse-escape-sequences="true" display-tooltip-when-elided="true" name="page-title" class="font page-title" style="color: rgb(57, 167, 255); font-size: 128px; margin-bottom: 30px;" />
+                        <ui:VisualElement name="inner-box" style="width: 500px;">
+                            <ui:Button text="방 만들기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create" picking-mode="Ignore" class="btn font lobby off" />
+                            <ui:Button text="방 찾기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-find" picking-mode="Ignore" class="btn font lobby off" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Button text="Create Room" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create-room" class="btn off" style="width: 80%;" />
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:VisualElement name="room-panel" class="panel">
-                <ui:VisualElement name="box">
-                    <ui:Label tabindex="-1" text="Room: 8172" parse-escape-sequences="true" display-tooltip-when-elided="true" name="room-name" class="title-font" style="width: 100%; padding-left: 20px; padding-right: 20px;" />
-                    <ui:ScrollView name="player-list" />
-                    <ui:VisualElement name="button-row" style="flex-direction: row; justify-content: flex-end;">
-                        <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start" class="btn" />
-                        <ui:Button text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit" class="btn btn-exit" />
+                <ui:VisualElement name="page-two" class="page" style="align-items: center; justify-content: center;">
+                    <ui:VisualElement name="page-panel" class="page-panel" style="background-color: rgb(150, 182, 197);">
+                        <ui:Label tabindex="-1" text="방 찾기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="page-title" class="page-title font" style="font-size: 100px;" />
+                        <ui:VisualElement name="btn-row" style="width: 750px; align-items: flex-end; margin-right: 20px;">
+                            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-refresh" style="width: 25px; height: 25px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); background-color: rgb(255, 255, 255); background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_refresh.png?fileID=2800000&amp;guid=92b8c447daf4d4b41a0ec148d1091261&amp;type=3#d_refresh&apos;); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-top-left-radius: 5px; border-top-right-radius: 5px;" />
+                        </ui:VisualElement>
+                        <ui:ScrollView name="room-list" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="width: 750px; height: 400px; background-color: rgb(173, 196, 206); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-bottom: 15px;">
+                            <ui:Instance template="RoomTemplate" name="RoomTemplate" />
+                        </ui:ScrollView>
+                        <ui:VisualElement name="inner-box" style="flex-direction: row; justify-content: space-between; width: 750px; align-items: center;">
+                            <ui:Label tabindex="-1" text="또는 코드로 참여" parse-escape-sequences="true" display-tooltip-when-elided="true" name="join-label" class="font" />
+                            <ui:VisualElement name="join-code" style="flex-direction: row; align-items: center; justify-content: flex-end;">
+                                <ui:TextField picking-mode="Ignore" value="코드를 입력하세요" name="join-code-field" class="font joincode-field" style="margin-top: 0; margin-right: 4px; margin-bottom: 0; margin-left: 4px; height: 100%; -unity-text-align: middle-left; width: 275px;" />
+                                <ui:Button text="참가하기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join-code" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-color: rgb(238, 224, 201);" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-back" style="position: absolute; top: 10px; right: 10px; background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); background-image: url(&apos;project://database/Packages/com.unity.collab-proxy/Editor/PlasticSCM/Assets/Images/d_iconundo.png?fileID=2800000&amp;guid=691dc543ff5b9ca44bf846657ba04161&amp;type=3#d_iconundo&apos;); -unity-background-image-tint-color: rgb(0, 0, 0);" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="page-three" class="page" style="align-items: center; justify-content: center;">
+                    <ui:VisualElement name="page-panel" class="page-panel" style="background-color: rgb(36, 89, 83);">
+                        <ui:Label tabindex="-1" text="곽석현&apos;s Room" parse-escape-sequences="true" display-tooltip-when-elided="true" name="page-title" class="font page-title" style="color: rgb(216, 216, 216); font-size: 100px;" />
+                        <ui:ScrollView name="player-list" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="width: 750px; height: 400px; background-color: rgba(64, 142, 145, 0.54); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-bottom: 15px;">
+                            <ui:Instance template="PlayerTemplate" name="PlayerTemplate" />
+                        </ui:ScrollView>
+                        <ui:VisualElement name="inner-box" style="flex-direction: row; justify-content: space-between; width: 750px; align-items: center;">
+                            <ui:Label tabindex="-1" text="1 / 4" parse-escape-sequences="true" display-tooltip-when-elided="true" name="player-count" class="font" style="color: rgb(216, 216, 216);" />
+                            <ui:VisualElement name="btn-row" style="flex-direction: row; align-items: center;">
+                                <ui:Button text="게임 시작" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start-game" picking-mode="Ignore" class="btn font off" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; background-color: rgb(216, 216, 216);" />
+                                <ui:Button text="나가기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit-room" class="btn font" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; background-color: rgb(228, 147, 147);" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="popup-container" class="off">
-            <ui:VisualElement name="popup-panel">
-                <ui:Label tabindex="-1" text="TYPE NAME" parse-escape-sequences="false" display-tooltip-when-elided="true" name="name-label" class="title-font" />
-                <ui:TextField picking-mode="Ignore" value="what is your name..." name="name-field" style="font-size: 50px; width: 80%; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.38); margin-bottom: 10px; height: 75px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px;" />
-                <ui:Button text="Confirm" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-confirm" class="btn" style="width: 80%;" />
+        <ui:VisualElement name="popup-panel" class="popup-panel off">
+            <ui:VisualElement name="inner-input" style="width: 30%; background-color: rgb(255, 255, 255); padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(10, 0, 144); border-right-color: rgb(10, 0, 144); border-top-color: rgb(10, 0, 144); border-bottom-color: rgb(10, 0, 144);">
+                <ui:TextField picking-mode="Ignore" value="이름을 입력하세요." name="name-field" class="font name-field" />
+                <ui:Button text="확인" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ok" class="font btn" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

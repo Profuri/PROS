@@ -82,7 +82,12 @@ MonoBehaviour:
   - RemoveScoreboard
   - ReviveRPC
   - UpdateScoreboard
+  - GenerateNewStageCall
   - GenerateStageRPC
+  - PlayJumpAnimRPC
+  - PlayLandAnimRPC
+  - PlayMoveAnimRPC
+  - RemoveCurStageCall
   - RoundEndRPC
   - RoundStartRPC
   DisableAutoOpenWizard: 1

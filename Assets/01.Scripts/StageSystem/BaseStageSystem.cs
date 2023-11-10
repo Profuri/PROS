@@ -1,20 +1,15 @@
 using MonoPlayer;
-
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public abstract class BaseStageSystem : IStageSystem
+public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 {
-    private EStageMode _mode;
+    [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
     private int _round;
     private StageObject _currentStageObject;
-
-    public BaseStageSystem(EStageMode mode)
-    {
-        _mode = mode;
-    }
 
     public virtual void Init(int mapIndex)
     {
@@ -31,7 +26,7 @@ public abstract class BaseStageSystem : IStageSystem
 
     public virtual void StageUpdate()
     {
-        if (!NetworkManager.Instance.IsMasterClient)
+        if (!NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
             return;
         
         if (RoundCheck(out var roundWinner))
@@ -43,10 +38,10 @@ public abstract class BaseStageSystem : IStageSystem
             
             ++_round;
             Scoring(roundWinner);
-            RemoveCurStage();
+            NetworkManager.Instance.PhotonView.RPC("RemoveCurStageCall", RpcTarget.All);
             
-            var type = Random.Range(0, StageManager.Instance.MapCnt) + 1;
-            GenerateNewStage(type);
+            var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+            NetworkManager.Instance.PhotonView.RPC("GenerateNewStageCall", RpcTarget.All, type);
         }
     }
 
@@ -77,6 +72,12 @@ public abstract class BaseStageSystem : IStageSystem
         return _currentStageObject.SpawnPoints[Random.Range(0, _currentStageObject.SpawnPoints.Count)];
     }
 
+    [PunRPC]
+    public void GenerateNewStageCall(int index)
+    {
+        GenerateNewStage(index);
+    }
+
     public virtual void GenerateNewStage(int index)
     {
         if (_currentStageObject)
@@ -88,6 +89,12 @@ public abstract class BaseStageSystem : IStageSystem
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();
+    }
+    
+    [PunRPC]
+    public void RemoveCurStageCall()
+    {
+        RemoveCurStage();
     }
 
     public virtual void RemoveCurStage()

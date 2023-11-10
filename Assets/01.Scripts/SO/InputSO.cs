@@ -67,6 +67,8 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     public void OnAim(InputAction.CallbackContext context)
     {
         _mousePos = context.ReadValue<Vector2>();
+        
+        Debug.Log("MousePos" + _mousePos);
         OnMouseAim?.Invoke(_mousePos);
     }
 }

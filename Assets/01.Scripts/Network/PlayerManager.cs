@@ -23,7 +23,7 @@ namespace MonoPlayer
                 return _instance;
             }
         }
-
+        
         public List<Player> LoadedPlayerList { get; private set; }
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
@@ -32,6 +32,8 @@ namespace MonoPlayer
 
         [SerializeField] private float _reviveTimer;
         private WaitForSeconds _reviveWaitForSeconds;
+
+        [SerializeField] private GameObject _playerObj;
         
         #region Init
         public void Init()
@@ -114,7 +116,7 @@ namespace MonoPlayer
         
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
-            var prefab = PhotonNetwork.Instantiate("Player",spawnPos,Quaternion.identity);
+            var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
             NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer);

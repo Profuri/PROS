@@ -43,7 +43,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ShowRate: 1
+    - _ShowRate: 0.215
     - _Value: 3.04
     m_Colors:
     - _Color: {r: 1, g: 0.52779984, b: 0.11792443, a: 1}

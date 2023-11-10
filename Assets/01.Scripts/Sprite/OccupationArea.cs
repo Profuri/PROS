@@ -5,14 +5,14 @@ using UnityEngine;
 public class OccupationArea : PoolableMono
 {
     private SpriteRenderer _spriteRenderer;
-    private Material _mat;
+    private readonly int _rateHash = Shader.PropertyToID("_ShowRate");
     public override void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _mat = _spriteRenderer.material;
     }
     public void SetValue(float value)
     {
-        _mat.SetFloat("_ShowRate",value);
+        _spriteRenderer.material.SetFloat(_rateHash,value);
+        Debug.Log(_spriteRenderer.material.GetFloat(_rateHash));
     }
 }

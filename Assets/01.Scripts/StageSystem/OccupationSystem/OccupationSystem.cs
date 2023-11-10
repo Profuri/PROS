@@ -64,7 +64,7 @@ public class OccupationSystem
         if(_areaObj != null)
             PoolManager.Instance.Push(_areaObj);
 
-        _areaObj = PoolManager.Instance.Pop("OccupationArea") as OccupationArea;
+        _areaObj = PoolManager.Instance.Pop("OccupationArea").GetComponent<OccupationArea>();
         _areaObj.transform.position = targetPos;
     }
 
@@ -82,7 +82,14 @@ public class OccupationSystem
         
         while (timer <= changeTime)
         {
-            _areaObj.SetValue(_curOccupationTime);
+            if (_areaObj != null)
+            {
+                _areaObj.SetValue(_curOccupationTime);
+            }
+            else
+            {
+                Debug.LogError("AreaObj is null!!!!!!!!!!");
+            }
             Debug.Log($"Timer: {timer}");
             Debug.Log($"CurOccupationTime: {_curOccupationTime}");
             Debug.Log($"CurrentPlayer: {_currentPlayer}");

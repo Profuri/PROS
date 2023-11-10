@@ -9,12 +9,7 @@ public class OccupationStageSystem : BaseStageSystem
     [SerializeField] private LayerMask _targetLayerMask;
 
     public Action OnTargetChangeTime;
-
-    public OccupationStageSystem(EStageMode mode) : base(mode)
-    {
-    }
-
-
+    
     public override void StageUpdate()
     {
         base.StageUpdate();

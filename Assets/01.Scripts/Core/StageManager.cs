@@ -30,6 +30,7 @@ public class StageManager : MonoBehaviourPunCallbacks
     public void Init()
     {
         _stageSystems.Add(GetComponent<NormalStageSystem>());
+        _stageSystems.Add(GetComponent<OccupationStageSystem>());
         SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
     }
 
@@ -43,8 +44,10 @@ public class StageManager : MonoBehaviourPunCallbacks
         if (!NetworkManager.Instance.IsMasterClient)
             return;
 
-        var stageIndex = Random.Range(0, _stageSystems.Count);
+        //var stageIndex = Random.Range(0, _stageSystems.Count);
+        var stageIndex = 1;
         var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        
         NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
     

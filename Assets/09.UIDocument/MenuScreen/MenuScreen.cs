@@ -193,7 +193,7 @@ public class MenuScreen : MonoBehaviour
             Debug.LogError("방장만 플레이 할 수 있습니다.");
             return;
         }
-        if(NetworkManager.Instance.GetCurRoom.PlayerCount <= 1)
+        if(NetworkManager.Instance.PlayerList.Count < 2)
         {
             Debug.LogError("게임을 플레이하려면 플레이어가 2인 이상 있어야 합니다.");
             return;

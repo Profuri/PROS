@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -386,6 +386,56 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1056467718197267562, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1571697086366317555, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1673323873821683489, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2009809289838752994, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2166461655071822395, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2480659908072591298, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2945204829380477892, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3322329501864032607, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4109293207074445426, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4858370267897222155, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6030028539944019869, guid: 2231b72fe908c0348a7c5b54f2394b44,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -435,6 +485,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7091755431958837500, guid: 2231b72fe908c0348a7c5b54f2394b44,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9194961859446988356, guid: 2231b72fe908c0348a7c5b54f2394b44,
         type: 3}

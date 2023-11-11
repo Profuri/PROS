@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,16 +12,20 @@ public class InvisiblePlatform : BasePlatform
 
     [SerializeField] private float _duration = 0.3f;
     [SerializeField] private float _term = 3f;
-    [SerializeField] private float _delay = 0f; 
+    [SerializeField] private float _delay = 0f;
+
+    private PhotonView _photonView;
 
     protected override void Awake()
     {
         base.Awake();
+        _photonView = GetComponent<PhotonView>();
         SetVisible(_isVisible);
     }
 
     private void Start()
     {
+        if(NetworkManager.Instance.IsMasterClient)
         StartCoroutine(ChangeVisibleCoroutine());
     }
 
@@ -30,7 +35,7 @@ public class InvisiblePlatform : BasePlatform
         while(true)
         {
             yield return new WaitForSeconds(_term);
-            SetVisible(!_isVisible);
+            _photonView.RPC(nameof(SetVisible), RpcTarget.All, !_isVisible);
         }
     }
 

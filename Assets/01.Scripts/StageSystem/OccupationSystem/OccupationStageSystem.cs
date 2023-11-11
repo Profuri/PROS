@@ -9,16 +9,32 @@ public class OccupationStageSystem : BaseStageSystem
     [SerializeField] private LayerMask _targetLayerMask;
     [SerializeField] private float _targetOccupationTime;
     public Action OnTargetChangeTime;
+    public Action<Player> OnPlayerWinEvent;
+
+    private Player _winPlayer;
+    private bool _roundEnd = false;
+    
 
     public override void Init(int mapIndex)
     {
         base.Init(mapIndex);
+        _roundEnd = false;
+        OnPlayerWinEvent += WinPlayer;
     }
 
+    private void WinPlayer(Player player)
+    {
+        _winPlayer = player;
+        _roundEnd = true;
+    }
     public override bool RoundCheck(out Player winnerPlayer)
     {
         winnerPlayer = null;
-        return false;
+        if (_roundEnd)
+        {
+            winnerPlayer = _winPlayer;
+        }
+        return _roundEnd;
     }
 
     public override void GenerateNewStage(int index)

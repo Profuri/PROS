@@ -32,7 +32,7 @@ public class OccupationSystem
     private Collider2D[] _cols;
     private Coroutine _coroutine;
     
-    private Collider2D _currentPlayer;
+    private Player _currentPlayer;
     private float _curOccupationTime;
     private OccupationArea _areaObj;
     private OccupationStageSystem _stageSystem;
@@ -96,15 +96,15 @@ public class OccupationSystem
             if (_curOccupationTime >= targetTime)
             {
                 if(_currentPlayer == null) Debug.LogError($"Player is null");
-                Debug.Log($"Winner: {_currentPlayer}");
+                _stageSystem.OnPlayerWinEvent?.Invoke(_currentPlayer);
             }
             
             if (_cols.Length > 0)
             {
                 if (_cols.Length == 1)
                 {
-                    //var player = _cols[0].transform.root.GetComponentInChildren<PlayerBrain>().PhotonView.Owner;
-                    var player = _cols[0];
+                    var player = _cols[0].transform.root.GetComponentInChildren<PlayerBrain>().PhotonView.Owner;
+                    //var player = _cols[0];
                     if (_currentPlayer != player)
                     {
                         _currentPlayer = player;

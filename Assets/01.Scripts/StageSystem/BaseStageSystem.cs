@@ -14,12 +14,14 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void Init(int mapIndex)
     {
         _round = 1;
+        ItemManager.Instance.StartGenerateItem();
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
         GenerateNewStage(mapIndex);
     }
 
     public virtual void StageLeave()
     {
+        ItemManager.Instance.StopGenerateItem();
         ScoreManager.Instance.OnDecideWinnerEvent -= OnDecideWinner;
         RemoveCurStage();
     }

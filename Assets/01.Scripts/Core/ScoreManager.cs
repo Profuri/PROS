@@ -87,6 +87,11 @@ public class ScoreManager : MonoBehaviourPunCallbacks
 
     private void RPCCallRemoveScoreboard(Player targetPlayer)
     {
+        if (_scoreboard is null)
+        {
+            return;
+        }
+        
         NetworkManager.Instance.PhotonView.RPC("RemoveScoreboard", RpcTarget.All, targetPlayer);
     }
     

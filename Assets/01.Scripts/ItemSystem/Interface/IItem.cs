@@ -5,6 +5,6 @@ public interface IItem
 {
     public void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed);
     public void UpdateItem();
-    public void HitByPlayer(Player hitPlayer);
+    public bool HitByPlayer(Player hitPlayer);
     public void OnTakeItem(Player takenPlayer);
 }

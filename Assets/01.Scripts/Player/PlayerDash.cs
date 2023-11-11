@@ -117,6 +117,14 @@ public class PlayerDash : PlayerHandler
                    // _brain.SetRagdollColsEnable(true);
                     yield break;
                 }
+                
+                if (collider.TryGetComponent<BaseItem>(out var item))
+                {
+                    if (!item.HitByPlayer(_brain.PhotonView.Owner))
+                    {
+                        yield break;
+                    }
+                }
             }
             yield return null;
         }

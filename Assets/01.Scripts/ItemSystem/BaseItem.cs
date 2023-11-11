@@ -1,4 +1,5 @@
 using Photon.Realtime;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class BaseItem : PoolableMono, IItem
@@ -31,14 +32,17 @@ public abstract class BaseItem : PoolableMono, IItem
         transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
     }
 
-    public virtual void HitByPlayer(Player hitPlayer)
+    public virtual bool HitByPlayer(Player hitPlayer)
     {
         _currentHitCnt++;
+        
         if (_currentHitCnt >= _usableHitCnt)
         {
             Used = true;
             OnTakeItem(hitPlayer);
         }
+
+        return Used;
     }
 
     public abstract void OnTakeItem(Player takenPlayer);

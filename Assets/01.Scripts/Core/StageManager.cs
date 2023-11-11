@@ -43,10 +43,13 @@ public class StageManager : MonoBehaviourPunCallbacks
     {
         if (!NetworkManager.Instance.IsMasterClient)
             return;
+        
+        Debug.Log("GenerateStage");
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
         var stageIndex = 1;
-        var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        //var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        var mapIndex = 3;
         
         NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
@@ -58,6 +61,7 @@ public class StageManager : MonoBehaviourPunCallbacks
         
         if (nextStage == null)
         {
+            Debug.LogError($"Can't find stage System in this index: {stageIndex}");
             return;
         }
         

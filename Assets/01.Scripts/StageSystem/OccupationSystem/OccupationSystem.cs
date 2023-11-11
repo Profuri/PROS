@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
 using System.Linq;
+using Photon.Pun;
+
 public struct OccupationStruct
 {
     public float TargetOccupationTime;
@@ -35,16 +37,11 @@ public class OccupationSystem
     private OccupationArea _areaObj;
     private OccupationStageSystem _stageSystem;
     
-
     public OccupationSystem(OccupationStageSystem stageSystem, OccupationStruct occupationData)
     {
         _stageSystem = stageSystem;
         _occupationData = occupationData;
 
-        if (_coroutine != null)
-        {
-            GameManager.Instance.StopCoroutine(_coroutine);
-        }
         _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
 
@@ -54,18 +51,22 @@ public class OccupationSystem
         {
             GameManager.Instance.StopCoroutine(_coroutine);
         }
-        PoolManager.Instance.Push(_areaObj);
     }
 
     public void SetOccupationPos(Vector3 targetPos)
     {
+        if (NetworkManager.Instance.IsMasterClient == false) return;
         _occupationPos = targetPos;
-
-        if(_areaObj != null)
-            PoolManager.Instance.Push(_areaObj);
-
-        _areaObj = PoolManager.Instance.Pop("OccupationArea").GetComponent<OccupationArea>();
-        _areaObj.transform.position = targetPos;
+        if (_areaObj == null)
+        {
+            _areaObj = PhotonNetwork.Instantiate("OccupationArea", targetPos, Quaternion.identity)
+                .GetComponent<OccupationArea>();
+            _areaObj.Init();
+        }
+        else
+        {
+            _areaObj.transform.position = targetPos;
+        }
     }
 
     private IEnumerator DetectPlayers()
@@ -82,13 +83,9 @@ public class OccupationSystem
         
         while (timer <= changeTime)
         {
-            if (_areaObj != null)
+            if (_areaObj != null && NetworkManager.Instance.IsMasterClient)
             {
                 _areaObj.SetValue(_curOccupationTime / targetTime);
-            }
-            else
-            {
-                Debug.LogError("AreaObj is null!!!!!!!!!!");
             }
             Debug.Log($"Timer: {timer}");
             Debug.Log($"CurOccupationTime: {_curOccupationTime}");

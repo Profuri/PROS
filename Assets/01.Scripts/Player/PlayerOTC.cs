@@ -1,41 +1,30 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using Photon.Pun;
-public class PlayerOTC : PlayerHandler,IDamageable
+
+public class PlayerOTC : PlayerHandler, IDamageable
 {
-    [SerializeField] private float _otcPower = 10f;
+    [SerializeField] private float _otcPower;
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
 
-    /// <summary>
-    /// OTC Dropout Execution Function
-    /// </summary>
-    /// <param name="attackDir"> Attack Object Moving Direction </param>
-    /// <param name="otcPrevPos"> Otc Object Previous Moving Direction </param>
-    /// <param name="otcCurPos"> Otc Object Current Moving Direction </param>
-    
-    [PunRPC]
-    public void PlayOTC(Vector3 attackDir)
+    public void Damaged(Vector3 attackDirection)
     {
         if (_brain.PlayerDefend.IsDefend) return;
 
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
-        Vector3 otcDir = CalcOTCDir(attackDir.normalized, otcMovingDir);
+        Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
 
         bool isBounce = false;
         if (!_brain.ActionData.IsDashing)
         {
-            otcDir = attackDir;
+            otcDir = attackDirection;
         }
         else
         {
             // Cases with OTC Direction X or Y of Zero
             if (otcDir == Vector3.zero)
             {
-                otcDir = attackDir;
+                otcDir = attackDirection;
                 isBounce = true;
             }
             
@@ -63,11 +52,14 @@ public class PlayerOTC : PlayerHandler,IDamageable
         // Protect flying to the floor
         if (otcDir.y < 0)
             otcDir.y *= -1;
+        
+        otcDir.Normalize();
 
         if (_brain.PlayerDefend.IsDefendBounce)
         {
+            _brain.PlayerDefend.IsDefendBounce = false;
             isBounce = true;
-            otcDir = attackDir.normalized;
+            otcDir = attackDirection.normalized;
         }
 
         if (isBounce)
@@ -76,11 +68,10 @@ public class PlayerOTC : PlayerHandler,IDamageable
         }
         else
         {
-            _brain.Collider.enabled = false;
+            Debug.Log(otcDir);
+            // _brain.Collider.enabled = false;
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
-
-        //_brain.PlayerDefend.IsDefendBounce = false;
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)
@@ -95,8 +86,4 @@ public class PlayerOTC : PlayerHandler,IDamageable
 
     public override void BrainUpdate(){}
     public override void BrainFixedUpdate(){}
-    public void Damaged(Vector3 attackDirection, Action Callback = null)
-    {
-        PlayOTC(attackDirection);
-    }
 }

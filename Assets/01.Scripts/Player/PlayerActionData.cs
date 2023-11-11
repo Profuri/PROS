@@ -9,5 +9,4 @@ public class PlayerActionData : MonoBehaviour
     public bool IsLanding;
     public Vector3 PreviousPos;
     public Vector3 CurrentPos;
-
 }

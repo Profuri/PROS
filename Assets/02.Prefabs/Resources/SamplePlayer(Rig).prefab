@@ -631,9 +631,9 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0.009191822, w: 0.9999578}
     - {x: 0, y: 0, z: 0, w: 1}
     m_StoredLocalRotations:
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
+    - {x: 0, y: 0, z: -0.714652, w: 0.6994802}
+    - {x: 0, y: 0, z: 0.009191822, w: 0.9999578}
+    - {x: 0, y: 0, z: 0, w: 1}
   m_Flip: 0
 --- !u!1 &2930783393380402333
 GameObject:
@@ -696,9 +696,9 @@ MonoBehaviour:
     - {x: 0, y: 0, z: 0.006285133, w: 0.9999803}
     - {x: 0, y: 0, z: 0, w: 1}
     m_StoredLocalRotations:
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
-    - {x: 0, y: 0, z: 0, w: 0}
+    - {x: 0, y: 0, z: -0.70779777, w: 0.7064151}
+    - {x: 0, y: 0, z: 0.006285133, w: 0.9999803}
+    - {x: 0, y: 0, z: 0, w: 1}
   m_Flip: 0
 --- !u!1 &3020588511966096009
 GameObject:
@@ -1480,6 +1480,7 @@ GameObject:
   - component: {fileID: 6329649964668445229}
   - component: {fileID: -6377599800123021253}
   - component: {fileID: 4323159503514568487}
+  - component: {fileID: 4593811164729338304}
   m_Layer: 7
   m_Name: SamplePlayer(Rig)
   m_TagString: Untagged
@@ -1497,7 +1498,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.15, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1252391641434890427}
@@ -1608,7 +1609,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.95}
+  m_Offset: {x: 0, y: 1}
   serializedVersion: 2
   m_Radius: 1
 --- !u!114 &8833756029806755848
@@ -1674,12 +1675,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dashTime: 0.3
-  _damageableLayer:
+  _obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
-  _obstacleLayer:
+    m_Bits: 320
+  _dashCollisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!114 &2767628487581510480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1709,8 +1710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab212d8248e02b740ba405810440945f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _otcPower: 10
-  _bouncePer: 0
+  _otcPower: 100
+  _bouncePer: 0.5
 --- !u!114 &3858970294392891971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,6 +1785,21 @@ MonoBehaviour:
   LeftLegEndPos: {fileID: 4974060844032635620}
   RightLegEndPos: {fileID: 2316236919845377011}
   _checkgroundCollider: {fileID: 5054789550338940543}
+--- !u!114 &4593811164729338304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6995761489085562046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 017fb996e0a47bf46a45fc0f0e99359f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _coolTime: 2
+  _defendTime: 1.5
+  IsDefendBounce: 0
 --- !u!1 &7239300074890697629
 GameObject:
   m_ObjectHideFlags: 0

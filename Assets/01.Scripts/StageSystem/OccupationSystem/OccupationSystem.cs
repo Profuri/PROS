@@ -84,7 +84,7 @@ public class OccupationSystem
         {
             if (_areaObj != null)
             {
-                _areaObj.SetValue(_curOccupationTime);
+                _areaObj.SetValue(_curOccupationTime / targetTime);
             }
             else
             {
@@ -115,6 +115,11 @@ public class OccupationSystem
                     }
                     _curOccupationTime += (Time.deltaTime);
                 }
+            }
+            else
+            {
+                _currentPlayer = null;
+                _curOccupationTime = 0;
             }
             yield return null;
         }

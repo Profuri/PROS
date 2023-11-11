@@ -1,18 +1,19 @@
 using System.Collections;
-using MonoPlayer;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using static Ease;
+
 public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
     [SerializeField] private float _dashTime = 0.3f;
+    
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
     private bool _isDashed = false;
 
-    [SerializeField] private LayerMask _damageableLayer;
-    [SerializeField] private LayerMask _obstacleLayer;
+    [SerializeField] private LayerMask _obstacleMask;
+    [SerializeField] private LayerMask _dashCollisionMask;
 
     public override void Init(PlayerBrain brain)
     {
@@ -49,7 +50,7 @@ public class PlayerDash : PlayerHandler
         }
     }
     
-    private IEnumerator DashCoroutine(float power,Vector3 mouseDir)
+    private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
         float prevValue = 0f;
         float timer = 0f;
@@ -57,35 +58,28 @@ public class PlayerDash : PlayerHandler
         Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
         float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
         
-        float timeToArrive = distanceFromDestination / power * _dashTime; 
-        
-        float radius = _brain.Collider.bounds.size.x * 0.5f;
+        float timeToArrive = distanceFromDestination / power * _dashTime;
+
+        float radius = ((CircleCollider2D)_brain.Collider).radius * 1.5f;
             
         _brain.ActionData.IsDashing = true;
-
-
+        
         float percent = 0f;
-
-        //_brain.SetRagdollColsEnable(false);
         
-        RaycastHit2D hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination,_obstacleLayer);
+        var hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination, _obstacleMask);
         
-        if (hit.collider != null)
+        if (hit.collider is not null)
         {
             var obstacleCollider = hit.collider;
             destination = hit.point - (Vector2)mouseDir * (_brain.Collider.bounds.size / 2);
             timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
         }
 
-        //목표 ?�치까�? ?�재 ?�간???�???�?�만???�누?�서 0 ~ 1�?만들?�줌
-        //�??�치마다 충돌체클�??�주�?로테?�션???�려�?
-        //?��?로된 PLAYER??Brain�?Player�?찾아??
-        
         _brain.PlayerMovement.StopImmediately(timeToArrive);
+        
         while (timer < timeToArrive)
         {
             timer += Time.deltaTime;
-
             percent = timer / timeToArrive;
             
             float easingValue = EaseOutCubic(percent);
@@ -95,91 +89,76 @@ public class PlayerDash : PlayerHandler
             
             var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
             transform.position = pos;
-            //_brain.Rigidbody.MovePosition(pos);
-            
-            _brain.PlayerMovement.SetRotationByDirection(mouseDir,easingValue);
 
-            //CheckCollisionRealtime
-            //?�재 ?�레?�어가 ?�직이면서 부?�히??것을 ?�인?�는 코드
-            Collider2D collider = Physics2D.OverlapCircle(_brain.AgentTrm.position,radius,_damageableLayer);
+            _brain.PlayerMovement.SetRotationByDirection(mouseDir, easingValue);
             
-            //찾�? 콜라?�더가 ??콜라?�더가 ?�니?�야 ??
-            if (collider != default(Collider2D) && collider.Equals(_brain.Collider) == false)
+            if (CheckDashCollision(mouseDir, radius))
             {
-                if (collider.TryGetComponent(out PlayerBrain brain))
-                {
-                    var player = brain.PhotonView.Owner;
-                    //_brain.PlayerMovement.StopAllCoroutines();
-                    _brain.PlayerMovement.StopImmediately(0f);
-
-                    if (brain.PlayerDefend.IsDefend)
-                    {
-                        ParticleManager.Instance.PlayParticleAll("ExplosionParticle", _brain.AgentTrm.position);
-                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, photonView.Owner, -mouseDir);
-                    }
-                    else
-                    {
-                        _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                    }
-                    
-                    yield break;
-                }
-                
-                if (collider.TryGetComponent<BaseItem>(out var item))
-                {
-                    if (!item.HitByPlayer(_brain.PhotonView.Owner))
-                    {
-                        yield break;
-                    }
-                }
+                yield break;
             }
+            
             yield return null;
         }
         
-        //착륙 지?�에 충돌체크�???�????�줌
-        _brain.Rigidbody.velocity = Vector3.zero;
+        _brain.PlayerMovement.StopImmediately(0.0f);
+        transform.rotation = Quaternion.identity;
+        CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;
-        
-        var cols = Physics2D.OverlapCircleAll(_brain.AgentTrm.position,radius * 1.3f,_damageableLayer);
-        
-        if (cols.Length > 0)
-        {
-            foreach (var col in cols)
-            {
-                if (col.Equals(_brain.Collider) == false)
-                {
-                    if (col.TryGetComponent(out PlayerBrain brain))
-                    {
-                        var player = brain.PhotonView.Owner;
-
-                        if (brain.PlayerDefend.IsDefend)
-                        {
-                            ParticleManager.Instance.PlayParticleAll("ExplosionParticle", _brain.AgentTrm.position);
-                            _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, -mouseDir);
-                        }
-                        else
-                        {
-                            _brain.PhotonView.RPC("OTCPlayer", RpcTarget.All, player, mouseDir);
-                        }
-                    }
-                }
-            }
-        }
     }
     #endregion
-    
-    [PunRPC]
-    private void OTCPlayer(Player player,Vector3 attackDir)
+
+    private bool CheckDashCollision(Vector3 dir, float radius, int maxCheckCount = 10)
     {
-        if (player == photonView.Owner)
-        {
-            _brain.PlayerDefend.IsDefendBounce = true;
-        }
+        var cols = new Collider2D[maxCheckCount];
+        var size = Physics2D.OverlapCircleNonAlloc(_brain.AgentTrm.position, radius, cols, _dashCollisionMask);
+
+        var returnValue = false;
         
-        GameManager.Instance.OTCPlayer(player,attackDir);
-        transform.rotation = Quaternion.identity;
+        if (size <= 0)
+        {
+            return false;
+        } 
+        
+        for (var i = 0; i < size; i++)
+        {
+            if (cols[i].Equals(_brain.Collider))
+            {
+                continue;
+            }
+
+            if (cols[i].TryGetComponent<PlayerBrain>(out var collisionBrain))
+            {
+                _brain.PlayerMovement.StopImmediately(0.0f);
+                ParticleManager.Instance.PlayParticleAll("ExplosionParticle", _brain.AgentTrm.position);
+
+                if (collisionBrain.PlayerDefend.IsDefend)
+                {
+                    collisionBrain.PlayerDefend.IsDefendBounce = true;
+                    _brain.PlayerOTC.Damaged(-dir);
+                }
+                else
+                {
+                    collisionBrain.PlayerOTC.Damaged(dir);
+                }
+
+                returnValue = true;
+            }
+            
+            if (cols[i].TryGetComponent<BaseItem>(out var item))
+            {
+                if (item.HitByPlayer(_brain.PhotonView.Owner))
+                {
+                    continue;
+                }
+
+                collisionBrain.PlayerDefend.IsDefendBounce = true;
+                _brain.PlayerOTC.Damaged(-dir);
+            }
+        }
+
+        return returnValue;
     }
-    
+
     public override void BrainUpdate()
     {
         if (_brain.PlayerMovement.IsGrounded)

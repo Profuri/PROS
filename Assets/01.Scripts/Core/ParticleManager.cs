@@ -1,6 +1,3 @@
-using System.Runtime.InteropServices.ComTypes;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
@@ -21,7 +18,7 @@ public class ParticleManager : MonoBehaviour
 
     public void PlayParticleAll(string particleName, Vector3 position = default, Quaternion rotation = default)
     {
-        NetworkManager.Instance.PhotonView.RPC("PlayParticlePRC", RpcTarget.All, particleName, position, rotation);
+        NetworkManager.Instance.PhotonView.RPC("PlayParticleRPC", RpcTarget.All, particleName, position, rotation);
     }
     
     [PunRPC]

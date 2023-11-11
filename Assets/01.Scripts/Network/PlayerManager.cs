@@ -24,6 +24,7 @@ namespace MonoPlayer
         }
         
         public List<Player> LoadedPlayerList { get; private set; }
+        
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;

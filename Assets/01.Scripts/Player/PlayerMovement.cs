@@ -81,7 +81,6 @@ public class PlayerMovement : PlayerHandler
     public void JumpAction() //Play Action in JumpAnim Event
     {
         //if (!IsGrounded || !_brain.IsMine) return;
-        Debug.Log("Jump");
         _brain.Rigidbody.velocity += new Vector2(0,_brain.MovementSO.JumpPower);
     }
 
@@ -93,7 +92,7 @@ public class PlayerMovement : PlayerHandler
         Vector2 movement = _inputVec3;
         if (_brain.ActionData.IsJumping == false)
         {
-            if (_prevInputVec != movement) //?…ë ¥??ë°”ê¼‡?„ë•Œë§??¤í–‰?´ì¤Œ
+            if (_prevInputVec != movement) //?ï¿½ë ¥??ë°”ê¼‡?ï¿½ë•Œï¿½??ï¿½í–‰?ï¿½ì¤Œ
                 PlayMoveAnim(movement);
         }
 
@@ -131,7 +130,7 @@ public class PlayerMovement : PlayerHandler
         }
 
       
-        _prevInputVec = _inputVec3; // ?´ì „ ?…ë ¥ ê°±ì‹ . 
+        _prevInputVec = _inputVec3; // ?ï¿½ì „ ?ï¿½ë ¥ ê°±ì‹ . 
     }
 
     public override void BrainFixedUpdate()
@@ -207,10 +206,10 @@ public class PlayerMovement : PlayerHandler
         }
         _stopCoroutine = StartCoroutine(StopCoroutine(stopTime, Callback));
     }
-    //ÄÚ·çÆ¾ÀÌ ¸ØÃçÀÖ´ÂÁö bool °ªÀ¸·Î È®ÀÎÇÒ ¼ö ÀÖ°Ô ÇØ¾ßÇÔ.
+    //ï¿½Ú·ï¿½Æ¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ bool ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½.
     private IEnumerator StopCoroutine(float stopTime,Action Callback = null)
     {  
-        //¿©±â¼­ 0ÀÎ »óÅÂ·Î °¡Á®¿Í¹ö¸®°Ô µÇ¸é ±×´ë·Î 0¿¡¼­ 0À¸·Î ¹Ù²ãÁÖ´Â ²ÃÀÌ µÇ¹ö¸².
+        //ï¿½ï¿½ï¿½â¼­ 0ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½×´ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½ï¿½.
         _brain.Rigidbody.gravityScale = 0f;
         _brain.Rigidbody.velocity = Vector3.zero;
         IsStopped = true;

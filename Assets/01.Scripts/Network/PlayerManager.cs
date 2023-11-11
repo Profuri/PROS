@@ -6,7 +6,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Random = UnityEngine.Random;
-
+                         
 namespace MonoPlayer
 {
     public class PlayerManager : MonoBehaviourPunCallbacks
@@ -39,6 +39,7 @@ namespace MonoPlayer
         public void Init()
         {
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
+            //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
             OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
 
             LoadedPlayerList = new List<Player>();
@@ -116,6 +117,7 @@ namespace MonoPlayer
         
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
+            Debug.Log("CreatePlayer");
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         

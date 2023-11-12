@@ -25,8 +25,8 @@ public class InvisiblePlatform : BasePlatform
 
     private void Start()
     {
-        if(NetworkManager.Instance.IsMasterClient)
-        StartCoroutine(ChangeVisibleCoroutine());
+        // if(NetworkManager.Instance.IsMasterClient)
+        //     StartCoroutine(ChangeVisibleCoroutine());
     }
 
     private IEnumerator ChangeVisibleCoroutine()

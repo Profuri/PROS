@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
         NetworkManager.Instance.Init();
         SceneManagement.Instance.Init(this.transform);
         PlayerManager.Instance.Init();
-        ParticleManager.Instance.Init();
         ScoreManager.Instance.Init();
         PoolManager.Instance = new PoolManager(this.transform);
         StageManager.Instance.Init();
@@ -64,7 +63,6 @@ public class GameManager : MonoBehaviour
         if (playerBrain.PlayerDefend.IsDefendBounce)
         {
             playerBrain.PlayerDefend.IsDefendBounce = false;
-            return;
         }
     }
 }

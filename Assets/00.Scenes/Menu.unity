@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 148809870}
   - component: {fileID: 148809871}
   - component: {fileID: 148809872}
-  - component: {fileID: 148809873}
   - component: {fileID: 148809874}
   - component: {fileID: 148809875}
   - component: {fileID: 148809876}
@@ -240,20 +239,6 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &148809873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148809866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8d369e3ceee57a48a87d293cb572a21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _particleTypeListSO: {fileID: 11400000, guid: 58ca3eaf53b01eb49a3d869e5b5e9ab3,
-    type: 2}
 --- !u!114 &148809874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,14 +300,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 148809866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a55bfa572c82854aad61569b342194d, type: 3}
+  m_Script: {fileID: 11500000, guid: c8d369e3ceee57a48a87d293cb572a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mode: 1
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  _targetOccupationTime: 2
 --- !u!1 &1409238413
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,8 +339,8 @@ Camera:
   m_GameObject: {fileID: 1409238413}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -384,7 +364,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:

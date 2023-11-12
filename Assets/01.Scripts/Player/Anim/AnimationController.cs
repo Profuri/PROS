@@ -48,7 +48,7 @@ public class AnimationController : MonoBehaviour
     //public float JumpPower = 10f;
     //public float StepWeight = 1f;
     //public float StepSpeed = 0.2f;
-    //public float FloatingValue = 0.5f; //¹ß ¾ó¸¶³ª ¶ç¿ïÁö
+    //public float FloatingValue = 0.5f; //ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     //public float PositionRadius = 1f; // check ground radius
 
     //private Rigidbody2D _rb;
@@ -125,7 +125,7 @@ public class AnimationController : MonoBehaviour
     //    //    SitDown(false);
     //    //}
 
-    //    if(_jumping == true && _jumpingTime >= AfterJumpCheckGroundTimeLimit) //Á¡ÇÁÇÑÁö 0.2ÃÊ°¡ Èê¤©·¶´Ù¸é
+    //    if(_jumping == true && _jumpingTime >= AfterJumpCheckGroundTimeLimit) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0.2ï¿½Ê°ï¿½ ï¿½ê¤©ï¿½ï¿½ï¿½Ù¸ï¿½
     //    {
     //        if(GroundCheck())
     //        {
@@ -184,9 +184,9 @@ public class AnimationController : MonoBehaviour
     //    float percent = 0f;
     //    _rb.gravityScale = 0;
 
-    //    //¸ñÇ¥ À§Ä¡±îÁö ÇöÀç ½Ã°£À» ´ë½¬ Å¸ÀÓ¸¸Å­ ³ª´©¾î¼­ 0 ~ 1·Î ¸¸µé¾îÁÜ
-    //    //±× À§Ä¡¸¶´Ù Ãæµ¹Ã¼Å¬¸£ ÇØÁÖ°í ·ÎÅ×ÀÌ¼ÇÀ» µ¹·ÁÁÜ
-    //    //Á¦´ë·ÎµÈ PLAYERÀÇ Brain°ú Player¸¦ Ã£¾Æ¿È
+    //    //ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ë½¬ Å¸ï¿½Ó¸ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½î¼­ 0 ~ 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //    //ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½æµ¹Ã¼Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //    //ï¿½ï¿½ï¿½ï¿½Îµï¿½ PLAYERï¿½ï¿½ Brainï¿½ï¿½ Playerï¿½ï¿½ Ã£ï¿½Æ¿ï¿½
     //    while (timer < timeToArrive)
     //    {
     //        timer += Time.deltaTime;
@@ -206,7 +206,7 @@ public class AnimationController : MonoBehaviour
 
 
     //        //CheckCollisionRealtime
-    //        //ÇöÀç ÇÃ·¹ÀÌ¾î°¡ ¿òÁ÷ÀÌ¸é¼­ ºÎµúÈ÷´Â °ÍÀ» È®ÀÎÇÏ´Â ÄÚµå
+    //        //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸é¼­ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½
     //        yield return null;
     //    }
     //    _rb.gravityScale = 9.8f;
@@ -256,7 +256,6 @@ public class AnimationController : MonoBehaviour
                 _animator.Play(_LandIdleHash);
                 break;
         }
-        Debug.Log("Land");
     }
     
     public void PlayMoveAnim(Vector2 _input)
@@ -279,7 +278,6 @@ public class AnimationController : MonoBehaviour
                 _animator.Play(_MoveIdleHash);
                 break;
         }
-        Debug.Log("Move");
     }
 
     public void PlayJumpAnim(Vector2 _input)
@@ -302,7 +300,6 @@ public class AnimationController : MonoBehaviour
                 _animator.Play(_jumpIdleHash);
                 break;
         }
-        Debug.Log("Jump");
     }
     #endregion
     #region Animwithcode

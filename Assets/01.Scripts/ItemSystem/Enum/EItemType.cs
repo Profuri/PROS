@@ -1,5 +1,4 @@
 public enum EItemType
 {
- 
-    COUNT,
+    COUNT = 0,
 }

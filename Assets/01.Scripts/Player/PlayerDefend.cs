@@ -55,6 +55,4 @@ public class PlayerDefend : PlayerHandler
 
     public override void BrainFixedUpdate(){}
     public override void BrainUpdate(){}
-
-
 }

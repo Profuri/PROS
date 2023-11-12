@@ -28,12 +28,14 @@ public class OccupationStageSystem : BaseStageSystem
         _winPlayer = player;
         _roundEnd = true;
     }
+    
     public override bool RoundCheck(out Player winnerPlayer)
     {
         winnerPlayer = null;
         if (_roundEnd)
         {
             winnerPlayer = _winPlayer;
+            Debug.LogError($"WinPlayer: {winnerPlayer}");
         }
         return _roundEnd;
     }
@@ -45,7 +47,8 @@ public class OccupationStageSystem : BaseStageSystem
         if (NetworkManager.Instance.IsMasterClient == false) return;
         NetworkManager.Instance.PhotonView.RPC("SetOccupationSystemRPC",RpcTarget.All);
     }
-
+    
+    [PunRPC]
     private void SetOccupationSystemRPC()
     {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,

@@ -60,12 +60,15 @@ public class PlayerBrain : MonoBehaviour
 
     public void OnPlayerDead()
     {
-        Debug.Log("주금");
-        PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+        }
     }
 
     #region UnityMessage
     public delegate void UnityMessageListener();
+    
     public event UnityMessageListener OnEnableEvent;
     public event UnityMessageListener OnDisableEvent;
     public event UnityMessageListener OnUpdateEvent;

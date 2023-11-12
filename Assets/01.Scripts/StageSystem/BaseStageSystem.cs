@@ -83,6 +83,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();
+        Debug.Log("GenerateNewStage: BaseStageSystem");
     }
 
     public virtual void RemoveCurStage()

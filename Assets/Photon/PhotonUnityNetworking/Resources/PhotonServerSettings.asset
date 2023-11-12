@@ -92,7 +92,10 @@ MonoBehaviour:
   - RoundStartRPC
   - GenerateItemRPC
   - RemoveItemRPC
-  - SetValueRPC
+  - PlayParticleRPC
+  - GenerateNewMapRPC
+  - GenerateNextStageRPC
+  - RemoveCurMapRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

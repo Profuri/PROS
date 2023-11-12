@@ -1,5 +1,4 @@
 using MonoPlayer;
-using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
@@ -40,10 +39,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             
             ++_round;
             Scoring(roundWinner);
-            NetworkManager.Instance.PhotonView.RPC("RemoveCurStageCall", RpcTarget.All);
             
-            var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
-            NetworkManager.Instance.PhotonView.RPC("GenerateNewStageCall", RpcTarget.All, type);
+            StageManager.Instance.RemoveCurMap();
+            StageManager.Instance.GenerateNewMap();
         }
     }
 
@@ -74,12 +72,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         return _currentStageObject.SpawnPoints[Random.Range(0, _currentStageObject.SpawnPoints.Count)];
     }
 
-    [PunRPC]
-    public void GenerateNewStageCall(int index)
-    {
-        GenerateNewStage(index);
-    }
-
     public virtual void GenerateNewStage(int index)
     {
         if (_currentStageObject)
@@ -92,12 +84,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         PlayerManager.Instance.RoundStart();
         Debug.Log("GenerateNewStage: BaseStageSystem");
-    }
-    
-    [PunRPC]
-    public void RemoveCurStageCall()
-    {
-        RemoveCurStage();
     }
 
     public virtual void RemoveCurStage()

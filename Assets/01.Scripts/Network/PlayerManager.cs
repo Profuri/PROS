@@ -167,7 +167,6 @@ namespace MonoPlayer
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
             playerBrain.SetName(player.NickName);
             
-     
             bool result = BrainDictionary.TryAdd(player, playerBrain);
             if (result == false)
             {

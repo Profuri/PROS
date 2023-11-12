@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 [CreateAssetMenu(menuName = "SO/Input")]
-public class InputSO : ScriptableObject,PlayerControls.INormalActions
+public class InputSO : ScriptableObject,PlayerControls.INormalActions, PlayerControls.IUIActions
 {
     private PlayerControls _playerControls;
     public event Action OnDashKeyPress;
@@ -12,6 +12,7 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     public event Action<Vector2> OnJumpKeyPress;
     public event Action<Vector2> OnMovementKeyPress;
     public event Action<Vector2> OnMouseAim;
+    public event Action<int> OnSpectateChange;
 
     private Vector2 _inputValue = Vector2.zero;
     public Vector2 CurrentInputValue => _inputValue;
@@ -68,5 +69,13 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions
     {
         _mousePos = context.ReadValue<Vector2>();
         OnMouseAim?.Invoke(_mousePos);
+    }
+
+    public void OnSpectate(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            OnSpectateChange?.Invoke(context.ReadValue<int>());
+        }
     }
 }

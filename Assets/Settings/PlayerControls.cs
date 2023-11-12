@@ -174,6 +174,56 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""7e152f45-9b88-4128-9b24-d6dba92f30ac"",
+            ""actions"": [
+                {
+                    ""name"": ""Spectate"",
+                    ""type"": ""Button"",
+                    ""id"": ""10eb1d5b-72ac-4148-b2c3-181342b0de99"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""Arrow"",
+                    ""id"": ""b005ac54-6389-4c4f-abff-151625254b52"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spectate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d5ead6c1-d74b-4712-af64-46bffa554371"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Spectate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""9b9a4fa8-d543-47cd-80eb-2bb2cb042dd7"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Spectate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -202,6 +252,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Normal_Dash = m_Normal.FindAction("Dash", throwIfNotFound: true);
         m_Normal_Aim = m_Normal.FindAction("Aim", throwIfNotFound: true);
         m_Normal_Defend = m_Normal.FindAction("Defend", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_Spectate = m_UI.FindAction("Spectate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -337,6 +390,52 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public NormalActions @Normal => new NormalActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_Spectate;
+    public struct UIActions
+    {
+        private @PlayerControls m_Wrapper;
+        public UIActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Spectate => m_Wrapper.m_UI_Spectate;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @Spectate.started += instance.OnSpectate;
+            @Spectate.performed += instance.OnSpectate;
+            @Spectate.canceled += instance.OnSpectate;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @Spectate.started -= instance.OnSpectate;
+            @Spectate.performed -= instance.OnSpectate;
+            @Spectate.canceled -= instance.OnSpectate;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyboardAndMouseSchemeIndex = -1;
     public InputControlScheme KeyboardAndMouseScheme
     {
@@ -353,5 +452,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDefend(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnSpectate(InputAction.CallbackContext context);
     }
 }

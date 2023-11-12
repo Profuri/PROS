@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class StageManager : MonoBehaviourPunCallbacks
 {
@@ -31,7 +29,7 @@ public class StageManager : MonoBehaviourPunCallbacks
     {
         _stageSystems.Add(GetComponent<NormalStageSystem>());
         _stageSystems.Add(GetComponent<OccupationStageSystem>());
-        SceneManagement.Instance.OnGameSceneLoaded += GenerateStage;
+        SceneManagement.Instance.OnGameSceneLoaded += GenerateNextStage;
     }
 
     private void Update()
@@ -39,20 +37,42 @@ public class StageManager : MonoBehaviourPunCallbacks
         _curStage?.StageUpdate();
     }
 
-    private void GenerateStage()
+    public void GenerateNewMap()
+    {
+        var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        NetworkManager.Instance.PhotonView.RPC("GenerateNewMapRPC", RpcTarget.All, type);
+    }
+    
+    [PunRPC]
+    public void GenerateNewMapRPC(int type)
+    {
+        _curStage.GenerateNewStage(type);
+    }
+
+    public void RemoveCurMap()
+    {
+        NetworkManager.Instance.PhotonView.RPC("RemoveCurMapRPC", RpcTarget.All);
+    }
+    
+    [PunRPC]
+    public void RemoveCurMapRPC()
+    {
+        _curStage.RemoveCurStage();
+    }
+
+    private void GenerateNextStage()
     {
         if (!NetworkManager.Instance.IsMasterClient)
             return;
 
-        //var stageIndex = Random.Range(0, _stageSystems.Count);
-        var stageIndex = 1;
+        var stageIndex = Random.Range(0, _stageSystems.Count);
         var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
         
-        NetworkManager.Instance.PhotonView.RPC("GenerateStageRPC", RpcTarget.All, stageIndex, mapIndex);
+        NetworkManager.Instance.PhotonView.RPC("GenerateNextStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
     
     [PunRPC]
-    private void GenerateStageRPC(int stageIndex, int mapIndex)
+    private void GenerateNextStageRPC(int stageIndex, int mapIndex)
     {
         var nextStage = _stageSystems[stageIndex];
         

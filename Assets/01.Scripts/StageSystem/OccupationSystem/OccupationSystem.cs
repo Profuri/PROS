@@ -83,13 +83,14 @@ public class OccupationSystem
         
         while (timer <= changeTime)
         {
-            if (_areaObj != null && NetworkManager.Instance.IsMasterClient)
+            if (_areaObj != null)
             {
                 _areaObj.SetValue(_curOccupationTime / targetTime);
             }
-            Debug.Log($"Timer: {timer}");
-            Debug.Log($"CurOccupationTime: {_curOccupationTime}");
-            Debug.Log($"CurrentPlayer: {_currentPlayer}");
+            else
+            {
+                Debug.LogError("Area obj is null!");   
+            }
             timer += Time.deltaTime;
             _cols = Physics2D.OverlapCircleAll(_occupationPos,radius,layer);
 

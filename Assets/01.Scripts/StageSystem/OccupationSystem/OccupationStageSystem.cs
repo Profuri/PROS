@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Photon.Pun;
 using Photon.Realtime;
 public class OccupationStageSystem : BaseStageSystem
 {
@@ -40,16 +41,21 @@ public class OccupationStageSystem : BaseStageSystem
     public override void GenerateNewStage(int index)
     {
         base.GenerateNewStage(index);
-        Debug.Log($"GenerateNewStage: {this.ToString()}");
+        
+        if (NetworkManager.Instance.IsMasterClient == false) return;
+        NetworkManager.Instance.PhotonView.RPC("SetOccupationSystemRPC",RpcTarget.All);
+    }
+
+    private void SetOccupationSystemRPC()
+    {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,
-                        minChangeTime: 20f,maxChangeTime: 40f,5f,_targetLayerMask);
+            minChangeTime: 20f,maxChangeTime: 40f,5f,_targetLayerMask);
         
         _occupationSystem = new OccupationSystem(this,data);
         SetRandomOccupationPos();
         
         OnTargetChangeTime += SetRandomOccupationPos;
     }
-
     private void SetRandomOccupationPos()
     {
         //It will be changed by fixed value

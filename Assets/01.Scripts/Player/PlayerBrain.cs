@@ -60,20 +60,24 @@ public class PlayerBrain : MonoBehaviour
 
     public void OnPlayerDead()
     {
-        Debug.Log("주금");
-        PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+        }
     }
 
     #region UnityMessage
     public delegate void UnityMessageListener();
+    
     public event UnityMessageListener OnEnableEvent;
     public event UnityMessageListener OnDisableEvent;
     public event UnityMessageListener OnUpdateEvent;
     public event UnityMessageListener OnFixedUpdateEvent;
-    private void OnEnable() => OnEnableEvent?.Invoke();
-    private void Update() => OnUpdateEvent?.Invoke();
-    private void OnDisable() => OnDisableEvent?.Invoke(); 
-    private void FixedUpdate() => OnFixedUpdateEvent?.Invoke();
+
+    private void OnEnable() { if (IsMine) { OnEnableEvent?.Invoke(); } }
+    private void Update() { if (IsMine) { OnUpdateEvent?.Invoke(); } }
+    private void OnDisable() { if(IsMine) { OnDisableEvent?.Invoke();} }
+    private void FixedUpdate() { if (IsMine) { OnFixedUpdateEvent?.Invoke(); } }
     #endregion
     
     public T GetHandlerComponent<T>() where T : PlayerHandler

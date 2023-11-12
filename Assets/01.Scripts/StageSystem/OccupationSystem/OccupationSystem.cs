@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
 using System.Linq;
+using Photon.Pun;
+
 public struct OccupationStruct
 {
     public float TargetOccupationTime;
@@ -30,21 +32,16 @@ public class OccupationSystem
     private Collider2D[] _cols;
     private Coroutine _coroutine;
     
-    private Collider2D _currentPlayer;
+    private Player _currentPlayer;
     private float _curOccupationTime;
     private OccupationArea _areaObj;
     private OccupationStageSystem _stageSystem;
     
-
     public OccupationSystem(OccupationStageSystem stageSystem, OccupationStruct occupationData)
     {
         _stageSystem = stageSystem;
         _occupationData = occupationData;
 
-        if (_coroutine != null)
-        {
-            GameManager.Instance.StopCoroutine(_coroutine);
-        }
         _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
 
@@ -54,18 +51,22 @@ public class OccupationSystem
         {
             GameManager.Instance.StopCoroutine(_coroutine);
         }
-        PoolManager.Instance.Push(_areaObj);
     }
 
     public void SetOccupationPos(Vector3 targetPos)
     {
+        if (NetworkManager.Instance.IsMasterClient == false) return;
         _occupationPos = targetPos;
-
-        if(_areaObj != null)
-            PoolManager.Instance.Push(_areaObj);
-
-        _areaObj = PoolManager.Instance.Pop("OccupationArea").GetComponent<OccupationArea>();
-        _areaObj.transform.position = targetPos;
+        if (_areaObj == null)
+        {
+            _areaObj = PhotonNetwork.Instantiate("OccupationArea", targetPos, Quaternion.identity)
+                .GetComponent<OccupationArea>();
+            _areaObj.Init();
+        }
+        else
+        {
+            _areaObj.transform.position = targetPos;
+        }
     }
 
     private IEnumerator DetectPlayers()
@@ -88,26 +89,23 @@ public class OccupationSystem
             }
             else
             {
-                Debug.LogError("AreaObj is null!!!!!!!!!!");
+                Debug.LogError("Area obj is null!");   
             }
-            Debug.Log($"Timer: {timer}");
-            Debug.Log($"CurOccupationTime: {_curOccupationTime}");
-            Debug.Log($"CurrentPlayer: {_currentPlayer}");
             timer += Time.deltaTime;
             _cols = Physics2D.OverlapCircleAll(_occupationPos,radius,layer);
 
             if (_curOccupationTime >= targetTime)
             {
                 if(_currentPlayer == null) Debug.LogError($"Player is null");
-                Debug.Log($"Winner: {_currentPlayer}");
+                _stageSystem.OnPlayerWinEvent?.Invoke(_currentPlayer);
             }
             
             if (_cols.Length > 0)
             {
                 if (_cols.Length == 1)
                 {
-                    //var player = _cols[0].transform.root.GetComponentInChildren<PlayerBrain>().PhotonView.Owner;
-                    var player = _cols[0];
+                    var player = _cols[0].transform.root.GetComponentInChildren<PlayerBrain>().PhotonView.Owner;
+                    //var player = _cols[0];
                     if (_currentPlayer != player)
                     {
                         _currentPlayer = player;

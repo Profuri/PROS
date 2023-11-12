@@ -11,6 +11,8 @@ public class PlayerOTC : PlayerHandler, IDamageable
     {
         if (_brain.PlayerDefend.IsDefend) return;
 
+        _brain.SetColsTrigger(false);
+        
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
 

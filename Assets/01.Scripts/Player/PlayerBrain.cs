@@ -15,6 +15,7 @@ public class PlayerBrain : MonoBehaviour
 
     [SerializeField] private Transform _agentTrm;
     [SerializeField] private Collider2D _collider;
+    private List<Collider2D> _cols;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
@@ -41,7 +42,9 @@ public class PlayerBrain : MonoBehaviour
     private void Awake()
     {
         _handlers = new List<PlayerHandler>();
+        _cols = new List<Collider2D>();
         GetComponentsInChildren(_handlers);
+        GetComponentsInChildren(_cols);
 
         PhotonView = GetComponent<PhotonView>();
         ActionData = GetComponent<PlayerActionData>();
@@ -70,6 +73,7 @@ public class PlayerBrain : MonoBehaviour
     public event UnityMessageListener OnDisableEvent;
     public event UnityMessageListener OnUpdateEvent;
     public event UnityMessageListener OnFixedUpdateEvent;
+    
     private void OnEnable() => OnEnableEvent?.Invoke();
     private void Update() => OnUpdateEvent?.Invoke();
     private void OnDisable() => OnDisableEvent?.Invoke(); 
@@ -90,7 +94,7 @@ public class PlayerBrain : MonoBehaviour
         MousePos = worldMousePos;
     }
     
-    //public void SetRagdollColsEnable(bool active) => _ragdollCols.ForEach(c => c.enabled = active);
+    public void SetColsTrigger(bool trigger) => _cols.ForEach(c => c.isTrigger = trigger);
     public void SetName(string nickName) => PhotonView.RPC("SetNameRPC", RpcTarget.All, nickName);
     [PunRPC]
     private void SetNameRPC(string nickName) => this.gameObject.name = nickName;

@@ -15,9 +15,16 @@ public class PlayerMovement : PlayerHandler
     private float _originGravityScale;
 
     public bool IsStopped { get; set; }
+    
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND"));
 
+    public Vector3 GroundPos => Physics2D.BoxCast(_brain.AgentTrm.position,
+        _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND")).point;
+
+    public Vector3 GroundNormal => Physics2D.BoxCast(_brain.AgentTrm.position,
+        _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND")).normal;
+    
     public bool CanJump { get; private set; }
     private float _jumpingTime = 0f;
     public bool CanMoveAnim { get; private set; } = false;

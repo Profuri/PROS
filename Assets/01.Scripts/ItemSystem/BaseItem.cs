@@ -1,17 +1,20 @@
 using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class BaseItem : PoolableMono, IItem
 {
-    [SerializeField] private int _usableHitCnt;
+    [SerializeField] protected ItemSO _itemSO;
     private int _currentHitCnt;
     
-    private Vector2 _moveDir;
+    protected Vector2 _moveDir;
 
     public bool Used { get; set; }
 
     private float _movementSpeed;
+
+    public UnityEvent HitEvent;
 
     public virtual void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
@@ -36,7 +39,7 @@ public abstract class BaseItem : PoolableMono, IItem
     {
         _currentHitCnt++;
         
-        if (_currentHitCnt >= _usableHitCnt)
+        if (_currentHitCnt >= _itemSO.UsableHitCnt)
         {
             Used = true;
             OnTakeItem(hitPlayer);

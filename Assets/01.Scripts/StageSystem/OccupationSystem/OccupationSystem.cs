@@ -111,7 +111,7 @@ public class OccupationSystem
                     {
                         _currentPlayer = player;
                         
-                        Color color = MonoPlayer.PlayerManager.Instance.ColorDictionary[player];
+                        Color color = MonoPlayer.PlayerManager.Instance.ColorDictionary[player.ActorNumber];
                         _areaObj?.SetColor(color);
                         
                         _curOccupationTime = 0;

@@ -32,7 +32,6 @@ public class PlayerColor : PlayerHandler
 
     [PunRPC]
     private void SetSpriteColorRPC(float r, float g, float b, float a)
-
     {
         CurrentColor = new Color(r, g, b, a);
         foreach (var spRenderer in _rendererList)

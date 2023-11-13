@@ -26,7 +26,7 @@ namespace MonoPlayer
         
         public List<Player> LoadedPlayerList { get; private set; }
         
-        public Dictionary<Player,Color> ColorDictionary { get; private set; }
+        public Dictionary<int,Color> ColorDictionary { get; private set; }
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;
@@ -40,7 +40,7 @@ namespace MonoPlayer
             #region Init
         public void Init()
         {
-            ColorDictionary = new Dictionary<Player, Color>();
+            ColorDictionary = new Dictionary<int, Color>();
             
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
@@ -161,12 +161,15 @@ namespace MonoPlayer
             {
                 LoadedPlayerList.Add(player);
                 
-
-                if (ColorDictionary.ContainsKey(player) == false)
+                if (ColorDictionary.ContainsKey(player.ActorNumber) == false)
                 {
-                    Color randomColor = Random.ColorHSV();
-                    NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
-                        player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+                    if (NetworkManager.Instance.IsMasterClient)
+                    {
+                        Debug.LogError("ColorDictionaryChanged");
+                        Color randomColor = Random.ColorHSV();
+                        NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
+                            player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+                    }
                 }
             }
             
@@ -176,11 +179,13 @@ namespace MonoPlayer
                 IsAllOfPlayerLoad = true;
             }
         }
+        
         [PunRPC]
         private void LoadColorDictionaryRPC(Player player,float r, float g, float b, float a)
         {
-            ColorDictionary[player] = new Color(r, g, b, a);
+            ColorDictionary[player.ActorNumber] = new Color(r, g, b, a);
         }
+        
         [PunRPC]
         private void LoadBrainDictionaryRPC(Player player)
         {
@@ -191,8 +196,8 @@ namespace MonoPlayer
             bool result = BrainDictionary.TryAdd(player, playerBrain);
             if (result)
             {
-                Color color = ColorDictionary[player];
-                playerBrain.PlayerColor.SetSpriteColor(color);
+                Color color = ColorDictionary[player.ActorNumber];
+                BrainDictionary[player].PlayerColor.SetSpriteColor(color);
             }
             else
             {

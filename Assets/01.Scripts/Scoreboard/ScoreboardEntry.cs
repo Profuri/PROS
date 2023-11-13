@@ -13,9 +13,15 @@ public class ScoreboardEntry
     private VisualElement _root;
 
     private List<VisualElement> _scoreElems = new List<VisualElement>();
+
+    private Color _originColor;
+    private Color _inactivatedColor;
     
-    public ScoreboardEntry(Player player, VisualTreeAsset treeAsset, VisualElement parentRoot)
+    public ScoreboardEntry(Color color, Player player, VisualTreeAsset treeAsset, VisualElement parentRoot)
     {
+        _originColor = color;
+        _inactivatedColor = color - new Color(0.15f, 0.15f, 0.15f, 0.2f);
+        
         _player = player;
         _parentRoot = parentRoot;
         InstantiateTreeAsset(treeAsset);
@@ -24,7 +30,6 @@ public class ScoreboardEntry
     private void InstantiateTreeAsset(VisualTreeAsset treeAsset)
     {
         _root = treeAsset.Instantiate().Q("user-scoreboard");
-        _root.AddToClassList(_player.IsLocal ? "local" : "other");
         _scoreElems = _root.Query("score").ToList();
         _parentRoot.Add(_root);
         UpdateEntry();
@@ -38,13 +43,15 @@ public class ScoreboardEntry
         {
             if (score >= i + 1)
             {
-                _scoreElems[i].RemoveFromClassList("off");
+                _scoreElems[i].style.unityBackgroundImageTintColor = new StyleColor(_originColor);
             }
             else
             {
-                _scoreElems[i].AddToClassList("off");
+                _scoreElems[i].style.unityBackgroundImageTintColor = new StyleColor(_inactivatedColor);
             }
         }
+        
+        Debug.Break();
     }
 
     public void Remove()

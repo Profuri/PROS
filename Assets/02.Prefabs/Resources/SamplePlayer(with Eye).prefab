@@ -103,8 +103,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
     type: 3}
@@ -159,7 +159,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 504068047344758023}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00018501618, y: 0.00941181, z: 0.052359834, w: 0.9985839}
+  m_LocalRotation: {x: 0.00018501707, y: 0.009411811, z: 0.05236008, w: 0.998584}
   m_LocalPosition: {x: 0.438, y: 0.001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -270,8 +270,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
     type: 3}
@@ -356,8 +356,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 2629479715053169353, guid: d2ee3555249e5a2459f7c606fd204857,
     type: 3}
@@ -462,8 +462,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_Sprite: {fileID: -4138196907388886391, guid: d2ee3555249e5a2459f7c606fd204857,
     type: 3}
@@ -553,7 +553,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2195227163076453447}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00029559655, y: 0.010246292, z: -0.05549077, w: 0.99840665}
+  m_LocalRotation: {x: -0.00029559594, y: 0.0102462815, z: -0.055490766, w: 0.99840665}
   m_LocalPosition: {x: 0.43, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -584,7 +584,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2255042778188326714}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7290434, w: 0.68446743}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7290435, w: 0.6844674}
   m_LocalPosition: {x: -0.42, y: 0.22, z: 0}
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
@@ -663,9 +663,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: -9105309698962096880, guid: d2ee3555249e5a2459f7c606fd204857,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -816,7 +816,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3175032836239497542}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00009727402, y: -0.009413126, z: -0.022394402, w: 0.99970496}
+  m_LocalRotation: {x: 0.00009727402, y: -0.009413126, z: -0.022394555, w: 0.99970496}
   m_LocalPosition: {x: 0.54656017, y: 0.0074538863, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -895,9 +895,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
+  m_SortingOrder: 3
   m_Sprite: {fileID: 1799238222550261250, guid: d2ee3555249e5a2459f7c606fd204857,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1075,8 +1075,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
     type: 3}
@@ -1162,8 +1162,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
     type: 3}
@@ -1335,8 +1335,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1590033203
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 7979366613833063626, guid: d2ee3555249e5a2459f7c606fd204857,
     type: 3}
@@ -2198,7 +2198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7857756999437018920}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.6871325, w: 0.72653216}
+  m_LocalRotation: {x: 0, y: 0, z: -0.68713254, w: 0.72653216}
   m_LocalPosition: {x: 0.35, y: 0.15760294, z: 0}
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2230,7 +2230,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7939542241759338576}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000064426094, y: -0.010250352, z: 0.032958556, w: 0.9994042}
+  m_LocalRotation: {x: 0.00006442603, y: -0.010250342, z: 0.032958582, w: 0.9994042}
   m_LocalPosition: {x: 0.53271925, y: -0.007529952, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2290,7 +2290,7 @@ MonoBehaviour:
   m_UseRendererSilhouette: 1
   m_CastsShadows: 1
   m_SelfShadows: 0
-  m_ApplyToSortingLayers: 000000009b4949ee33fbc55e
+  m_ApplyToSortingLayers: 3f83e27a
   m_ShapePath:
   - {x: 0.008394003, y: 2.0859299, z: 0}
   - {x: 0.4457698, y: 2.0326939, z: 0}
@@ -2313,7 +2313,7 @@ MonoBehaviour:
   - {x: -0.23596579, y: 2.0797958, z: 0}
   m_ShapePathHash: 291537828
   m_Mesh: {fileID: 0}
-  m_InstanceId: -49200
+  m_InstanceId: -1572
   m_LocalBounds:
     m_Center: {x: -0.014526129, y: 1.0137215, z: 0}
     m_Extent: {x: 1.0840418, y: 1.0722084, z: 0}

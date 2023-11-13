@@ -10,7 +10,7 @@ public class EyeController : MonoBehaviour
 
     private Camera _mainCam;
     public Camera MainCam => _mainCam;
-
+    
     private void Awake()
     {
         _brain = GetComponent<PlayerBrain>();

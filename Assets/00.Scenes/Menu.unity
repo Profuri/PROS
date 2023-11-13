@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _reviveTimer: 1.5
-  _playerObj: {fileID: 6247278034501460213, guid: f6a6b6827a5c3e14385d699b22adc8d0,
+  _playerObj: {fileID: 3958669578175485639, guid: 6e470c094de676345b7228e4292a1eb9,
     type: 3}
 --- !u!114 &148809872
 MonoBehaviour:

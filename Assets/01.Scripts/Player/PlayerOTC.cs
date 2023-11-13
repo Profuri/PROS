@@ -3,6 +3,8 @@ using Photon.Pun;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
+    [SerializeField] private ParticleSystem _smokeParticle;
+    
     [SerializeField] private float _otcPower;
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
@@ -63,6 +65,8 @@ public class PlayerOTC : PlayerHandler, IDamageable
             isBounce = true;
             otcDir = attackDirection.normalized;
         }
+        
+        PlaySmokeParticle(otcDir);
 
         if (isBounce)
         {
@@ -74,6 +78,18 @@ public class PlayerOTC : PlayerHandler, IDamageable
             // _brain.Collider.enabled = false;
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
+    }
+
+    private void PlaySmokeParticle(Vector3 otcDir)
+    {
+        if (_smokeParticle.isPlaying)
+        {
+            _smokeParticle.Stop();
+        }
+        
+        var rotation = Quaternion.LookRotation(-otcDir);
+        _smokeParticle.transform.rotation = rotation;
+        _smokeParticle.Play();
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

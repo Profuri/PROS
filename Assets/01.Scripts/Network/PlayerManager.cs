@@ -26,7 +26,7 @@ namespace MonoPlayer
         
         public List<Player> LoadedPlayerList { get; private set; }
         
-        public Dictionary<int,Color> ColorDictionary { get; private set; }
+        public Dictionary<Player,Color> ColorDictionary { get; private set; }
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;
@@ -40,7 +40,7 @@ namespace MonoPlayer
             #region Init
         public void Init()
         {
-            ColorDictionary = new Dictionary<int, Color>();
+            ColorDictionary = new Dictionary<Player, Color>();
             
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
@@ -124,7 +124,9 @@ namespace MonoPlayer
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer);
+            Color randomColor = Random.ColorHSV();
+            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, 
+                localPlayer,randomColor.r,randomColor.g,randomColor.b,randomColor.a);
         }
 
         public void RemovePlayer(Player player) =>
@@ -155,37 +157,29 @@ namespace MonoPlayer
         }
         
         [PunRPC]
-        private void LoadPlayerListRPC(Player player)
+        private void LoadPlayerListRPC(Player player,float r,float g,float b,float a)
         {
             if (!LoadedPlayerList.Contains(player))
             {
                 LoadedPlayerList.Add(player);
                 
-                if (ColorDictionary.ContainsKey(player.ActorNumber) == false)
+                if (ColorDictionary.ContainsKey(player) == false)
                 {
-                    if (NetworkManager.Instance.IsMasterClient)
-                    {
-                        Debug.LogError("ColorDictionaryChanged");
-                        Color randomColor = Random.ColorHSV();
-                        NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
-                            player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
-                    }
+                    Debug.LogError($"ColorDictionaryChanged, Player: {player}");
+                    //NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
+                      //  player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+                    ColorDictionary.Add(player,new Color(r,g,b,a));
                 }
             }
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
+                Debug.LogError("OnAllPlayerLoad");
                 OnAllPlayerLoad?.Invoke();
                 IsAllOfPlayerLoad = true;
             }
         }
-        
-        [PunRPC]
-        private void LoadColorDictionaryRPC(Player player,float r, float g, float b, float a)
-        {
-            ColorDictionary[player.ActorNumber] = new Color(r, g, b, a);
-        }
-        
+
         [PunRPC]
         private void LoadBrainDictionaryRPC(Player player)
         {
@@ -196,7 +190,7 @@ namespace MonoPlayer
             bool result = BrainDictionary.TryAdd(player, playerBrain);
             if (result)
             {
-                Color color = ColorDictionary[player.ActorNumber];
+                Color color = ColorDictionary[player];
                 BrainDictionary[player].PlayerColor.SetSpriteColor(color);
             }
             else

@@ -143,10 +143,12 @@ namespace MonoPlayer
             {
                 var obj = playerBrain.gameObject;
             
+                
                 LoadedPlayerList.Remove(player);
                 BrainDictionary.Remove(player);
                 //ColorDictionary.Remove(player);
-            
+                
+                Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
                 
                 if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
@@ -165,7 +167,7 @@ namespace MonoPlayer
                 
                 if (ColorDictionary.ContainsKey(player) == false)
                 {
-                    Debug.LogError($"ColorDictionaryChanged, Player: {player}");
+                    //Debug.LogError($"ColorDictionaryChanged, Player: {player}");
                     //NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
                       //  player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
                     ColorDictionary.Add(player,new Color(r,g,b,a));

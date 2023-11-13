@@ -1,4 +1,5 @@
 using MonoPlayer;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
@@ -74,12 +75,13 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void GenerateNewStage(int index)
     {
+        if (!NetworkManager.Instance.IsMasterClient) return;
         if (_currentStageObject)
         {
             return;
         }
 
-        _currentStageObject = PoolManager.Instance.Pop($"Map{index}") as StageObject;
+        _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();
@@ -88,7 +90,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void RemoveCurStage()
     {
-        PoolManager.Instance.Push(_currentStageObject);
+        PhotonNetwork.Destroy(_currentStageObject.gameObject);
         _currentStageObject = null;
         PlayerManager.Instance.RoundEnd();
     }

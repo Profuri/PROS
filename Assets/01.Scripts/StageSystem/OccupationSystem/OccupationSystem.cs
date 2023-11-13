@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Realtime;
 using System.Linq;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 
 public struct OccupationStruct
 {
@@ -89,7 +90,7 @@ public class OccupationSystem
             }
             else
             {
-                Debug.LogError("Area obj is null!");   
+                Debug.LogWarning("Area obj is null!");   
             }
             timer += Time.deltaTime;
             _cols = Physics2D.OverlapCircleAll(_occupationPos,radius,layer);
@@ -109,6 +110,10 @@ public class OccupationSystem
                     if (_currentPlayer != player)
                     {
                         _currentPlayer = player;
+                        
+                        Color color = MonoPlayer.PlayerManager.Instance.ColorDictionary[player];
+                        _areaObj?.SetColor(color);
+                        
                         _curOccupationTime = 0;
                     }
                     _curOccupationTime += (Time.deltaTime);

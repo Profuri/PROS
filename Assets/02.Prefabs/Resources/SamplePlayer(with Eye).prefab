@@ -1512,6 +1512,7 @@ GameObject:
   - component: {fileID: 3094847340766432893}
   - component: {fileID: 669249535709098515}
   - component: {fileID: 3464831112275257751}
+  - component: {fileID: 2399591618458487903}
   m_Layer: 7
   m_Name: SamplePlayer(with Eye)
   m_TagString: Untagged
@@ -1843,6 +1844,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _otcPower: 100
   _bouncePer: 0.5
+--- !u!114 &2399591618458487903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247278034501460213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fcee9c4fc39e14a9cf1c7a011fed51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderParent: {fileID: 8347960991363354201}
 --- !u!1 &6328364391320418184
 GameObject:
   m_ObjectHideFlags: 0

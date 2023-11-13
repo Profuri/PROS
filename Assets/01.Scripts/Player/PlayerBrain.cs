@@ -18,13 +18,15 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
-
+    
+    
     #region Property
     public PhotonView PhotonView { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerOTC PlayerOTC { get; private set; }
     public PlayerDefend PlayerDefend { get; private set; }
     public PlayerActionData ActionData { get; private set; }
+    public PlayerColor PlayerColor { get; private set; }
     public AnimationController AnimationController { get; private set; }
     public float OriginGravityScale { get; private set; }
     public Vector3 MousePos { get; private set; }
@@ -45,12 +47,13 @@ public class PlayerBrain : MonoBehaviour
 
         PhotonView = GetComponent<PhotonView>();
         ActionData = GetComponent<PlayerActionData>();
-        PlayerOTC = GetComponent<PlayerOTC>();
+        PlayerOTC = GetHandlerComponent<PlayerOTC>();
         AnimationController = GetComponent<AnimationController>();
-        PlayerDefend = GetComponent<PlayerDefend>();
+        PlayerDefend = GetHandlerComponent<PlayerDefend>();
+        PlayerMovement = GetHandlerComponent<PlayerMovement>();
+        PlayerColor = GetHandlerComponent<PlayerColor>();
 
         _handlers.ForEach(h => h.Init(this));
-        PlayerMovement = GetHandlerComponent<PlayerMovement>();
 
         OriginGravityScale = _rigidbody.gravityScale;
 
@@ -80,11 +83,11 @@ public class PlayerBrain : MonoBehaviour
     private void FixedUpdate() { if (IsMine) { OnFixedUpdateEvent?.Invoke(); } }
     #endregion
     
-    public T GetHandlerComponent<T>() where T : PlayerHandler
+    private T GetHandlerComponent<T>() where T : PlayerHandler
     {
         var test = _handlers.Find(handle => handle.GetType() == typeof(T)) as T;
         if (test == null) Debug.LogError("Can't Get HandlerComponent!");
-        return test;
+        return (T)test;
     }
 
     private void AimToWorldPoint(Vector2 mousePos)

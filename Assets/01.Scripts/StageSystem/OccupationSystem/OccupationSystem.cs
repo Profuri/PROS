@@ -62,7 +62,7 @@ public class OccupationSystem
         }
         _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
-
+    
     public void SetOccupationPos(Vector3 targetPos)
     {
         if (NetworkManager.Instance.IsMasterClient == false) return;

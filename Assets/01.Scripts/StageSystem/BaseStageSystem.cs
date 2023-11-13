@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using MonoPlayer;
 using Photon.Realtime;
 using UnityEngine;
@@ -10,8 +12,16 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     private int _round;
     private StageObject _currentStageObject;
 
+    [SerializeField] protected List<BaseMapEvent> _mapEventList;
+    
+    [SerializeField] protected float _minRandomEvnetTime = 10f; 
+    [SerializeField] protected float _maxRandomEvnetTime = 30f;
+
+    protected Coroutine _generateCor;
+
     public virtual void Init(int mapIndex)
     {
+        _mapEventList = new List<BaseMapEvent>();
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
@@ -84,6 +94,11 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         PlayerManager.Instance.RoundStart();
         Debug.Log("GenerateNewStage: BaseStageSystem");
+        if (_generateCor != null)
+        {
+            StopCoroutine(_generateCor);
+        }
+        _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()
@@ -93,5 +108,28 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         PlayerManager.Instance.RoundEnd();
     }
 
+    protected BaseMapEvent GetRandomBaseMapEvent()
+    {
+        int index = Random.Range(0,_mapEventList.Count);
+        return _mapEventList[index];
+    }
+
+    protected IEnumerator GenerateMapEvent()
+    {
+        float timer = 0f;
+        float randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
+        while (true)
+        {
+            if (timer > randomTime)
+            {
+                timer = 0f;
+                randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
+                GetRandomBaseMapEvent()?.ExecuteEvent();
+            }
+            timer += Time.deltaTime;
+            
+            yield return null;
+        }
+    }
     public abstract bool RoundCheck(out Player roundWinner);
 }

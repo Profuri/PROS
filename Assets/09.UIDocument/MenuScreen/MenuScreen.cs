@@ -210,11 +210,22 @@ public class MenuScreen : MonoBehaviour
         foreach(var room in NetworkManager.Instance.RoomList)
         {
             VisualElement newRoom = _roomTemplate.Instantiate();
-            newRoom.Q<Label>("room-name").text = $"{room.masterClientId}'s Room";
-            newRoom.Q<Button>("btn-join").RegisterCallback<ClickEvent>(evt =>
+            newRoom.Q<Label>("room-name").text = room.Name;
+            Button joinBtn = newRoom.Q<Button>("btn-join");
+            if(room.RemovedFromList)
             {
-                NetworkManager.Instance.JoinRoom(room.Name);
-            });
+                joinBtn.pickingMode = PickingMode.Ignore;
+                joinBtn.AddToClassList("off");
+            }
+            else
+            {
+                joinBtn.pickingMode = PickingMode.Position;
+                joinBtn.RemoveFromClassList("off");
+                joinBtn.RegisterCallback<ClickEvent>(evt =>
+                {
+                    NetworkManager.Instance.JoinRoom(room.Name);
+                });
+            }
             _roomList.Add(newRoom);
         }
     }
@@ -223,6 +234,7 @@ public class MenuScreen : MonoBehaviour
     {
         _playerList.Remove(_playerDictionary[other]);
         _playerDictionary.Remove(other);
+        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
     }
 
     private void HandlePlayerEnterRoom(Player other)
@@ -231,6 +243,7 @@ public class MenuScreen : MonoBehaviour
         newPlayer.Q<Label>("player-name").text = other.NickName;
         _playerList.Add(newPlayer);
         _playerDictionary.Add(other, newPlayer);
+        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
     }
 
     private void HandleLeftRoom()
@@ -245,20 +258,20 @@ public class MenuScreen : MonoBehaviour
         RoomInfo room = NetworkManager.Instance.GetCurRoom;
         _playerList.Clear();
         _playerDictionary.Clear();
+        _roomNameLabel.text = room.Name;
         foreach(var player in NetworkManager.Instance.PlayerList)
         {
             VisualElement newPlayer = _playerTempalte.Instantiate();
             newPlayer.Q<Label>("player-name").text = player.NickName;
             if(player.IsMasterClient)
             {
-                _roomNameLabel.text = $"{player.NickName}'s Room";
                 newPlayer.Q<VisualElement>("master-icon").style.visibility = Visibility.Visible;
             }
             _playerList.Add(newPlayer);
             _playerDictionary.Add(player, newPlayer);
         }
 
-        _roomPlayerCount.text = $"Join Code: {room.Name.Split(' ')[1]}";
+        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {room.MaxPlayers}";
 
         if(NetworkManager.Instance.IsMasterClient)
         {

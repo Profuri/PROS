@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 8065245189318442296}
   - component: {fileID: 6002139629988740056}
   - component: {fileID: 6531823120920919508}
+  - component: {fileID: -5486951534985572951}
   m_Layer: 7
   m_Name: SamplePlayer(Rig)(ScaleUP)
   m_TagString: Untagged
@@ -919,6 +920,19 @@ MonoBehaviour:
   _smokeParticle: {fileID: 2831619488367386624}
   _otcPower: 100
   _bouncePer: 0.5
+--- !u!114 &-5486951534985572951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958669578175485639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fcee9c4fc39e14a9cf1c7a011fed51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderParent: {fileID: 7823556322010030652}
 --- !u!1 &4005831873032644307
 GameObject:
   m_ObjectHideFlags: 0

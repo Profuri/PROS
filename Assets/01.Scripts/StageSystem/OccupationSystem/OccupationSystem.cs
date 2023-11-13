@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Realtime;
 using System.Linq;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 
 public struct OccupationStruct
 {
@@ -41,16 +42,24 @@ public class OccupationSystem
     {
         _stageSystem = stageSystem;
         _occupationData = occupationData;
-
-        _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
 
     public void Init()
     {
+        _currentPlayer = null;
+        _curOccupationTime = 0;
+        _occupationPos = Vector3.zero;
+        
+        if (_areaObj != null)
+        {
+            PhotonNetwork.Destroy(_areaObj.gameObject);
+        }
+        
         if(_coroutine != null)
         {
             GameManager.Instance.StopCoroutine(_coroutine);
         }
+        _coroutine = GameManager.Instance.StartCoroutine(DetectPlayers());
     }
 
     public void SetOccupationPos(Vector3 targetPos)
@@ -89,7 +98,7 @@ public class OccupationSystem
             }
             else
             {
-                Debug.LogError("Area obj is null!");   
+                Debug.LogWarning("Area obj is null!");   
             }
             timer += Time.deltaTime;
             _cols = Physics2D.OverlapCircleAll(_occupationPos,radius,layer);
@@ -109,6 +118,11 @@ public class OccupationSystem
                     if (_currentPlayer != player)
                     {
                         _currentPlayer = player;
+                        
+                        Color color = MonoPlayer.PlayerManager.Instance.ColorDictionary[player];
+                        _areaObj?.SetColor(color);
+                        _areaObj?.SetValue(_curOccupationTime / targetTime);
+
                         _curOccupationTime = 0;
                     }
                     _curOccupationTime += (Time.deltaTime);

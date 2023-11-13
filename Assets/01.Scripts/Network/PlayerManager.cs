@@ -136,7 +136,7 @@ namespace MonoPlayer
         private void RemovePlayerRPC(Player player)
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
-
+            StopAllCoroutines();
             var playerBrain = BrainDictionary[player];
 
             if (playerBrain.PhotonView.IsMine)
@@ -148,9 +148,8 @@ namespace MonoPlayer
                 BrainDictionary.Remove(player);
                 //ColorDictionary.Remove(player);
                 
-                Debug.LogError($"Destroy Player: {player}");
+                //Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
-                
                 if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
                 {
                     RevivePlayer(player);

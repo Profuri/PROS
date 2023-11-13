@@ -53,6 +53,7 @@ public class OccupationSystem
         if (_areaObj != null)
         {
             PhotonNetwork.Destroy(_areaObj.gameObject);
+            _areaObj = null;
         }
         
         if(_coroutine != null)

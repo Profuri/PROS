@@ -10,7 +10,7 @@ public class OccupationArea : MonoBehaviourPunCallbacks
     private SpriteRenderer _spriteRenderer;
     private TMP_Text _percentTxt;
     private PhotonView _photonView;
-
+    
     public SpriteRenderer SpriteRenderer
     {
         get
@@ -22,7 +22,6 @@ public class OccupationArea : MonoBehaviourPunCallbacks
             return _spriteRenderer;
         }
     }
-
     public TMP_Text PercentTxt
     {
         get
@@ -34,7 +33,6 @@ public class OccupationArea : MonoBehaviourPunCallbacks
             return _percentTxt;
         }
     }
-
     public PhotonView PhotonView
     {
         get
@@ -46,6 +44,7 @@ public class OccupationArea : MonoBehaviourPunCallbacks
             return _photonView;
         }
     }
+        
     private readonly int _rateHash = Shader.PropertyToID("_ShowRate");
     private readonly int _colorHash = Shader.PropertyToID("_Color");
 

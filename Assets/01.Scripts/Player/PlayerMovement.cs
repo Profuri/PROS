@@ -93,6 +93,7 @@ public class PlayerMovement : PlayerHandler
 
     public override void BrainUpdate()
     {
+        if (_brain.IsMine == false) return;
         //If not dashing rotate to origin rotation
         if(_brain.ActionData.IsJumping) _jumpingTime += Time.deltaTime;
 

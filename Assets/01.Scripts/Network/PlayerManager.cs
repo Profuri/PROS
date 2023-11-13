@@ -122,8 +122,12 @@ namespace MonoPlayer
                         
             NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer);
         }
+
+        public void RemovePlayer(Player player) =>
+            NetworkManager.Instance.PhotonView.RPC("RemovePlayerRPC", RpcTarget.All, player);
         
-        public void RemovePlayer(Player player)
+        [PunRPC]
+        private void RemovePlayerRPC(Player player)
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
 
@@ -137,11 +141,11 @@ namespace MonoPlayer
                 BrainDictionary.Remove(player);
             
                 PhotonNetwork.Destroy(obj);
-            }
-
-            if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
-            {
-                RevivePlayer(player);
+                
+                if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
+                {
+                    RevivePlayer(player);
+                }
             }
         }
                 

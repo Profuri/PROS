@@ -25,6 +25,7 @@ public class EyeTracking : MonoBehaviour
 
     void Update()
     {
+        //if (_eyeController.XScale < 0f) transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y);
         Vector2 mousePosition = _eyeController.Brain.InputSO.CurrentMousePos;
         Vector2 lookDir =  mousePosition - (Vector2)_eyeController.MainCam.WorldToScreenPoint((Vector2)_eyePupil.position);
         lookDir.Normalize();

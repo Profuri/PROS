@@ -234,7 +234,7 @@ public class MenuScreen : MonoBehaviour
     {
         _playerList.Remove(_playerDictionary[other]);
         _playerDictionary.Remove(other);
-        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {room.MaxPlayers}";
+        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
     }
 
     private void HandlePlayerEnterRoom(Player other)
@@ -243,7 +243,7 @@ public class MenuScreen : MonoBehaviour
         newPlayer.Q<Label>("player-name").text = other.NickName;
         _playerList.Add(newPlayer);
         _playerDictionary.Add(other, newPlayer);
-        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {room.MaxPlayers}";
+        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
     }
 
     private void HandleLeftRoom()

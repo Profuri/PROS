@@ -101,9 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4311a56ce3b51df45845b322b6d50982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 1423906118027918739}
-  _percentTxt: {fileID: 4015606118769399287}
-  _photonView: {fileID: -5187400538479367834}
 --- !u!114 &-5187400538479367834
 MonoBehaviour:
   m_ObjectHideFlags: 0

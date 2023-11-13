@@ -20,15 +20,9 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-
-    public event Action<Player> OnGameEnd;
-    public event Action<Player> OnRoundEnd;
-
-    public event Action OnGameStart;
-    public event Action OnRoundStart;
+    
     
     #region INTERNAL VARIABLE
-    [SerializeField] private int _targetWinCnt = 3;
     
     [SerializeField]
     private PoolingListSO _poolingListSO;

@@ -66,7 +66,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         if (_currentStageObject.SpawnPoints.Count <= 0)
         {
-            Debug.LogError("Stage spawn points is empty!");
+            Debug.LogWarning("Stage spawn points is empty!");
             return Vector3.zero;
         }
         

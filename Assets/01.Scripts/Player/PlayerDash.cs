@@ -94,6 +94,7 @@ public class PlayerDash : PlayerHandler
             
             if (CheckDashCollision(mouseDir, radius))
             {
+                transform.rotation = Quaternion.identity;
                 yield break;
             }
             

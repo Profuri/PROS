@@ -44,6 +44,9 @@ public class OccupationStageSystem : BaseStageSystem
     {
         base.GenerateNewStage(index);
         
+        _winPlayer = null;
+        _roundEnd = false;
+        
         if (NetworkManager.Instance.IsMasterClient == false) return;
         NetworkManager.Instance.PhotonView.RPC("SetOccupationSystemRPC",RpcTarget.All);
     }
@@ -53,8 +56,12 @@ public class OccupationStageSystem : BaseStageSystem
     {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,
             minChangeTime: 20f,maxChangeTime: 40f,5f,_targetLayerMask);
-        
-        _occupationSystem = new OccupationSystem(this,data);
+
+        if (_occupationSystem == null)
+        {
+            _occupationSystem = new OccupationSystem(this,data);
+        }
+        _occupationSystem.Init();
         SetRandomOccupationPos();
         
         OnTargetChangeTime += SetRandomOccupationPos;

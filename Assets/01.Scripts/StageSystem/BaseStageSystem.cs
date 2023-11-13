@@ -79,7 +79,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             return;
         }
 
-        _currentStageObject = PoolManager.Instance.Pop($"Stage{index}") as StageObject;
+        _currentStageObject = PoolManager.Instance.Pop($"Map{index}") as StageObject;
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();

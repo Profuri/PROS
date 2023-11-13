@@ -1,4 +1,5 @@
 public enum EItemType
 {
-    COUNT = 0,
+    SCALEUP,
+    COUNT,
 }

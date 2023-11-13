@@ -114,12 +114,14 @@ public class PlayerMovement : PlayerHandler
         {
             if(CanJump)
             {
+                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, Quaternion.LookRotation(-GroundNormal));
                 PlayJumpAnim(movement);
                 CanJump = false;
             }
 
             if (_brain.ActionData.IsJumping == true && _jumpingTime >= 0.5f)
             {
+                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, Quaternion.LookRotation(-GroundNormal));
                 PlayLandAnim(movement);
             }
         }

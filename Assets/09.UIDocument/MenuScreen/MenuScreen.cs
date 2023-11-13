@@ -65,7 +65,7 @@ public class MenuScreen : MonoBehaviour
         _popupPanel = root.Q<VisualElement>("popup-panel");
         _popupPanel.RemoveFromClassList("off");
         _nameField = _popupPanel.Q<TextField>("name-field");
-        _nameField.value = PlayerPrefs.GetString(_nameKey, "ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.");
+        _nameField.value = PlayerPrefs.GetString(_nameKey, "ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
         _popupPanel.Q<Button>("btn-ok").RegisterCallback<ClickEvent>(HandleConfirmName);
         #endregion
 
@@ -130,7 +130,7 @@ public class MenuScreen : MonoBehaviour
     {
         if(string.IsNullOrEmpty(_nameField.value))
         {
-            Debug.LogError("ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.LogError("ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
         NetworkManager.Instance.LocalPlayer.NickName = _nameField.value;
@@ -154,12 +154,12 @@ public class MenuScreen : MonoBehaviour
     {
         if (NetworkManager.Instance.GetCurRoom != null)
         {
-            Debug.LogError("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
+            Debug.LogError("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
             return;
         }
         if (string.IsNullOrEmpty(_joinCodeField.value))
         {
-            Debug.LogError("¹æ ÄÚµå¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+            Debug.LogError("ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
             return;
         }
         NetworkManager.Instance.JoinRoom($"Room: {_joinCodeField.value}");
@@ -174,7 +174,7 @@ public class MenuScreen : MonoBehaviour
     {
         if (NetworkManager.Instance.GetCurRoom == null)
         {
-            Debug.LogError("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
+            Debug.LogError("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
             return;
         }
 
@@ -185,17 +185,17 @@ public class MenuScreen : MonoBehaviour
     {
         if (NetworkManager.Instance.GetCurRoom == null)
         {
-            Debug.LogError("Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
+            Debug.LogError("ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
             return;
         }
         if(!NetworkManager.Instance.IsMasterClient)
         {
-            Debug.LogError("¹æÀå¸¸ ÇÃ·¹ÀÌ ÇÒ ¼ö ÀÖ½À´Ï´Ù.");
+            Debug.LogError("ï¿½ï¿½ï¿½å¸¸ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
         if(NetworkManager.Instance.PlayerList.Count < 2)
         {
-            Debug.LogError("°ÔÀÓÀ» ÇÃ·¹ÀÌÇÏ·Á¸é ÇÃ·¹ÀÌ¾î°¡ 2ÀÎ ÀÌ»ó ÀÖ¾î¾ß ÇÕ´Ï´Ù.");
+            Debug.LogError("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ 2ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Õ´Ï´ï¿½.");
             return;
         }
 

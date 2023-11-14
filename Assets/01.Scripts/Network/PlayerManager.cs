@@ -124,7 +124,7 @@ namespace MonoPlayer
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            Color randomColor = Random.ColorHSV();
+            Color randomColor = new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), 1f);
             NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, 
                 localPlayer,randomColor.r,randomColor.g,randomColor.b,randomColor.a);
         }

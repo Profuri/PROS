@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UIElements;
+using PlayerManager = MonoPlayer.PlayerManager;
 
 public class ScoreboardUI : MonoBehaviourPunCallbacks
 {
@@ -32,7 +33,7 @@ public class ScoreboardUI : MonoBehaviourPunCallbacks
 
     public void CreateNewEntry(Player newPlayer)
     {
-        var entry = new ScoreboardEntry(newPlayer, _userScoreboardAsset, _scoreboardContainer);
+        var entry = new ScoreboardEntry(PlayerManager.Instance.ColorDictionary[newPlayer], newPlayer, _userScoreboardAsset, _scoreboardContainer);
         _entries.Add(entry);
     }
 

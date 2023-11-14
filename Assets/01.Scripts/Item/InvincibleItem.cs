@@ -16,33 +16,41 @@ public class InvincibleItem : BaseItem
     [SerializeField] private float _maxSpeed = 4f;
     private float _runawayTime;
     private bool _isturn = false;
-    private void Start()
-    {
-        Init();
-    }
-
+    
     public override void Init()
     {
-        _runawayTime = 0;
-        _moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
-        transform.position = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
-        var moveSpeed = Random.Range(1f, 2f);
-        _movementSpeed = moveSpeed;
-        //HitEvent.AddListener(ShakePosition);
+        //_runawayTime = 0;
+        //_moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
+        //transform.position = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+        //var moveSpeed = Random.Range(1f, 2f);
+        //_movementSpeed = moveSpeed;
+        ////HitEvent.AddListener(ShakePosition);
     }
-
     public override void OnTakeItem(Player takenPlayer)
     {
-        
+        //PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<PlayerBuff>().AddBuff(EBuffType.INVINCIBLE);
     }
 
-    private void Update()
+    public override void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
-
-        RunAwayMove();
-        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
-
+        base.GenerateSetting(moveDir, spawnPos, movementSpeed);
+        _runawayTime = 0f;
+        _isturn = false;
     }
+
+    //private void Start()
+    //{
+    //    Init();
+    //}
+
+
+    //private void Update()
+    //{
+
+    //    RunAwayMove();
+    //    transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+
+    //}
 
     public override void UpdateItem()
     {
@@ -121,10 +129,5 @@ public class InvincibleItem : BaseItem
     {
         Tween shakeTween = transform.DOShakePosition(_shakeDuration);
         shakeTween.Play();
-    }
-
-    private void OnDisable()
-    {
-        HitEvent.RemoveAllListeners();
     }
 }

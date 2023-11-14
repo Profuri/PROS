@@ -13,21 +13,28 @@ public abstract class BaseItem : PoolableMono, IItem
     public bool Used { get; set; }
 
     protected float _movementSpeed;
+    protected bool _isSpawnEnd;
 
+    public UnityEvent SpawnEvent;
     public UnityEvent HitEvent;
 
     public virtual void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
-        Used = false;
-        _currentHitCnt = 0;
         _movementSpeed = movementSpeed;
         transform.position = spawnPos;
         _moveDir = moveDir;
+
+        Used = false;
+        _isSpawnEnd = false;
+        _currentHitCnt = 0;
+
+        GetComponent<SpriteRenderer>().sprite = _itemSO.Sprite;
+        SpawnEvent?.Invoke();
     }
 
     public virtual void UpdateItem()
     {
-        if (Used)
+        if (Used || !_isSpawnEnd)
         {
             return;
         }

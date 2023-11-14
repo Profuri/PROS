@@ -7,38 +7,17 @@ using Random = UnityEngine.Random;
 
 public class DashingItem : BaseItem
 {
-    private void Start()
-    {
-        Init();
-    }
-
     public override void Init()
-    {
-        _moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
-        transform.position = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
-        var moveSpeed = Random.Range(1f, 2f);
-        _movementSpeed = moveSpeed;
-    }
+    { }
 
     public override void OnTakeItem(Player takenPlayer)
     {
-            
-    }
-
-    private void Update()
-    {
-        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+        //PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<PlayerBuff>().AddBuff(EBuffType.DASHING);
     }
 
     public override void UpdateItem()
     {
         base.UpdateItem();
-        ReflectMove();
-    }
-
-    private void ReflectMove()
-    {
-        
     }
 
     //ContactPoint2D[] contacts = new ContactPoint2D[2];

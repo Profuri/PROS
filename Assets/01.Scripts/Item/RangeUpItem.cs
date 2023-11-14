@@ -1,18 +1,23 @@
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeUpItem : MonoBehaviour
+public class RangeUpItem : BaseItem
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Init()
     {
-        
+
+    }
+    public override void OnTakeItem(Player takenPlayer)
+    {
+        //PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<PlayerBuff>().AddBuff(EBuffType.RANGEUP);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
-        
+        base.GenerateSetting(moveDir, spawnPos, movementSpeed);
+        _moveDir = Vector2.down;
     }
+
 }

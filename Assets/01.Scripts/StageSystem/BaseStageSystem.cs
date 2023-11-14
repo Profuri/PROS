@@ -28,6 +28,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     {
         _mapEventList = new List<BaseMapEvent>();
         transform.Find("MapEvents").GetComponents(_mapEventList);
+        _mapEventList.ForEach(mapEvent => mapEvent.Init(StageManager.Instance.MapBound));
 
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
@@ -137,7 +138,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         }
     }
 
-        protected BaseMapEvent GetRandomBaseMapEvent()
+    protected BaseMapEvent GetRandomBaseMapEvent()
     {
         int index = Random.Range(0,_mapEventList.Count);
         return _mapEventList[index];

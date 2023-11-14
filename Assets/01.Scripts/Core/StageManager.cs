@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+public struct MapBoundStruct
+{
+    public float minX;
+    public float minY;
+    public float maxX;
+    public float maxY;
+}
 
 public class StageManager : MonoBehaviourPunCallbacks
 {
@@ -19,6 +26,8 @@ public class StageManager : MonoBehaviourPunCallbacks
     
     private readonly List<BaseStageSystem> _stageSystems = new List<BaseStageSystem>();
     
+    [SerializeField] private MapBoundStruct _mapBound;
+    public MapBoundStruct MapBound => _mapBound;
     [SerializeField] private int _stageTypeCnt;
     public int StageTypeCnt => _stageTypeCnt;
 

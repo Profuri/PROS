@@ -35,7 +35,7 @@ public class PoolManager
     {
         if (!_pools.ContainsKey(prefabName))
         {
-            Debug.Log($"Prefab does not exist on pool: {prefabName}");
+            Debug.LogError($"Prefab does not exist on pool: {prefabName}");
             return null;
         }
         PoolableMono item = _pools[prefabName].Pop();

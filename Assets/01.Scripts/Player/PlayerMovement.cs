@@ -36,6 +36,7 @@ public class PlayerMovement : PlayerHandler
         Debug.Log(_brain.AnimationController);
         _brain.InputSO.OnJumpKeyPress += SetCanJump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
+        _brain.OnOTC += () => enabled = false;
         _originGravityScale = _brain.Rigidbody.gravityScale;
         _jumpingTime = 0f;
         StopAllCoroutines();

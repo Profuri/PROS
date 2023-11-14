@@ -4,10 +4,9 @@ using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using static Define;
-using System;
-using Photon.Pun.Demo.PunBasics;
 using PlayerManager = MonoPlayer.PlayerManager;
 using Random = UnityEngine.Random;
+using System;
 
 public class PlayerBrain : MonoBehaviour
 {
@@ -19,6 +18,7 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
     
+    public Action OnOTC;
     
     #region Property
     public PhotonView PhotonView { get; private set; }
@@ -30,6 +30,7 @@ public class PlayerBrain : MonoBehaviour
     public AnimationController AnimationController { get; private set; }
     public float OriginGravityScale { get; private set; }
     public Vector3 MousePos { get; private set; }
+
 
     public MovementSO MovementSO => _movementSO;
     public InputSO InputSO => _inputSO;
@@ -96,7 +97,7 @@ public class PlayerBrain : MonoBehaviour
         worldMousePos.z = 0f;
         MousePos = worldMousePos;
     }
-    
+    public void EnablePlayerHandlers(bool value) => _handlers.ForEach(h => h.enabled = value);
     //public void SetRagdollColsEnable(bool active) => _ragdollCols.ForEach(c => c.enabled = active);
     public void SetName(string nickName) => PhotonView.RPC("SetNameRPC", RpcTarget.All, nickName);
     [PunRPC]

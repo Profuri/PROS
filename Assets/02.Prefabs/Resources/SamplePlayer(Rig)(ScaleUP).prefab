@@ -830,6 +830,7 @@ MonoBehaviour:
   IsDashing: 0
   IsJumping: 0
   IsLanding: 0
+  IsFlying: 0
   PreviousPos: {x: 0, y: 0, z: 0}
   CurrentPos: {x: 0, y: 0, z: 0}
 --- !u!114 &2450193743513725957

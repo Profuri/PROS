@@ -22,6 +22,7 @@ public class Train : BaseEventObject
         Vector3 direction = random > 0 ? Vector3.left : Vector3.right;
         _photonView.RPC(nameof(ThroughMapRPC),RpcTarget.All,direction);
     }
+    
     protected override void DestroyObject()
     {
         if(NetworkManager.Instance.IsMasterClient)

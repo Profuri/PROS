@@ -20,6 +20,7 @@ public class PlayerDash : PlayerHandler
         base.Init(brain);
         _brain.InputSO.OnDashKeyPress += DashRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
+        _brain.OnOTC += () => enabled = false;
         StopAllCoroutines();
     }
     

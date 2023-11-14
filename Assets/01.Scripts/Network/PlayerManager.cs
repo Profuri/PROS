@@ -51,16 +51,15 @@ namespace MonoPlayer
 
             _reviveWaitForSeconds = new WaitForSeconds(_reviveTimer);
         }
-        
-        private void OnDisable()
+        public override void OnDisable()
         {
             NetworkManager.Instance.OnPlayerLeftRoomEvent -= OnLeftPlayer;
         }
-
         #endregion
 
         public void RevivePlayer(Player revivePlayer)
         {
+            Debug.LogError($"RevivePlayer: {revivePlayer}");
             StartCoroutine(ReviveRoutine(revivePlayer));
         }
 
@@ -145,7 +144,7 @@ namespace MonoPlayer
             
                 
                 LoadedPlayerList.Remove(player);
-                BrainDictionary.Remove(player);
+                //BrainDictionary.Remove(player);
                 //ColorDictionary.Remove(player);
                 
                 //Debug.LogError($"Destroy Player: {player}");
@@ -187,18 +186,18 @@ namespace MonoPlayer
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
             playerBrain.SetName(player.NickName);
-            
-            bool result = BrainDictionary.TryAdd(player, playerBrain);
-            if (result)
+
+            Color color = ColorDictionary[player];
+            playerBrain.PlayerColor.SetSpriteColor(color);
+
+            if(BrainDictionary.ContainsKey(player))
             {
-                Color color = ColorDictionary[player];
-                BrainDictionary[player].PlayerColor.SetSpriteColor(color);
+                BrainDictionary[player] = playerBrain;
             }
             else
             {
-                Debug.Log($"BrainDictionary has a same key: {player}");
+                BrainDictionary.TryAdd(player,playerBrain);
             }
-            
         }
         #endregion
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
@@ -11,10 +12,8 @@ public class PlayerOTC : PlayerHandler, IDamageable
 
     public void Damaged(Vector3 attackDirection)
     {
-        if (_brain.PlayerDefend.IsDefend) return;
+        if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying ) return;
 
-        //_brain.SetColsTrigger(false);
-        
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
 
@@ -75,15 +74,16 @@ public class PlayerOTC : PlayerHandler, IDamageable
         else
         {
             Debug.Log(otcDir);
-            // _brain.Collider.enabled = false;
+            
+            _brain.Collider.enabled = false;
+            _brain.ActionData.IsFlying = true;
+            _brain.OnOTC?.Invoke();
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
     }
 
     private void PlaySmokeParticle(Vector3 otcDir)
     {
-        if(_smokeParticle != null)
-        {
             if(_smokeParticle.isPlaying)
             {
                 _smokeParticle.Stop();
@@ -91,8 +91,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
             var rotation = Quaternion.LookRotation(-otcDir);
             _smokeParticle.transform.rotation = rotation;
             _smokeParticle.Play();
-        }
-
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

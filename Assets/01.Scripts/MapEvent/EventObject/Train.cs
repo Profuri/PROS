@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System;
+using Random = UnityEngine.Random;
 
 public class Train : BaseEventObject
 {
-    [SerializeField] private float _speed = 300f;
-    [SerializeField] private float _prevTimeDelay = 5f;
+    [SerializeField] private float _speed = 3000f;
+    [SerializeField] private float _prevTimeDelay = 3f;
     [SerializeField] private float _trainDashTime = 3f;
     [SerializeField] private LayerMask _layerMask;
-    
-    private Collider2D _collider;
+    [SerializeField] private Collider2D _collider;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
 
     public override void Init()
     {
         base.Init();
-        _collider = GetComponent<Collider2D>();
         int random = Random.Range(0,2);
 
         Vector3 direction = random > 0 ? Vector3.left : Vector3.right;
@@ -23,7 +24,10 @@ public class Train : BaseEventObject
     }
     protected override void DestroyObject()
     {
-        PhotonNetwork.Destroy(this.gameObject);
+        if(NetworkManager.Instance.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(this.gameObject);
+        }
     }
 
     [PunRPC]
@@ -34,9 +38,24 @@ public class Train : BaseEventObject
     private IEnumerator ThroughMapCor(Vector3 dir)
     {
         //Todo: Notice train will be arrived
-        yield return new WaitForSeconds(_prevTimeDelay);
+        float prevTimer = 0f;
+
+        Color alphaColor = _spriteRenderer.material.color;
+        _collider.enabled = false;
+        while(prevTimer <= _prevTimeDelay)
+        {
+            prevTimer += Time.deltaTime;
+            alphaColor.a = (float)(Math.Sin(prevTimer * 10f) + 1) * 0.5f;
+            _spriteRenderer.material.color = alphaColor;
+            yield return null;
+        }
         float timer = 0f;
-        while (timer < _trainDashTime)
+
+        alphaColor.a = 1f;
+        _spriteRenderer.material.color  = alphaColor;
+        transform.position = transform.position - dir * _collider.bounds.size.x;
+        _collider.enabled = true;
+        while (timer <= _trainDashTime)
         {
             timer += Time.deltaTime;
             transform.position += dir * Time.deltaTime * _speed;
@@ -48,7 +67,8 @@ public class Train : BaseEventObject
                 {
                     if (col.TryGetComponent(out PlayerBrain playerBrain))
                     {
-                        GameManager.Instance.OTCPlayer(playerBrain.PhotonView.Owner,Vector3.up);
+                        Vector3 attackDir = (col.transform.position - transform.position).normalized + dir;
+                        GameManager.Instance.OTCPlayer(playerBrain.PhotonView.Owner,attackDir);
                     }
                 }
             }

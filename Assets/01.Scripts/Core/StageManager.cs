@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+[System.Serializable]
 public struct MapBoundStruct
 {
     public float minX;

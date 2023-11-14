@@ -82,14 +82,17 @@ public class PlayerOTC : PlayerHandler, IDamageable
 
     private void PlaySmokeParticle(Vector3 otcDir)
     {
-        if (_smokeParticle.isPlaying)
+        if(_smokeParticle != null)
         {
-            _smokeParticle.Stop();
+            if(_smokeParticle.isPlaying)
+            {
+                _smokeParticle.Stop();
+            }
+            var rotation = Quaternion.LookRotation(-otcDir);
+            _smokeParticle.transform.rotation = rotation;
+            _smokeParticle.Play();
         }
-        
-        var rotation = Quaternion.LookRotation(-otcDir);
-        _smokeParticle.transform.rotation = rotation;
-        _smokeParticle.Play();
+
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

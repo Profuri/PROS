@@ -308,6 +308,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b605bfcb66d24d20b32b8860f928fc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mapBound:
+    minX: -3
+    minY: -3
+    maxX: 3
+    maxY: 3
   _stageTypeCnt: 3
 --- !u!114 &148809876
 MonoBehaviour:
@@ -323,8 +328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 0
   _mapEventList: []
-  _minRandomEvnetTime: 10
-  _maxRandomEvnetTime: 30
+  _minRandomEvnetTime: 2
+  _maxRandomEvnetTime: 5
 --- !u!114 &148809877
 MonoBehaviour:
   m_ObjectHideFlags: 0

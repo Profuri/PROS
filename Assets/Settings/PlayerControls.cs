@@ -174,6 +174,127 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UXInput"",
+            ""id"": ""b1c0b1de-fbb5-42fd-8cbb-0488de8c961d"",
+            ""actions"": [
+                {
+                    ""name"": ""MenuIndexUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""68a3ce32-e2af-4ed4-b7ef-9d044a404df5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuIndexDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""95b8a4b1-d521-446d-84d5-02abba298855"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae66a47d-39c5-4bec-9068-f8f382156ebd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfc09a15-7a10-4421-96f3-01b19ddfa6f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""94105a60-0373-4d44-9b1a-db87182a1b52"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""MenuIndexUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aad43a86-037a-41f4-b216-f2a57b4b2a5c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""MenuIndexUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0324915-7858-4cea-a189-abd466d75c7a"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""MenuIndexDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07daafeb-da5d-4c67-8e72-f3bd36f8a530"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""MenuIndexDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8792423a-be61-43f0-811f-eef75aaf2f69"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c7fd4b3-d222-4f79-9026-d061a9b02e92"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a4687a6-50ed-4882-bca4-8a9e18c02a0a"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -202,6 +323,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Normal_Dash = m_Normal.FindAction("Dash", throwIfNotFound: true);
         m_Normal_Aim = m_Normal.FindAction("Aim", throwIfNotFound: true);
         m_Normal_Defend = m_Normal.FindAction("Defend", throwIfNotFound: true);
+        // UXInput
+        m_UXInput = asset.FindActionMap("UXInput", throwIfNotFound: true);
+        m_UXInput_MenuIndexUp = m_UXInput.FindAction("MenuIndexUp", throwIfNotFound: true);
+        m_UXInput_MenuIndexDown = m_UXInput.FindAction("MenuIndexDown", throwIfNotFound: true);
+        m_UXInput_Back = m_UXInput.FindAction("Back", throwIfNotFound: true);
+        m_UXInput_Enter = m_UXInput.FindAction("Enter", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -337,6 +464,76 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public NormalActions @Normal => new NormalActions(this);
+
+    // UXInput
+    private readonly InputActionMap m_UXInput;
+    private List<IUXInputActions> m_UXInputActionsCallbackInterfaces = new List<IUXInputActions>();
+    private readonly InputAction m_UXInput_MenuIndexUp;
+    private readonly InputAction m_UXInput_MenuIndexDown;
+    private readonly InputAction m_UXInput_Back;
+    private readonly InputAction m_UXInput_Enter;
+    public struct UXInputActions
+    {
+        private @PlayerControls m_Wrapper;
+        public UXInputActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MenuIndexUp => m_Wrapper.m_UXInput_MenuIndexUp;
+        public InputAction @MenuIndexDown => m_Wrapper.m_UXInput_MenuIndexDown;
+        public InputAction @Back => m_Wrapper.m_UXInput_Back;
+        public InputAction @Enter => m_Wrapper.m_UXInput_Enter;
+        public InputActionMap Get() { return m_Wrapper.m_UXInput; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UXInputActions set) { return set.Get(); }
+        public void AddCallbacks(IUXInputActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UXInputActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UXInputActionsCallbackInterfaces.Add(instance);
+            @MenuIndexUp.started += instance.OnMenuIndexUp;
+            @MenuIndexUp.performed += instance.OnMenuIndexUp;
+            @MenuIndexUp.canceled += instance.OnMenuIndexUp;
+            @MenuIndexDown.started += instance.OnMenuIndexDown;
+            @MenuIndexDown.performed += instance.OnMenuIndexDown;
+            @MenuIndexDown.canceled += instance.OnMenuIndexDown;
+            @Back.started += instance.OnBack;
+            @Back.performed += instance.OnBack;
+            @Back.canceled += instance.OnBack;
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
+        }
+
+        private void UnregisterCallbacks(IUXInputActions instance)
+        {
+            @MenuIndexUp.started -= instance.OnMenuIndexUp;
+            @MenuIndexUp.performed -= instance.OnMenuIndexUp;
+            @MenuIndexUp.canceled -= instance.OnMenuIndexUp;
+            @MenuIndexDown.started -= instance.OnMenuIndexDown;
+            @MenuIndexDown.performed -= instance.OnMenuIndexDown;
+            @MenuIndexDown.canceled -= instance.OnMenuIndexDown;
+            @Back.started -= instance.OnBack;
+            @Back.performed -= instance.OnBack;
+            @Back.canceled -= instance.OnBack;
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
+        }
+
+        public void RemoveCallbacks(IUXInputActions instance)
+        {
+            if (m_Wrapper.m_UXInputActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUXInputActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UXInputActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UXInputActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UXInputActions @UXInput => new UXInputActions(this);
     private int m_KeyboardAndMouseSchemeIndex = -1;
     public InputControlScheme KeyboardAndMouseScheme
     {
@@ -353,5 +550,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDefend(InputAction.CallbackContext context);
+    }
+    public interface IUXInputActions
+    {
+        void OnMenuIndexUp(InputAction.CallbackContext context);
+        void OnMenuIndexDown(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
+        void OnEnter(InputAction.CallbackContext context);
     }
 }

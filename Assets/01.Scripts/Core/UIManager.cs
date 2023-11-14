@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,12 +25,25 @@ public class UIManager : MonoBehaviour
     public void Init()
     {
         _componentStack = new Stack<UGUIComponent>();
-        // GenerateUGUI(_mainCanvas.transform);
-        // GenerateUGUI(_mainCanvas.transform);
+        GenerateUGUI("MenuSceneScreen");
     }
-    
-    public void GenerateUGUI(string componentName, Transform parent, EGenerateOption options = EGenerateOption.NONE)
+
+    private void Update()
     {
+        var uguiComponent = _componentStack.Peek();
+        if (uguiComponent is not null)
+        {
+            uguiComponent.UpdateUI();
+        }
+    }
+
+    public void GenerateUGUI(string componentName, Transform parent = null, EGenerateOption options = EGenerateOption.NONE)
+    {
+        if (parent == null)
+        {
+            parent = _mainCanvas.transform;
+        }
+        
         var ugui = PoolManager.Instance.Pop(componentName) as UGUIComponent;
 
         if (ugui == null)

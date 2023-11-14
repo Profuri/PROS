@@ -10,7 +10,7 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
     private EGenerateOption _options;
     public EGenerateOption Options => _options;
     
-    public void GenerateUI(Transform parent, EGenerateOption options)
+    public virtual void GenerateUI(Transform parent, EGenerateOption options)
     {
         _prevParent = transform.parent;
         _options = options;
@@ -26,6 +26,7 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
         }
         
         transform.SetParent(parent);
+        ((RectTransform)transform).anchoredPosition = Vector2.zero;
     }
 
     public virtual void RemoveUI()

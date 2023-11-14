@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5427204857094921854}
+  - component: {fileID: 7285834916676321702}
   m_Layer: 5
   m_Name: MenuSystem
   m_TagString: Untagged
@@ -37,6 +38,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 35}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7285834916676321702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067701764661541479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3fa70fb90243189d42e1d7fe00a422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
 --- !u!1 &1825102851572053584
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +137,7 @@ GameObject:
   - component: {fileID: 3947523765084529867}
   - component: {fileID: 2516997657802740574}
   - component: {fileID: 5201904843453982165}
+  - component: {fileID: 6370237330864247230}
   m_Layer: 5
   m_Name: QuitMenu
   m_TagString: Untagged
@@ -246,6 +261,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6370237330864247230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6114983239194214419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cf987886574df09faa237214b2a6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CallBackEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6655248997898310277
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +352,7 @@ GameObject:
   - component: {fileID: 3483022059057128195}
   - component: {fileID: 1200564167734873819}
   - component: {fileID: 7656545196127903290}
+  - component: {fileID: 556282521981060574}
   m_Layer: 5
   m_Name: OnlineMenu
   m_TagString: Untagged
@@ -445,6 +476,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &556282521981060574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7954498287831544411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cf987886574df09faa237214b2a6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CallBackEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8614081525987820862
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,6 +502,7 @@ GameObject:
   - component: {fileID: 5260143337840858068}
   - component: {fileID: 2481053415283175977}
   - component: {fileID: 2932878758163800448}
+  - component: {fileID: 2560326373962601187}
   m_Layer: 5
   m_Name: OptionMenu
   m_TagString: Untagged
@@ -579,3 +626,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2560326373962601187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614081525987820862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cf987886574df09faa237214b2a6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CallBackEvent:
+    m_PersistentCalls:
+      m_Calls: []

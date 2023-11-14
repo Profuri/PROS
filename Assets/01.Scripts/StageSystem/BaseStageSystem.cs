@@ -120,14 +120,13 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     protected IEnumerator GenerateMapEvent()
     {
-        Debug.LogError("GenerateMapEventStart");
         float timer = 0f;
         float randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
         while (true)
         {
             if (timer > randomTime)
             {
-                Debug.LogError("GeenrateMapEvent");
+                Debug.Log("GeenrateMapEvent");
                 timer = 0f;
                 randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
                 GetRandomBaseMapEvent()?.StartEvent();

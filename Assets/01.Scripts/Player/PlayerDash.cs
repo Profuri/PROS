@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
@@ -8,7 +9,8 @@ public class PlayerDash : PlayerHandler
 {
     private Coroutine _dashCoroutine;
     [SerializeField] private float _dashTime = 0.3f;
-    
+    private float _LandRange = 1.5f;
+
     public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
     private bool _isDashed = false;
 
@@ -20,9 +22,11 @@ public class PlayerDash : PlayerHandler
         base.Init(brain);
         _brain.InputSO.OnDashKeyPress += DashRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
+        _brain.PlayerBuff.RangeUp += LandRangeUpRPC;
+        _brain.PlayerBuff.Dashing += DashBuff;
         StopAllCoroutines();
     }
-    
+
     #region Dash
     private void DashRPC()
     {
@@ -102,7 +106,7 @@ public class PlayerDash : PlayerHandler
         
         _brain.PlayerMovement.StopImmediately(0.0f);
         transform.rotation = Quaternion.identity;
-        CheckDashCollision(mouseDir, radius * 1.5f);
+        CheckDashCollision(mouseDir, radius * _LandRange);
         _brain.ActionData.IsDashing = false;
     }
     #endregion
@@ -157,6 +161,35 @@ public class PlayerDash : PlayerHandler
         }
 
         return returnValue;
+    }
+
+    private void LandRangeUpRPC(float value)
+    {
+        if (_brain.IsMine)
+            _brain.PhotonView.RPC("LandRangeUp", RpcTarget.All, value);
+    }
+
+    [PunRPC]
+    private void LandRangeUp(float value)
+    {
+        _LandRange = value;
+    }
+
+    private void DashBuff(bool value)
+    {
+        _brain.PlayerBuff.IsDashing = value;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (_brain.PlayerBuff.IsDashing)
+        {
+            if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
+            {
+                Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
+                player.PlayerOTC.Damaged(dir);
+            }
+        }
     }
 
     public override void BrainUpdate()

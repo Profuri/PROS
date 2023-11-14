@@ -24,6 +24,7 @@ public class PlayerBrain : MonoBehaviour
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerOTC PlayerOTC { get; private set; }
     public PlayerDefend PlayerDefend { get; private set; }
+    public PlayerBuff PlayerBuff { get; private set; }
     public PlayerActionData ActionData { get; private set; }
     public AnimationController AnimationController { get; private set; }
     public float OriginGravityScale { get; private set; }
@@ -48,6 +49,7 @@ public class PlayerBrain : MonoBehaviour
         PlayerOTC = GetComponent<PlayerOTC>();
         AnimationController = GetComponent<AnimationController>();
         PlayerDefend = GetComponent<PlayerDefend>();
+        PlayerBuff = GetComponent<PlayerBuff>();
 
         _handlers.ForEach(h => h.Init(this));
         PlayerMovement = GetHandlerComponent<PlayerMovement>();

@@ -51,7 +51,7 @@ public class ScoreboardEntry
             }
         }
         
-        Debug.Break();
+        //Debug.Break();
     }
 
     public void Remove()

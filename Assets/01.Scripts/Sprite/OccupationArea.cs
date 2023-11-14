@@ -76,6 +76,6 @@ public class OccupationArea : MonoBehaviourPunCallbacks
         SpriteRenderer.material.SetFloat(_rateHash,value);
         SpriteRenderer.material.SetColor(_colorHash,_currentColor);
         PercentTxt.text = String.Format("{0:0.0}",value * 100f);
-        Debug.Log(SpriteRenderer.material.GetFloat(_rateHash));
+        //Debug.Log(SpriteRenderer.material.GetFloat(_rateHash));
     }
 }

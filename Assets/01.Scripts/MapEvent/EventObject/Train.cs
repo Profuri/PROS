@@ -5,44 +5,43 @@ using Photon.Pun;
 
 public class Train : BaseEventObject
 {
-    [SerializeField] private float _speed = 30f;
+    [SerializeField] private float _speed = 300f;
     [SerializeField] private float _prevTimeDelay = 5f;
+    [SerializeField] private float _trainDashTime = 3f;
     [SerializeField] private LayerMask _layerMask;
     
-    private PhotonView _photonView;
-    private Collider _collider;
+    private Collider2D _collider;
 
     public override void Init()
     {
         base.Init();
+        _collider = GetComponent<Collider2D>();
         int random = Random.Range(0,2);
+
         Vector3 direction = random > 0 ? Vector3.left : Vector3.right;
-        ThroughMap(direction);
+        _photonView.RPC(nameof(ThroughMapRPC),RpcTarget.All,direction);
     }
     protected override void DestroyObject()
     {
         PhotonNetwork.Destroy(this.gameObject);
     }
 
-    public void ThroughMap(Vector3 dir)
-    { 
-        _photonView.RPC(nameof(ThroughMapRPC),RpcTarget.All,dir);
-    }
     [PunRPC]
     private void ThroughMapRPC(Vector3 dir)
     {
-            
+        StartCoroutine(ThroughMapCor(dir));
     }
-
     private IEnumerator ThroughMapCor(Vector3 dir)
     {
         //Todo: Notice train will be arrived
         yield return new WaitForSeconds(_prevTimeDelay);
-        while (true)
+        float timer = 0f;
+        while (timer < _trainDashTime)
         {
+            timer += Time.deltaTime;
             transform.position += dir * Time.deltaTime * _speed;
             
-            Collider2D[] cols = Physics2D.OverlapBoxAll(transform.position,_collider.bounds.size,0f,_layerMask;
+            Collider2D[] cols = Physics2D.OverlapBoxAll(transform.position,_collider.bounds.size,0f,_layerMask);
             if (cols.Length > 0)
             {
                 foreach (Collider2D col in cols)

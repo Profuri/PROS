@@ -10,6 +10,10 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
+
+
+
+
     private int _round;
     private StageObject _currentStageObject;
 
@@ -23,6 +27,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void Init(int mapIndex)
     {
         _mapEventList = new List<BaseMapEvent>();
+        transform.Find("MapEvents").GetComponents(_mapEventList);
+
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
@@ -95,16 +101,12 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();
-        Debug.Log("GenerateNewStage: BaseStageSystem");
 
-        if (NetworkManager.Instance.IsMasterClient)
-        {
             if (_generateCor != null)
             {
                 StopCoroutine(_generateCor);
             }
             _generateCor = StartCoroutine(GenerateMapEvent());
-        }
     }
 
     public virtual void RemoveCurStage()
@@ -114,28 +116,32 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         PlayerManager.Instance.RoundEnd();
     }
 
-    protected BaseMapEvent GetRandomBaseMapEvent()
-    {
-        int index = Random.Range(0,_mapEventList.Count);
-        return _mapEventList[index];
-    }
+
 
     protected IEnumerator GenerateMapEvent()
     {
+        Debug.LogError("GenerateMapEventStart");
         float timer = 0f;
         float randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
         while (true)
         {
             if (timer > randomTime)
             {
+                Debug.LogError("GeenrateMapEvent");
                 timer = 0f;
                 randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
-                GetRandomBaseMapEvent()?.ExecuteEvent();
+                GetRandomBaseMapEvent()?.StartEvent();
             }
             timer += Time.deltaTime;
             
             yield return null;
         }
+    }
+
+        protected BaseMapEvent GetRandomBaseMapEvent()
+    {
+        int index = Random.Range(0,_mapEventList.Count);
+        return _mapEventList[index];
     }
     public abstract bool RoundCheck(out Player roundWinner);
 }

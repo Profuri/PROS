@@ -7,8 +7,7 @@ public class TrainMapEvent : BaseMapEvent
 {
     public override void StartEvent()
     {
-        Train train = PhotonNetwork.Instantiate("Train",Vector3.zero,Quaternion.identity).GetComponent<Train>();
-        train.Init();
+        ExecuteEvent();
     }
 
     public override void EndEvent()
@@ -18,6 +17,7 @@ public class TrainMapEvent : BaseMapEvent
 
     public override void ExecuteEvent()
     {
-        
+        Train train = PhotonNetwork.Instantiate("Train",Vector3.zero,Quaternion.identity).GetComponent<Train>();
+        train.Init();
     }
 }

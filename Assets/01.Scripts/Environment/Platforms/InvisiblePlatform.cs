@@ -42,7 +42,8 @@ public class InvisiblePlatform : BasePlatform
             _photonView.RPC(nameof(SetVisible), RpcTarget.Others, !_isVisible);
         }
     }
-
+    
+    [PunRPC]
     public void SetVisible(bool value)
     {
         if (value == _isVisible) return;

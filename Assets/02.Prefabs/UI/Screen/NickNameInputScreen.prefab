@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6611065950123065869}
   m_Layer: 5
-  m_Name: NickNameInputPopup
+  m_Name: NickNameInputScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

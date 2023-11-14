@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e1d2012eb4ef7df4eacb28fae86cdbf7
+guid: 1028c0b6359a5482795bd76aad291a72
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - KIMM_Light
+  - SUITE Variable
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

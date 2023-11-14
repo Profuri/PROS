@@ -151,7 +151,7 @@ namespace MonoPlayer
                 Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
                 
-                if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
+                if (StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
                 {
                     RevivePlayer(player);
                 }

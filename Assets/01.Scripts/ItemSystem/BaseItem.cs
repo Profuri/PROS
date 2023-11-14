@@ -12,7 +12,7 @@ public abstract class BaseItem : PoolableMono, IItem
 
     public bool Used { get; set; }
 
-    private float _movementSpeed;
+    protected float _movementSpeed;
 
     public UnityEvent HitEvent;
 
@@ -38,11 +38,15 @@ public abstract class BaseItem : PoolableMono, IItem
     public virtual bool HitByPlayer(Player hitPlayer)
     {
         _currentHitCnt++;
-        
+
         if (_currentHitCnt >= _itemSO.UsableHitCnt)
         {
             Used = true;
             OnTakeItem(hitPlayer);
+        }
+        else
+        {
+            HitEvent?.Invoke();
         }
 
         return Used;

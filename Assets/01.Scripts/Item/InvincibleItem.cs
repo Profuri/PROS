@@ -12,9 +12,10 @@ public class InvincibleItem : BaseItem
     [SerializeField] private float _detectRadius = 5f;
     [SerializeField] private float _turnAngleValue = 100f;
     [SerializeField] private float _runawayMaxtime = 2f;
-
+    [SerializeField] private float _minSpeed = 2f;
+    [SerializeField] private float _maxSpeed = 4f;
     private float _runawayTime;
-
+    private bool _isturn = false;
     private void Start()
     {
         Init();
@@ -104,7 +105,16 @@ public class InvincibleItem : BaseItem
             }
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
+
         _moveDir = transform.up;
+        float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
+        if(sinValue < 0.3)
+            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
+        else if(sinValue < 0.8)
+            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue *= 3);
+        else
+            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
+            
     }
 
     public void ShakePosition()

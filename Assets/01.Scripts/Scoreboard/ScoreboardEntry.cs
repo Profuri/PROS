@@ -50,8 +50,6 @@ public class ScoreboardEntry
                 _scoreElems[i].style.unityBackgroundImageTintColor = new StyleColor(_inactivatedColor);
             }
         }
-        
-        Debug.Break();
     }
 
     public void Remove()

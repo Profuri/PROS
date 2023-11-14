@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using System;
-using Random = UnityEngine.Random;
 
 public class InvincibleItem : BaseItem
 {
@@ -16,7 +14,7 @@ public class InvincibleItem : BaseItem
     [SerializeField] private float _maxSpeed = 4f;
     private float _runawayTime;
     private bool _isturn = false;
-    
+
     public override void Init()
     {
         //_runawayTime = 0;
@@ -88,16 +86,16 @@ public class InvincibleItem : BaseItem
         }
         else
         {
-            if(_runawayTime > _runawayMaxtime)
+            if (_runawayTime > _runawayMaxtime)
             {
                 Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
                 _moveDir = (Camera.main.ScreenToWorldPoint(screenCenter) - transform.position).normalized; //중심을 향해 가도록    
             }
             dir = _moveDir;
-            
+
             _runawayTime += Time.deltaTime;
         }
-        
+
         float dot = Vector3.Dot(transform.up, dir);
         if (dot < 1.0f)
         {
@@ -116,13 +114,13 @@ public class InvincibleItem : BaseItem
 
         _moveDir = transform.up;
         float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
-        if(sinValue < 0.3)
+        if (sinValue < 0.3)
             _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
-        else if(sinValue < 0.8)
+        else if (sinValue < 0.8)
             _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue *= 3);
         else
             _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
-            
+
     }
 
     public void ShakePosition()
@@ -130,4 +128,5 @@ public class InvincibleItem : BaseItem
         Tween shakeTween = transform.DOShakePosition(_shakeDuration);
         shakeTween.Play();
     }
+
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class DoubleDashItem : BaseItem
 {
-
     Rigidbody2D _rb;
 
     private float t;

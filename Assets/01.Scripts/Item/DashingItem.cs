@@ -7,8 +7,7 @@ using Random = UnityEngine.Random;
 
 public class DashingItem : BaseItem
 {
-    public override void Init()
-    { }
+    public override void Init() { }
 
     public override void OnTakeItem(Player takenPlayer)
     {

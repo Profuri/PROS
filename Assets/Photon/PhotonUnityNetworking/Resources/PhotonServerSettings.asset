@@ -101,9 +101,7 @@ MonoBehaviour:
   - SetSpriteColorRPC
   - SetColorRPC
   - LoadColorDictionaryRPC
-  - ThroughMapRPC
-  - ThroughMapCor
-  - SetVisible
+  - SetVisibleRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

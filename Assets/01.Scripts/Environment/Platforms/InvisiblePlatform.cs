@@ -20,13 +20,17 @@ public class InvisiblePlatform : BasePlatform
     {
         base.Awake();
         _photonView = GetComponent<PhotonView>();
+        if(NetworkManager.Instance.LocalPlayer.IsMasterClient)
+        {
+            _photonView.RequestOwnership();
+        }
         SetVisible(_isVisible);
     }
 
     private void Start()
     {
-        // if(NetworkManager.Instance.IsMasterClient)
-        //     StartCoroutine(ChangeVisibleCoroutine());
+        if (_photonView.Owner == NetworkManager.Instance.LocalPlayer)
+            StartCoroutine(ChangeVisibleCoroutine());
     }
 
     private IEnumerator ChangeVisibleCoroutine()
@@ -35,7 +39,7 @@ public class InvisiblePlatform : BasePlatform
         while(true)
         {
             yield return new WaitForSeconds(_term);
-            _photonView.RPC(nameof(SetVisible), RpcTarget.All, !_isVisible);
+            _photonView.RPC(nameof(SetVisible), RpcTarget.Others, !_isVisible);
         }
     }
 

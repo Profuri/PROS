@@ -18,6 +18,7 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions, PlayerCon
     public event Action OnMenuIndexDownPress = null;
     public event Action OnBackPress = null;
     public event Action OnEnterPress = null;
+    public event Action OnRefreshPress = null;
     
     private Vector2 _inputValue = Vector2.zero;
     public Vector2 CurrentInputValue => _inputValue;
@@ -107,6 +108,14 @@ public class InputSO : ScriptableObject,PlayerControls.INormalActions, PlayerCon
         if (context.performed)
         {
             OnEnterPress?.Invoke();
+        }
+    }
+
+    public void OnRefresh(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnRefreshPress?.Invoke();
         }
     }
 }

@@ -192,6 +192,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Refresh",
+                    "type": "Button",
+                    "id": "4e2f5d05-db77-4504-a1fc-451fc497591f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -252,6 +261,17 @@
                 },
                 {
                     "name": "",
+                    "id": "05da63d0-f164-4c21-9711-7b009baf645e",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4c7fd4b3-d222-4f79-9026-d061a9b02e92",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -269,6 +289,17 @@
                     "processors": "",
                     "groups": "KeyboardAndMouse",
                     "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ee9debe7-8f9d-40be-9069-c2c1af0aa9d8",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "Refresh",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -5,11 +5,6 @@ using UnityEngine;
 public class MenuSceneScreen : UGUIComponent
 {
     [SerializeField] private UGUIMenuSystem _menuSystem;
-    
-    public override void Init()
-    {
-        // Do Nothing
-    }
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
@@ -30,17 +25,17 @@ public class MenuSceneScreen : UGUIComponent
 
     #region CallBacks
     
-    public void OnlineMenuCallBack()
+    public void OnlineCallBack()
     {
-        
+        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", null, EGenerateOption.CLEAR_PANEL);
     }
 
-    public void OptionsMenuCallBack()
+    public void OptionsCallBack()
     {
-        
+        Debug.Log("option");
     }
 
-    public void QuitMenuCallBack()
+    public void QuitCallBack()
     {
         Application.Quit();
     }

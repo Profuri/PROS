@@ -217,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 556282521981060574, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
       propertyPath: CallBackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnlineMenuCallBack
+      value: OnlineCallBack
       objectReference: {fileID: 0}
     - target: {fileID: 556282521981060574, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
@@ -257,7 +257,7 @@ PrefabInstance:
     - target: {fileID: 2560326373962601187, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
       propertyPath: CallBackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OptionsMenuCallBack
+      value: OptionsCallBack
       objectReference: {fileID: 0}
     - target: {fileID: 2560326373962601187, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
@@ -432,7 +432,7 @@ PrefabInstance:
     - target: {fileID: 6370237330864247230, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
       propertyPath: CallBackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: QuitMenuCallBack
+      value: QuitCallBack
       objectReference: {fileID: 0}
     - target: {fileID: 6370237330864247230, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}

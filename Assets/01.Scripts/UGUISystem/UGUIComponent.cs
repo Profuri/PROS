@@ -26,7 +26,9 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
         }
         
         transform.SetParent(parent);
-        ((RectTransform)transform).anchoredPosition = Vector2.zero;
+        
+        ((RectTransform)transform).offsetMin = Vector2.zero;
+        ((RectTransform)transform).offsetMax = Vector2.zero;
     }
 
     public virtual void RemoveUI()
@@ -40,6 +42,10 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
         PoolManager.Instance.Push(this);
     }
 
-    public abstract override void Init();
+    public sealed override void Init()
+    {
+        // Do Nothing
+    }
+    
     public abstract void UpdateUI();
 }

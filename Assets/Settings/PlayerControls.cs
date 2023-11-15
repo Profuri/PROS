@@ -214,6 +214,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Refresh"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e2f5d05-db77-4504-a1fc-451fc497591f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -274,6 +283,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""05da63d0-f164-4c21-9711-7b009baf645e"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""4c7fd4b3-d222-4f79-9026-d061a9b02e92"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -291,6 +311,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
                     ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee9debe7-8f9d-40be-9069-c2c1af0aa9d8"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Refresh"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -329,6 +360,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_UXInput_MenuIndexDown = m_UXInput.FindAction("MenuIndexDown", throwIfNotFound: true);
         m_UXInput_Back = m_UXInput.FindAction("Back", throwIfNotFound: true);
         m_UXInput_Enter = m_UXInput.FindAction("Enter", throwIfNotFound: true);
+        m_UXInput_Refresh = m_UXInput.FindAction("Refresh", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -472,6 +504,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_UXInput_MenuIndexDown;
     private readonly InputAction m_UXInput_Back;
     private readonly InputAction m_UXInput_Enter;
+    private readonly InputAction m_UXInput_Refresh;
     public struct UXInputActions
     {
         private @PlayerControls m_Wrapper;
@@ -480,6 +513,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @MenuIndexDown => m_Wrapper.m_UXInput_MenuIndexDown;
         public InputAction @Back => m_Wrapper.m_UXInput_Back;
         public InputAction @Enter => m_Wrapper.m_UXInput_Enter;
+        public InputAction @Refresh => m_Wrapper.m_UXInput_Refresh;
         public InputActionMap Get() { return m_Wrapper.m_UXInput; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -501,6 +535,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Enter.started += instance.OnEnter;
             @Enter.performed += instance.OnEnter;
             @Enter.canceled += instance.OnEnter;
+            @Refresh.started += instance.OnRefresh;
+            @Refresh.performed += instance.OnRefresh;
+            @Refresh.canceled += instance.OnRefresh;
         }
 
         private void UnregisterCallbacks(IUXInputActions instance)
@@ -517,6 +554,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Enter.started -= instance.OnEnter;
             @Enter.performed -= instance.OnEnter;
             @Enter.canceled -= instance.OnEnter;
+            @Refresh.started -= instance.OnRefresh;
+            @Refresh.performed -= instance.OnRefresh;
+            @Refresh.canceled -= instance.OnRefresh;
         }
 
         public void RemoveCallbacks(IUXInputActions instance)
@@ -557,5 +597,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMenuIndexDown(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
         void OnEnter(InputAction.CallbackContext context);
+        void OnRefresh(InputAction.CallbackContext context);
     }
 }

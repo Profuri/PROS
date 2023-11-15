@@ -47,7 +47,18 @@ public class UGUIMenuSystem : MonoBehaviour
 
     private void SetIndex(int index)
     {
-        _index = Mathf.Clamp(index, 0, _menus.Count - 1);
+        _index = index;
+        
+        if (_index < 0)
+        {
+            _index = _menus.Count - 1;
+        }
+
+        if (_index >= _menus.Count)
+        {
+            _index = 0;
+        }
+        
         _cursorRectTransform.anchoredPosition = new Vector2(0, _menus[_index].IndexPosition);
     }
 

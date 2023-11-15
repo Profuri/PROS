@@ -94,15 +94,15 @@ public class RangeUpItem : BaseItem
             {
                 //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
                 //_moveDir = (Camera.main.ScreenToWorldPoint(screenCenter) - transform.position).normalized; //중심을 향해 가도록    
-                for (int i = 0; i < playerCol.Length; i++)
-                {
-                    curDis = Vector3.Distance(playerCol[i].transform.position, transform.position);
-                    if (curDis < minDis)
-                    {
-                        index = i;
-                        minDis = curDis;
-                    }
-                }
+                //for (int i = 0; i < playerCol.Length; i++)
+                //{
+                //    curDis = Vector3.Distance(playerCol[i].transform.position, transform.position);
+                //    if (curDis < minDis)
+                //    {
+                //        index = i;
+                //        minDis = curDis;
+                //    }
+                //}
                 _moveDir = (playerCol[index].transform.position - transform.position).normalized;
             }
             dir = _moveDir;

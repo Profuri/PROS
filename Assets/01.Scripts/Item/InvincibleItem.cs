@@ -8,16 +8,18 @@ using UnityEngine.Events;
 public class InvincibleItem : BaseItem
 {
     [SerializeField] private float _shakeDuration = 0.5f;
-    [SerializeField] private float _detectRadius = 5f;
+    [SerializeField] private float _detectDistance = 5f;
     [SerializeField] private float _turnAngleValue = 100f;
-    [SerializeField] private float _runawayMaxtime = 2f;
+    [SerializeField] private float _stopMoveDuration = 2f;
     [SerializeField] private float _basePower = 5f;
-    [SerializeField] private float _rangeAreaDivide = 6;
     [SerializeField] private UnityEvent RunAwayEvt;
-    private float _runawayTime;
+    private float _stopTime = 0f;
     private bool _isturn = false;
+    private bool _isMove = false;
+    private Vector2 _targetMovePos;
+    
     Camera _mainCam;
-
+    Collider2D[] playerCol;
     public override void Init()
     {
         if (_mainCam == null)
@@ -28,6 +30,7 @@ public class InvincibleItem : BaseItem
         //var moveSpeed = Random.Range(1f, 2f);
         //_movementSpeed = moveSpeed;
         //HitEvent.AddListener(ShakePosition);
+        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
     }
     public override void OnTakeItem(Player takenPlayer)
     {
@@ -37,40 +40,48 @@ public class InvincibleItem : BaseItem
     public override void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
         base.GenerateSetting(moveDir, spawnPos, movementSpeed);
-        _runawayTime = 0f;
+        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
+        _stopTime = 0f;
         _isturn = false;
+        _isMove = false;
     }
 
-    //private void Start()
-    //{
-    //    Init();
-    //}
+    private void Start()
+    {
+        Init();
+    }
 
 
-    //private void Update()
-    //{
+    private void Update()
+    {
 
-    //    RunAwayMove();
-    //    transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+        QuidditchMove();
 
-    //}
+        if (_isMove)
+            transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
+
+    }
 
     public override void UpdateItem()
     {
-        base.UpdateItem();
+        if (Used || !_isSpawnEnd)
+        {
+            return;
+        }
+
         QuidditchMove();
-        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+        if (_isMove)
+            transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
     }
 
     void QuidditchMove()
     {
         #region 근처 플레이어 찾기.
-        Collider2D[] playerCol = Physics2D.OverlapCircleAll(transform.position, _detectRadius, LayerMask.GetMask("DAMAGEABLE"));
 
         int nearColindex = 0; // min Distance collider index;
         float curDis = 0f;
         float minDis = float.MaxValue;
-        //float maxDis = float.MinValue;
+        
         for (int i = 0; i < playerCol.Length; i++)
         {
             curDis = Vector3.Distance(playerCol[i].transform.position, transform.position);
@@ -84,49 +95,32 @@ public class InvincibleItem : BaseItem
         #endregion
 
 
-        Vector2 centerpos = transform.position;
-        Vector2 targetPos = -(playerCol[nearColindex].transform.position - transform.position).normalized * _basePower;
+        Vector3 centerpos = transform.position;
+        Vector2 targetPos = 
+            -(playerCol[nearColindex].transform.position - centerpos).normalized * (_basePower * Random.Range(0.5f, 1.5f));
         Vector2 viewportPoint = _mainCam.WorldToViewportPoint(targetPos);
-        if (viewportPoint.x <= 0.05 || viewportPoint.x >= 0.9)
+        if (viewportPoint.x <= 0 || viewportPoint.x >= 1)
         {
-
+            targetPos.x = -targetPos.x;
         }
-        if (viewportPoint.y <= 0.05 || viewportPoint.y >= 0.9)// 카메라 범위 벗어난것
+        if (viewportPoint.y <= 0 || viewportPoint.y >= 1)// 카메라 범위 벗어난것
         {
-
+            targetPos.y = -targetPos.y;
         }
 
-        if (playerCol.Length != 0)
+        if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // 멈춰있던 시간 끝
         {
-            _runawayTime = 0;
+            _isMove = true;
             //dir = 
         }
         else
         {
-            _runawayTime = 0;
-            if (_runawayTime > _runawayMaxtime)
-            {
-                int x = Screen.width / 2;
-                int y = Screen.height / 2;
-                Vector2 screenCenter =
-                    new Vector2(x + Random.Range(-x / _rangeAreaDivide, x / _rangeAreaDivide),
-                               y + Random.Range(-y / _rangeAreaDivide, y / _rangeAreaDivide));
+            _canMoveTime = 0;
+            
+            _moveDir = ;
 
-                _moveDir = (_mainCam.ScreenToWorldPoint(screenCenter) - transform.position).normalized; //중심을 향해 가도록    
-            }
-            //dir = _moveDir;
-
-            _runawayTime += Time.deltaTime;
+            _canMoveTime += Time.deltaTime;
         }
-
-        //float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
-        //if (sinValue < 0.3)
-        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
-        //else if (sinValue < 0.8)
-        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue *= 2);
-        //else
-        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
-
     }
 
     public void ShakePosition()

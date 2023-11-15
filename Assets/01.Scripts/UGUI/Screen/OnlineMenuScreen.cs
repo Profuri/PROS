@@ -7,7 +7,7 @@ public class OnlineMenuScreen : UGUIComponent
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
-        _menuSystem.SetUp();
+        _menuSystem.SetUp(this);
     }
 
     public override void RemoveUI()
@@ -25,7 +25,7 @@ public class OnlineMenuScreen : UGUIComponent
 
     public void CreateRoomCallBack()
     {
-        UIManager.Instance.GenerateUGUI("ModeSelectScreen", null, EGenerateOption.CLEAR_PANEL);
+        UIManager.Instance.GenerateUGUI("ModeSelectScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
     }
 
     public void QuickMatchCallBack()
@@ -35,7 +35,7 @@ public class OnlineMenuScreen : UGUIComponent
 
     public void RoomListCallBack()
     {
-        UIManager.Instance.GenerateUGUI("RoomListScreen", null, EGenerateOption.CLEAR_PANEL);
+        UIManager.Instance.GenerateUGUI("RoomListScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
     }
 
     public void BackCallBack()

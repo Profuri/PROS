@@ -1,9 +1,10 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class UGUIComponent : PoolableMono, IUGUI
 {
     private Transform _prevParent;
-    
+
     private Transform _parent;
     public Transform Parent => _parent;
     
@@ -26,9 +27,12 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
         }
         
         transform.SetParent(parent);
-        
-        ((RectTransform)transform).offsetMin = Vector2.zero;
-        ((RectTransform)transform).offsetMax = Vector2.zero;
+
+        if (options.HasFlag(EGenerateOption.RESETING_POS))
+        {
+            ((RectTransform)transform).offsetMin = Vector2.zero;
+            ((RectTransform)transform).offsetMax = Vector2.zero;
+        }
     }
 
     public virtual void RemoveUI()

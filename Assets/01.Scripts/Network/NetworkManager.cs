@@ -73,7 +73,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message){ }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
+    { 
         OnPlayerEnteredRoomEvent?.Invoke(newPlayer);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)

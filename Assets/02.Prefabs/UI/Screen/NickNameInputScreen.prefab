@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
+  _inputField: {fileID: 673636604232264165}
 --- !u!1 &1575674239077679182
 GameObject:
   m_ObjectHideFlags: 0

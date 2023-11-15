@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -20,24 +21,24 @@ public class UIManager : MonoBehaviour
     public Canvas MainCanvas => _mainCanvas;
     
     private Stack<UGUIComponent> _componentStack;
-    public Stack<UGUIComponent> ComponentStack => _componentStack;
+    public UGUIComponent TopComponent => _componentStack.Peek();
 
     public void Init()
     {
         _componentStack = new Stack<UGUIComponent>();
-        GenerateUGUI("MenuSceneScreen");
+        GenerateUGUI("MenuSceneScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+        GenerateUGUI("BlockScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
     }
 
     private void Update()
     {
-        var uguiComponent = _componentStack.Peek();
-        if (uguiComponent is not null)
+        if (TopComponent is not null)
         {
-            uguiComponent.UpdateUI();
+            TopComponent.UpdateUI();
         }
     }
 
-    public void GenerateUGUI(string componentName, Transform parent = null, EGenerateOption options = EGenerateOption.NONE)
+    public UGUIComponent GenerateUGUI(string componentName, EGenerateOption options = EGenerateOption.NONE, Transform parent = null)
     {
         if (parent == null)
         {
@@ -46,13 +47,25 @@ public class UIManager : MonoBehaviour
         
         var ugui = PoolManager.Instance.Pop(componentName) as UGUIComponent;
 
-        if (ugui == null)
+        if (ugui is null)
         {
-            return;
+            return null;
         }
         
         ugui.GenerateUI(parent, options);
-        _componentStack.Push(ugui);
+
+        if (options.HasFlag(EGenerateOption.STACKING))
+        {
+            _componentStack.Push(ugui);
+        }
+
+        return ugui;
+    }
+
+    public void RemoveTopUGUI()
+    {
+        var top = _componentStack.Pop();
+        top.RemoveUI();
     }
 
     public void ReturnUGUI()
@@ -73,7 +86,7 @@ public class UIManager : MonoBehaviour
         }
         
         curComponent.RemoveUI();
-        GenerateUGUI(prevComponent.name, prevComponent.Parent, prevComponent.Options);
+        GenerateUGUI(prevComponent.name, prevComponent.Options, prevComponent.Parent);
     }
 
     public void ClearPanel()

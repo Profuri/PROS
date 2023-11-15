@@ -9,7 +9,7 @@ public class MenuSceneScreen : UGUIComponent
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
-        _menuSystem.SetUp();
+        _menuSystem.SetUp(this);
     }
 
     public override void RemoveUI()
@@ -27,7 +27,7 @@ public class MenuSceneScreen : UGUIComponent
     
     public void OnlineCallBack()
     {
-        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", null, EGenerateOption.CLEAR_PANEL);
+        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
     }
 
     public void OptionsCallBack()

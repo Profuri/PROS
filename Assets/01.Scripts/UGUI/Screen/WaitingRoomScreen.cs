@@ -15,22 +15,30 @@ public class WaitingRoomScreen : UGUIComponent
 
         _playerCardDiction = new Dictionary<Player, PlayerCard>();
 
-        _inputSO.OnEnterPress += EnterCallBack;
+        _inputSO.OnEnterPress += ReadyCallBack;
         _inputSO.OnBackPress += ExitCallBack;
+        NetworkManager.Instance.OnJoinedRoomEvent += JoinRoomCallBack;
         NetworkManager.Instance.OnPlayerEnteredRoomEvent += EnterPlayerCallBack;
         NetworkManager.Instance.OnPlayerLeftRoomEvent += LeftPlayerCallBack;
-        
-        EnterPlayerCallBack(NetworkManager.Instance.LocalPlayer);
     }
 
     public override void RemoveUI()
     {
         base.RemoveUI();
+        
+        foreach(var pair in _playerCardDiction)
+        {
+            pair.Value.RemoveUI();
+        }
+        _playerCardDiction.Clear();
 
-        _inputSO.OnEnterPress -= EnterCallBack;
+        _inputSO.OnEnterPress -= ReadyCallBack;
         _inputSO.OnBackPress -= ExitCallBack;
+        NetworkManager.Instance.OnJoinedRoomEvent -= JoinRoomCallBack;
         NetworkManager.Instance.OnPlayerEnteredRoomEvent -= EnterPlayerCallBack;
         NetworkManager.Instance.OnPlayerLeftRoomEvent -= LeftPlayerCallBack;
+        
+        NetworkManager.Instance.LeaveRoom();
     }
 
     public override void UpdateUI()
@@ -40,14 +48,24 @@ public class WaitingRoomScreen : UGUIComponent
 
     #region CallBacks
 
-    private void EnterCallBack()
+    private void ReadyCallBack()
     {
         
     }
 
     private void ExitCallBack()
     {
-        
+        UIManager.Instance.RemoveTopUGUI();
+        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", EGenerateOption.STACKING | EGenerateOption.CLEAR_PANEL | EGenerateOption.RESETING_POS);
+    }
+
+    private void JoinRoomCallBack()
+    {
+        var playerList = NetworkManager.Instance.PlayerList;
+        foreach (var p in playerList)
+        {
+            EnterPlayerCallBack(p);
+        }
     }
 
     private void EnterPlayerCallBack(Player player)

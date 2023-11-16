@@ -29,13 +29,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public RoomInfo GetCurRoom => PhotonNetwork.CurrentRoom;
     public bool IsMasterClient => PhotonNetwork.IsMasterClient;
     public Player LocalPlayer => PhotonNetwork.LocalPlayer;
-    public List<RoomInfo> RoomList => _roomList;
+    private Dictionary<RoomInfo, EStageMode> _roomList;
+    public Dictionary<RoomInfo, EStageMode> RoomList => _roomList;
     public List<Player> PlayerList => PhotonNetwork.PlayerList.ToList();
         
     
     private PhotonView _photonView;
     public PhotonView PhotonView => _photonView;
-    private List<RoomInfo> _roomList;
 
     public event Action OnConnectedToMasterEvent;
     public event Action OnJoinedRoomEvent;

@@ -3,6 +3,8 @@ using UnityEngine;
 public class RoomListScreen : UGUIComponent
 {
     [SerializeField] private InputSO _inputSO;
+    
+    private List<
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {

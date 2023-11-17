@@ -44,7 +44,7 @@ namespace MonoPlayer
             
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
-            OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
+            //OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
 
             LoadedPlayerList = new List<Player>();
             BrainDictionary = new Dictionary<Player, PlayerBrain>();
@@ -135,14 +135,14 @@ namespace MonoPlayer
         private void RemovePlayerRPC(Player player)
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
+            Debug.LogError($"RemovePlayer: {player}");
             StopAllCoroutines();
             var playerBrain = BrainDictionary[player];
 
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;
-            
-                
+
                 LoadedPlayerList.Remove(player);
                 //BrainDictionary.Remove(player);
                 //ColorDictionary.Remove(player);
@@ -162,12 +162,9 @@ namespace MonoPlayer
             if (!LoadedPlayerList.Contains(player))
             {
                 LoadedPlayerList.Add(player);
-                
+
                 if (ColorDictionary.ContainsKey(player) == false)
                 {
-                    //Debug.LogError($"ColorDictionaryChanged, Player: {player}");
-                    //NetworkManager.Instance.PhotonView.RPC("LoadColorDictionaryRPC",RpcTarget.All,
-                      //  player, randomColor.r,randomColor.g,randomColor.b,randomColor.a);
                     ColorDictionary.Add(player,new Color(r,g,b,a));
                 }
             }
@@ -176,6 +173,7 @@ namespace MonoPlayer
             {
                 Debug.LogError("OnAllPlayerLoad");
                 OnAllPlayerLoad?.Invoke();
+                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
                 IsAllOfPlayerLoad = true;
             }
         }

@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
         PoolManager.Instance = new PoolManager(this.transform);
         StageManager.Instance.Init();
         ItemManager.Instance.Init();
+        DeadManager.Instance.Init();
 
         _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
     }

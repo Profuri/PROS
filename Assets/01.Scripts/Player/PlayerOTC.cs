@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
+using Unity.VisualScripting;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
@@ -12,7 +13,7 @@ public class PlayerOTC : PlayerHandler, IDamageable
 
     public void Damaged(Vector3 attackDirection)
     {
-        if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying ) return;
+        if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
 
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
@@ -75,7 +76,7 @@ public class PlayerOTC : PlayerHandler, IDamageable
         {
             Debug.Log(otcDir);
             
-            _brain.Collider.enabled = false;
+            _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;
             _brain.OnOTC?.Invoke();
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);

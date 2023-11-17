@@ -64,10 +64,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void OnPlayerDead()
     {
-        if (NetworkManager.Instance.IsMasterClient)
-        {
-            PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
-        }
+        PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
     }
 
     #region UnityMessage

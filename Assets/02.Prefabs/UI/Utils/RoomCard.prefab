@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 6200161624588648790}
   - component: {fileID: 7822912728462110662}
   - component: {fileID: 733755293040493634}
+  - component: {fileID: 2937862769169465266}
   m_Layer: 5
   m_Name: RoomCard
   m_TagString: Untagged
@@ -408,6 +409,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2937862769169465266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7507608528927998094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43323afd309147f0af09a427e78dbd61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _titleTMP: {fileID: 7473584995396727484}
+  _modeTMP: {fileID: 3335039862537182278}
+  _playerCntTMP: {fileID: 1931102838861636431}
+  _button: {fileID: 733755293040493634}
 --- !u!1 &9056788687798835119
 GameObject:
   m_ObjectHideFlags: 0

@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
+  _roomCardParent: {fileID: 7291939675364451118}
 --- !u!1 &4256109143553346220
 GameObject:
   m_ObjectHideFlags: 0

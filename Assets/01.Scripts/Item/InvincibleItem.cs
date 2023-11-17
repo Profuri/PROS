@@ -111,15 +111,13 @@ public class InvincibleItem : BaseItem
         if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // ∏ÿ√Á¿÷¥¯ Ω√∞£ ≥°
         {
             _isMove = true;
-            //dir = 
+            _stopTime = 0;
         }
         else
         {
-            _canMoveTime = 0;
-            
-            _moveDir = ;
+            _stopTime += Time.deltaTime;
 
-            _canMoveTime += Time.deltaTime;
+            _targetMovePos = transform.position;
         }
     }
 

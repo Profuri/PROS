@@ -9,11 +9,14 @@ public class InvincibleItem : BaseItem
 {
     [SerializeField] private float _shakeDuration = 0.5f;
     [SerializeField] private float _detectDistance = 5f;
-    [SerializeField] private float _turnAngleValue = 100f;
-    [SerializeField] private float _stopMoveDuration = 2f;
+    [SerializeField] private float _baseStopMoveDuration = 1.3f;
+    [SerializeField] private float _stoptimeDeviation = 1f; // 시간 편차
     [SerializeField] private float _basePower = 5f;
+    [SerializeField] private float _powerDeviation = 1f; // 힘 편차
     [SerializeField] private UnityEvent RunAwayEvt;
     private float _stopTime = 0f;
+    private float _stopMoveDuration;
+    
     private bool _isturn = false;
     private bool _isMove = false;
     private Vector2 _targetMovePos;
@@ -42,6 +45,8 @@ public class InvincibleItem : BaseItem
         base.GenerateSetting(moveDir, spawnPos, movementSpeed);
         playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
         _stopTime = 0f;
+        _stopMoveDuration = 
+            _baseStopMoveDuration + Random.Range(-_stoptimeDeviation / 2, +_stoptimeDeviation / 2);
         _isturn = false;
         _isMove = false;
     }
@@ -97,27 +102,39 @@ public class InvincibleItem : BaseItem
 
         Vector3 centerpos = transform.position;
         Vector2 targetPos = 
-            -(playerCol[nearColindex].transform.position - centerpos).normalized * (_basePower * Random.Range(0.5f, 1.5f));
+            -(playerCol[nearColindex].transform.position - centerpos).normalized 
+            * (_basePower + Random.Range(-_powerDeviation/2, +_powerDeviation));
         Vector2 viewportPoint = _mainCam.WorldToViewportPoint(targetPos);
         if (viewportPoint.x <= 0 || viewportPoint.x >= 1)
         {
             targetPos.x = -targetPos.x;
         }
-        if (viewportPoint.y <= 0 || viewportPoint.y >= 1)// 카메라 범위 벗어난것
+        if (viewportPoint.y <= 0 || viewportPoint.y >= 1)// 카메라 범위 벗어난것.
         {
             targetPos.y = -targetPos.y;
         }
 
-        if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // 멈춰있던 시간 끝
+        if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // 멈춰있던 시간 끝.
         {
+            if(!_isMove)
+            {
+                _stopMoveDuration =
+                    _baseStopMoveDuration + Random.Range(-_stoptimeDeviation / 2, +_stoptimeDeviation / 2); //다음 정지 시간을 미리 계산.
+            }
             _isMove = true;
+            _targetMovePos = targetPos;
             _stopTime = 0;
         }
         else
         {
-            _stopTime += Time.deltaTime;
-
-            _targetMovePos = transform.position;
+            if(Vector3.Distance(_targetMovePos, transform.position) < 0.1f)
+            {
+                _isMove = false;
+                _targetMovePos = transform.position;
+            }
+            if(!_isMove)
+                _stopTime += Time.deltaTime;
+            //_targetMovePos = transform.position;
         }
     }
 

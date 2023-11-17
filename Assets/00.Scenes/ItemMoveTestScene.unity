@@ -1199,6 +1199,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: InvincibleItem
       objectReference: {fileID: 0}
+    - target: {fileID: 9035823220909707735, guid: 48985ad78d1eb424dbe8b1a86acfe30c,
+        type: 3}
+      propertyPath: _basePower
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035823220909707735, guid: 48985ad78d1eb424dbe8b1a86acfe30c,
+        type: 3}
+      propertyPath: _powerDeviation
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9035823220909707735, guid: 48985ad78d1eb424dbe8b1a86acfe30c,
+        type: 3}
+      propertyPath: _baseStopMoveDuration
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

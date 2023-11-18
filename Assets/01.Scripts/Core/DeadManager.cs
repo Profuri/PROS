@@ -28,45 +28,10 @@ public class DeadManager : MonoBehaviour
     public void Init()
     {
         _playerBrainList = new List<PlayerBrain>();
-        //SceneManagement.Instance.OnGameSceneLoaded += StartUpdate; 
-
-    }
-    public void AddPlayerBrain(Player player)
-    {
-        NetworkManager.Instance.PhotonView.RPC(nameof(AddPlayerBrainRPC),RpcTarget.All,player);
     }
 
-    public void RemovePlayerBrain(Player player)
+    public bool IsDeadPosition(Vector3 pos)
     {
-        NetworkManager.Instance.PhotonView.RPC(nameof(RemovePlayerBrainRPC),RpcTarget.All,player);
-    }
-
-    [PunRPC]
-    private void AddPlayerBrainRPC(Player player)
-    {
-        var brain = PlayerManager.Instance.BrainDictionary[player];
-        _playerBrainList.Add(brain);
-    }
-
-    [PunRPC]
-    private void RemovePlayerBrainRPC(Player player)
-    {
-        var brain = PlayerManager.Instance.BrainDictionary[player];
-        _playerBrainList.Remove(brain);
-    }
-    
-    
-    
-    private void Update()
-    {
-        foreach(var brain in _playerBrainList.ToList())
-        {
-            if(brain == null) _playerBrainList.Remove(brain);
-            if(Vector3.Distance(Vector3.zero,brain.transform.position) >= _deathDistance)
-            {
-                brain.OnPlayerDead();
-                _playerBrainList.Remove(brain);
-            }
-        }
+        return Vector3.Distance(transform.position, pos) >= _deathDistance;
     }
 }

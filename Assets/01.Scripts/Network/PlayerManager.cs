@@ -136,7 +136,8 @@ namespace MonoPlayer
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
             Debug.LogError($"RemovePlayer: {player}");
-            StopAllCoroutines();
+            //This stop Coroutines makes error (not revive player because of RPC)
+            //StopAllCoroutines();
             var playerBrain = BrainDictionary[player];
 
             if (playerBrain.PhotonView.IsMine)

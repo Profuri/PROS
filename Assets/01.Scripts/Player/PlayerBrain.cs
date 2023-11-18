@@ -60,6 +60,14 @@ public class PlayerBrain : MonoBehaviour
 
         _inputSO.OnMouseAim += AimToWorldPoint;
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
+        OnUpdateEvent += () =>
+        {
+            if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
+            {
+                PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+                Debug.LogError($"PlayerIsDead: {PhotonView.Owner}");
+            }
+        };
     }
 
     public void OnPlayerDead()

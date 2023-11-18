@@ -62,11 +62,15 @@ public class WindMapEvent : BaseMapEvent
         }
     }
     
+    
     //It Works master client only
     [PunRPC]
     private void ApplyWindRPC(int dir)
     {
-        PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
-        brain.PlayerMovement.ApplyWind(_windPower,dir);
+        if (NetworkManager.Instance.PhotonView.IsMine)
+        {
+            PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
+            brain.PlayerMovement.ApplyWind(_windPower,dir);
+        }
     }
 }

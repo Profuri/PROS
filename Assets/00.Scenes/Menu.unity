@@ -181,7 +181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _windPower: 30
-  _maxWindPower: 10
   _targetLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -428,8 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61471445669c0674c8f13e196c4132fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _windPower: 5
-  _maxWindPower: 10
+  _windPower: 2.5
   _targetLayer:
     serializedVersion: 2
     m_Bits: 128

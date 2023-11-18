@@ -123,73 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &3670493
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3670494}
-  - component: {fileID: 3670495}
-  - component: {fileID: 3670496}
-  m_Layer: 0
-  m_Name: MapEvents
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3670494
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3670493}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 148809869}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3670495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3670493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eee6eadb703cae145b884f0718d395ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3670496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3670493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61471445669c0674c8f13e196c4132fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _windPower: 30
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  _minWindTime: 10
-  _maxWindTime: 15
-  _colPos: {x: 0, y: 0, z: 0}
-  _colBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &148809866
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,8 +190,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3670494}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &148809870
@@ -354,8 +286,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 0
   _mapEventList: []
-  _minRandomEvnetTime: 2
-  _maxRandomEvnetTime: 5
+  _minRandomEvnetTime: 20
+  _maxRandomEvnetTime: 30
 --- !u!114 &148809877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,8 +328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 1
   _mapEventList: []
-  _minRandomEvnetTime: 1
-  _maxRandomEvnetTime: 5
+  _minRandomEvnetTime: 30
+  _maxRandomEvnetTime: 40
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 128

@@ -51,8 +51,8 @@ public class WindMapEvent : BaseMapEvent
         float timer = 0f;
         float targetTime = Random.Range(_minWindTime, _maxWindTime);
 
-        //_curDir = (Dir)Random.Range((int)Dir.LEFT, (int)Dir.END);
-        _curDir = Dir.LEFT;
+        _curDir = (Dir)Random.Range((int)Dir.LEFT, (int)Dir.END);
+        //_curDir = Dir.LEFT;
         
         while (timer <= targetTime)
         {

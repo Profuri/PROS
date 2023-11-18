@@ -132,8 +132,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     private BaseMapEvent GetRandomBaseMapEvent()
     {
-        //int index = Random.Range(0,_mapEventList.Count);
-        int index = 1;
+        int index = Random.Range(0,_mapEventList.Count);
+        //int index = 1;
         return _mapEventList[index];
     }
     public abstract bool RoundCheck(out Player roundWinner);

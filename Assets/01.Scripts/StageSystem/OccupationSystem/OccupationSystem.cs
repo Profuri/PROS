@@ -75,7 +75,9 @@ public class OccupationSystem
         }
         else
         {
+            _curOccupationTime = 0f;
             _areaObj.transform.position = targetPos;
+            _areaObj.SetValue(_curOccupationTime);
         }
     }
 
@@ -94,13 +96,11 @@ public class OccupationSystem
         while (timer <= changeTime)
         {
             if (_areaObj != null)
-            {
                 _areaObj.SetValue(_curOccupationTime / targetTime);
-            }
             else
-            {
-                Debug.LogWarning("Area obj is null!");   
-            }
+                Debug.LogWarning("Area obj is null!");
+            
+            
             timer += Time.deltaTime;
             _cols = Physics2D.OverlapCircleAll(_occupationPos,radius,layer);
 

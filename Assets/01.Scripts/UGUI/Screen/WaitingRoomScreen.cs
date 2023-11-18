@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonoPlayer;
 using Photon.Realtime;
 using UnityEngine;
 
@@ -46,11 +47,16 @@ public class WaitingRoomScreen : UGUIComponent
         // Do Nothing
     }
 
+    public void ReadyPlayer(Player player)
+    {
+        _playerCardDiction[player].ReadyToggle();
+    }
+
     #region CallBacks
 
     private void ReadyCallBack()
     {
-        
+        PlayerManager.Instance.ReadyPlayer(NetworkManager.Instance.LocalPlayer);
     }
 
     private void ExitCallBack()

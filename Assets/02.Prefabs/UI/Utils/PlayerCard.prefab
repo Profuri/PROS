@@ -426,7 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 1}
+  m_Color: {r: 0.16078432, g: 0.16078432, b: 0.16078432, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -522,3 +522,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2748620a26c4a68ae1c07fd213483fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unReadyColor: {r: 0.16078432, g: 0.16078432, b: 0.16078432, a: 1}
+  _readyColor: {r: 0.24313726, g: 0.6627451, b: 0.35686275, a: 1}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -54,12 +55,12 @@ public class UIManager : MonoBehaviour
             return null;
         }
         
-        ugui.GenerateUI(parent, options);
-
         if (options.HasFlag(EGenerateOption.STACKING))
         {
             _componentStack.Push(ugui);
         }
+        
+        ugui.GenerateUI(parent, options);
 
         return ugui;
     }
@@ -67,7 +68,6 @@ public class UIManager : MonoBehaviour
     public void RemoveTopUGUI()
     {
         var top = _componentStack.Pop();
-        Debug.Log(top.name);
         top.RemoveUI();
     }
 

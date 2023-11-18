@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Photon.Realtime;
-using Random = UnityEngine.Random;
 using System.Linq;
 using ExitGames.Client.Photon;
 
@@ -70,9 +69,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsVisible = true,
             IsOpen = true,
             MaxPlayers = 4,
-            CustomRoomProperties = new Hashtable { { "Mode", "None" } }
         };
-
+        options.CustomRoomProperties = new Hashtable { { "Mode", (int)mode } };
         PhotonNetwork.CreateRoom($"{owner.NickName}'S ROOM", options);
     }
 

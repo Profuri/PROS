@@ -59,19 +59,8 @@ public class RoomListScreen : UGUIComponent
             {
                 return;
             }
-            
-            switch (cp["Mode"])
-            {
-                case "SURVIVE":
-                    roomCard.SetMode(EStageMode.SURVIVE);
-                    break;
-                case "DEATHMATCH":
-                    roomCard.SetMode(EStageMode.DEATHMATCH);
-                    break;
-                case "OCCUPATION":
-                    roomCard.SetMode(EStageMode.OCCUPATION);
-                    break;
-            }
+
+            // roomCard.SetMode((EStageMode)cp["Mode"]);
             
             roomCard.SetTitle(room.Name);
             roomCard.SetPlayerCnt(room.PlayerCount, room.MaxPlayers);

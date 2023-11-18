@@ -42,7 +42,7 @@ public class WindMapEvent : BaseMapEvent
         {
             StopCoroutine(_coroutine);
         }
-        StartCoroutine(WindCoroutine());
+        _coroutine = StartCoroutine(WindCoroutine());
     }
 
     private IEnumerator WindCoroutine()
@@ -63,14 +63,12 @@ public class WindMapEvent : BaseMapEvent
     }
     
     
+    
     //It Works master client only
     [PunRPC]
     private void ApplyWindRPC(int dir)
     {
-        if (NetworkManager.Instance.PhotonView.IsMine)
-        {
-            PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
-            brain.PlayerMovement.ApplyWind(_windPower,dir);
-        }
+        PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
+        brain.PlayerMovement.ApplyWind(_windPower,dir);
     }
 }

@@ -65,7 +65,6 @@ public class PlayerBrain : MonoBehaviour
             if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
             {
                 PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
-                Debug.LogError($"PlayerIsDead: {PhotonView.Owner}");
             }
         };
     }

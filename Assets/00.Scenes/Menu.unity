@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3670494}
   - component: {fileID: 3670495}
+  - component: {fileID: 3670496}
   m_Layer: 0
   m_Name: MapEvents
   m_TagString: Untagged
@@ -167,6 +168,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee6eadb703cae145b884f0718d395ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3670496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61471445669c0674c8f13e196c4132fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _windPower: 30
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _minWindTime: 10
+  _maxWindTime: 15
+  _colPos: {x: 0, y: 0, z: 0}
+  _colBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &148809866
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,6 +211,8 @@ GameObject:
   - component: {fileID: 148809877}
   - component: {fileID: 148809878}
   - component: {fileID: 148809880}
+  - component: {fileID: 148809882}
+  - component: {fileID: 148809881}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -371,8 +396,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mode: 1
   _mapEventList: []
-  _minRandomEvnetTime: 10
-  _maxRandomEvnetTime: 30
+  _minRandomEvnetTime: 1
+  _maxRandomEvnetTime: 5
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -390,6 +415,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deathDistance: 30
+--- !u!114 &148809881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148809866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61471445669c0674c8f13e196c4132fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _windPower: 20
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _minWindTime: 10
+  _maxWindTime: 15
+  _colPos: {x: 0, y: 0, z: 0}
+  _colBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 30, y: 30, z: 30}
+--- !u!114 &148809882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148809866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee6eadb703cae145b884f0718d395ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1409238413
 GameObject:
   m_ObjectHideFlags: 0

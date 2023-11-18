@@ -59,7 +59,6 @@ namespace MonoPlayer
 
         public void RevivePlayer(Player revivePlayer)
         {
-            Debug.LogError($"RevivePlayer: {revivePlayer}");
             StartCoroutine(ReviveRoutine(revivePlayer));
         }
 
@@ -135,7 +134,6 @@ namespace MonoPlayer
         private void RemovePlayerRPC(Player player)
         {
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
-            Debug.LogError($"RemovePlayer: {player}");
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
             var playerBrain = BrainDictionary[player];
@@ -172,7 +170,6 @@ namespace MonoPlayer
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
-                Debug.LogError("OnAllPlayerLoad");
                 OnAllPlayerLoad?.Invoke();
                 NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
                 IsAllOfPlayerLoad = true;

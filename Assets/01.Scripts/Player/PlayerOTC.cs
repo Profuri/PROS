@@ -11,10 +11,10 @@ public class PlayerOTC : PlayerHandler, IDamageable
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
 
-    public void Damaged(Vector3 attackDirection)
+    public void Damaged(Vector3 attackDirection, bool priority = false)
     {
         if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
-
+        
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
 
@@ -58,8 +58,8 @@ public class PlayerOTC : PlayerHandler, IDamageable
             otcDir.y *= -1;
         
         otcDir.Normalize();
-
-        if (_brain.PlayerDefend.IsDefendBounce)
+        
+        if (_brain.PlayerDefend.IsDefendBounce && priority == false)
         {
             _brain.PlayerDefend.IsDefendBounce = false;
             isBounce = true;

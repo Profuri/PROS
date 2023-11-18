@@ -10,10 +10,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
-
-
-
-
     private int _round;
     private StageObject _currentStageObject;
 
@@ -27,7 +23,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void Init(int mapIndex)
     {
         _mapEventList = new List<BaseMapEvent>();
-        transform.Find("MapEvents").GetComponents(_mapEventList);
+        GetComponents(_mapEventList);
         _mapEventList.ForEach(mapEvent => mapEvent.Init(StageManager.Instance.MapBound));
 
         _round = 1;
@@ -116,9 +112,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject = null;
         PlayerManager.Instance.RoundEnd();
     }
-
-
-
     protected IEnumerator GenerateMapEvent()
     {
         float timer = 0f;
@@ -127,7 +120,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         {
             if (timer > randomTime)
             {
-                Debug.Log("GeenrateMapEvent");
                 timer = 0f;
                 randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
                 GetRandomBaseMapEvent()?.StartEvent();
@@ -138,9 +130,10 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         }
     }
 
-    protected BaseMapEvent GetRandomBaseMapEvent()
+    private BaseMapEvent GetRandomBaseMapEvent()
     {
-        int index = Random.Range(0,_mapEventList.Count);
+        //int index = Random.Range(0,_mapEventList.Count);
+        int index = 1;
         return _mapEventList[index];
     }
     public abstract bool RoundCheck(out Player roundWinner);

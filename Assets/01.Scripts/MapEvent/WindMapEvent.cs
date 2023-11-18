@@ -16,7 +16,6 @@ public class WindMapEvent : BaseMapEvent
 {
     [SerializeField] private float _windPower = 20f;
 
-    [SerializeField] private float _maxWindPower = 10f;
     [SerializeField] private LayerMask _targetLayer;
     
     [Tooltip("바람이 몇 시간동안 불지")]
@@ -25,6 +24,7 @@ public class WindMapEvent : BaseMapEvent
 
     [SerializeField] private Vector3 _colPos;
     [SerializeField] private Bounds _colBounds;
+    
 
     private Dir _curDir;
     private Coroutine _coroutine;
@@ -57,28 +57,16 @@ public class WindMapEvent : BaseMapEvent
         while (timer <= targetTime)
         {
             timer += Time.deltaTime;
-            NetworkManager.Instance.PhotonView.RPC(nameof(ApplyWindRPC),RpcTarget.All);
+            NetworkManager.Instance.PhotonView.RPC(nameof(ApplyWindRPC),RpcTarget.All,(int)_curDir);
             yield return null;
         }
     }
-
+    
+    //It Works master client only
     [PunRPC]
-    private void ApplyWindRPC()
+    private void ApplyWindRPC(int dir)
     {
-        Collider2D[] cols = Physics2D.OverlapBoxAll(_colPos,_colBounds.size,0f,_targetLayer);
-        
-        if (cols.Length > 0)
-        {
-            foreach (var col in cols)
-            {
-                if (col.TryGetComponent(out PlayerBrain playerBrain))
-                {
-                    Vector2 applyVelocity = playerBrain.Rigidbody.velocity;
-                    applyVelocity.x -= _windPower * Time.deltaTime * (int)_curDir;
-                    applyVelocity.x = Mathf.Clamp(applyVelocity.x, 0,_maxWindPower);
-                    playerBrain.Rigidbody.velocity = applyVelocity;
-                }
-            }
-        }
+        PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
+        brain.PlayerMovement.ApplyWind(_windPower,dir);
     }
 }

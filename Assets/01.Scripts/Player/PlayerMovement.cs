@@ -13,8 +13,10 @@ public class PlayerMovement : PlayerHandler
     
     private Coroutine _stopCoroutine;
     private float _originGravityScale;
+    
+    [SerializeField] private float _maxWindPower = 10f;
 
-    public bool IsStopped { get; set; }
+    private bool IsStopped { get; set; }
     
     public bool IsGrounded => Physics2D.BoxCast(_brain.AgentTrm.position,
         _brain.Collider.bounds.size,0,Vector3.down,0.5f, 1 << LayerMask.NameToLayer("GROUND"));
@@ -29,6 +31,8 @@ public class PlayerMovement : PlayerHandler
     private float _jumpingTime = 0f;
     public bool CanMoveAnim { get; private set; } = false;
 
+    
+    
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -41,14 +45,31 @@ public class PlayerMovement : PlayerHandler
         _jumpingTime = 0f;
         StopAllCoroutines();
     }
+    public void ApplyWind(float windPower,int dir) => _brain.PhotonView.RPC(nameof(ApplyWindRPC),RpcTarget.All,windPower,(int)dir);
+    
+    [PunRPC]
+    private void ApplyWindRPC(float windPower,int dir)
+    {
+        if (_brain.PhotonView.IsMine)
+        {
+            //Vector2 applyVelocity = _brain.Rigidbody.velocity;
+            //applyVelocity.x -= windPower * Time.deltaTime * dir;
+            //applyVelocity.x = Mathf.Clamp(applyVelocity.x, 0, _maxWindPower);
+            //_brain.Rigidbody.velocity = applyVelocity;
+            Vector3 applyPos = transform.position;
+            applyPos.x -= windPower * Time.deltaTime * dir;
+            transform.position = applyPos;
+        }
+    }
     private void SetCanJump(Vector2 value) => CanJump = true;
     private void SetInputVec(Vector2 value) => _inputVec3 = value;
-    public void PlayMoveAnim(Vector2 _input)
+    
+    private void PlayMoveAnim(Vector2 _input)
     {
         if(_brain.IsMine)
             photonView.RPC(nameof(PlayMoveAnimRPC), RpcTarget.All, _input);
     }
-    public void PlayJumpAnim(Vector2 _input)
+    private void PlayJumpAnim(Vector2 _input)
     {
         if (_brain.IsMine)
         {
@@ -56,7 +77,7 @@ public class PlayerMovement : PlayerHandler
             photonView.RPC(nameof(PlayJumpAnimRPC), RpcTarget.All, _input);
         }
     }
-    public void PlayLandAnim(Vector2 _input)
+    private void PlayLandAnim(Vector2 _input)
     {
         if(_brain.IsMine)
         {
@@ -140,8 +161,6 @@ public class PlayerMovement : PlayerHandler
             _brain.ActionData.IsJumping = false;
             _jumpingTime = 0f;
         }
-
-      
         _prevInputVec = _inputVec3; // ?�전 ?�력 갱신. 
     }
 

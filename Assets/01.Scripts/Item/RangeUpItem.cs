@@ -19,12 +19,8 @@ public class RangeUpItem : BaseItem
     Collider2D[] playerCol;
     public override void Init()
     {
-        _runawayTime = 0;
-        _moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
-        transform.position = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
-        var moveSpeed = Random.Range(1f, 2f);
-        _movementSpeed = moveSpeed;
-        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
+
+        //playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
         //HitEvent.AddListener(ShakePosition);
     }
     public override void OnTakeItem(Player takenPlayer)
@@ -40,19 +36,14 @@ public class RangeUpItem : BaseItem
         _isturn = false;
     }
 
-    private void Start()
-    {
-        Init();
-    }
 
+    //private void Update()
+    //{
 
-    private void Update()
-    {
+    //    RunAwayMove();
+    //    transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
 
-        RunAwayMove();
-        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
-
-    }
+    //}
 
     public override void UpdateItem()
     {

@@ -296,8 +296,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _shakeDuration: 0.5
-  _detectRadius: 5
-  _turnAngleValue: 100
-  _runawayMaxtime: 1.5
-  _minSpeed: 1
-  _maxSpeed: 2
+  _detectDistance: 5
+  _baseStopMoveDuration: 1
+  _stoptimeDeviation: 1
+  _basePower: 3
+  _powerDeviation: 0.5
+  RunAwayEvt:
+    m_PersistentCalls:
+      m_Calls: []

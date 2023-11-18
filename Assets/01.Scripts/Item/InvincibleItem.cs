@@ -27,14 +27,8 @@ public class InvincibleItem : BaseItem
     {
         if (_mainCam == null)
             _mainCam = Camera.main;
-        //_runawayTime = 0;
-        //_moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
-        //transform.position = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
-        //var moveSpeed = Random.Range(1f, 2f);
-        //_movementSpeed = moveSpeed;
-        //HitEvent.AddListener(ShakePosition);
-        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
     }
+
     public override void OnTakeItem(Player takenPlayer)
     {
         //PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<PlayerBuff>().AddBuff(EBuffType.INVINCIBLE);
@@ -51,21 +45,15 @@ public class InvincibleItem : BaseItem
         _isMove = false;
     }
 
-    private void Start()
-    {
-        Init();
-    }
+    //private void Update()
+    //{
 
+    //    QuidditchMove();
 
-    private void Update()
-    {
+    //    if (_isMove)
+    //        transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
 
-        QuidditchMove();
-
-        if (_isMove)
-            transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
-
-    }
+    //}
 
     public override void UpdateItem()
     {

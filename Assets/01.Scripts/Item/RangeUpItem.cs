@@ -14,7 +14,13 @@ public class RangeUpItem : BaseItem
     [SerializeField] private float _minSpeed = 2f;
     [SerializeField] private float _maxSpeed = 4f;
     private float _runawayTime;
-    private bool _isturn = false;
+    private float _curveTime;
+    private float _turnDuration;
+    private float _afterturnDuration; //돌고 난후 easing적용할 기간.
+    //private bool _isturn = false;
+    //private bool _constantspeed = true;
+    private float _baseMovementSpeed;
+    private bool _isTurning;
 
     Collider2D[] playerCol;
     public override void Init()
@@ -31,19 +37,27 @@ public class RangeUpItem : BaseItem
     public override void GenerateSetting(Vector2 moveDir, Vector2 spawnPos, float movementSpeed)
     {
         base.GenerateSetting(moveDir, spawnPos, movementSpeed);
-        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
+        _baseMovementSpeed = _movementSpeed;
         _runawayTime = 0f;
-        _isturn = false;
+        _turnDuration = 1f;
+        _curveTime = 0f;
+        _isTurning = false;
+
+        playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
     }
 
+    private void Start()
+    {
+        GenerateSetting(Vector2.left, new Vector2(Random.Range(-5f, 5f),Random.Range(-5f,5f)), 2f);
+    }
 
-    //private void Update()
-    //{
+    private void Update()
+    {
 
-    //    RunAwayMove();
-    //    transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+        RunAwayMove();
+        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
 
-    //}
+    }
 
     public override void UpdateItem()
     {
@@ -83,17 +97,6 @@ public class RangeUpItem : BaseItem
         {
             if (_runawayTime > _runawayMaxtime)
             {
-                //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
-                //_moveDir = (Camera.main.ScreenToWorldPoint(screenCenter) - transform.position).normalized; //중심을 향해 가도록    
-                //for (int i = 0; i < playerCol.Length; i++)
-                //{
-                //    curDis = Vector3.Distance(playerCol[i].transform.position, transform.position);
-                //    if (curDis < minDis)
-                //    {
-                //        index = i;
-                //        minDis = curDis;
-                //    }
-                //}
                 _moveDir = (playerCol[index].transform.position - transform.position).normalized;
             }
             dir = _moveDir;
@@ -115,16 +118,53 @@ public class RangeUpItem : BaseItem
                 angle = transform.rotation.eulerAngles.z + Mathf.Min(_turnAngleValue * Time.deltaTime, angle);
             }
             transform.rotation = Quaternion.Euler(0, 0, angle);
+
         }
 
-        _moveDir = transform.up;
-        float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
-        if (sinValue < 0.3)
-            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
-        else if (sinValue < 0.8)
-            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue *= 3);
+        if (dot < 0.9 && !(minDis < _detectDistance)) // turning
+        {
+            _isTurning = true;
+            _curveTime += Time.deltaTime;
+            _afterturnDuration = 0f;
+            Debug.Log("CosValue: " + CosInOut(_curveTime));
+            _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);            
+        }
         else
-            _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
+        {
+            if(_isTurning)
+            {
+                _afterturnDuration += Time.deltaTime;
+                if (_afterturnDuration > 0.3f)
+                {
+                    if (_curveTime != 0)
+                        _turnDuration = _curveTime;
+                    _curveTime = 0f;
+                    _movementSpeed = _baseMovementSpeed;
+                    _isTurning = false;
+                }
+                else
+                {
+                    _curveTime += Time.deltaTime;
+                    _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);
+                }
+            }
+            else
+            {
+                Debug.Log("Constant");
+            }
+
+        }
+        
+        Debug.Log("MovementSpeed : " + _movementSpeed);
+
+        _moveDir = transform.up;
+        //float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
+        //if (sinValue < 0.3)
+        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
+        //else if (sinValue < 0.8)
+        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue *= 3);
+        //else
+        //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);
 
     }
 
@@ -139,4 +179,13 @@ public class RangeUpItem : BaseItem
         playerCol = null;
     }
 
+    private float EaseInOut(float t)
+    {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    private float CosInOut(float t)
+    {
+        return (Mathf.Cos(6.3f * t) + 2) / 3;
+    }
 }

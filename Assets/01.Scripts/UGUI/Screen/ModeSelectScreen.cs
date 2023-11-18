@@ -23,9 +23,10 @@ public class ModeSelectScreen : UGUIComponent
 
     private void CreateRoom(EStageMode mode)
     {
-        Debug.Log(mode);
-        NetworkManager.Instance.CreateRoom();
+        NetworkManager.Instance.CreateRoom(NetworkManager.Instance.LocalPlayer, mode);
         UIManager.Instance.GenerateUGUI("WaitingRoomScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+        var loading = UIManager.Instance.GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
+        loading.ExecuteLoading(ELoadingType.JOIN_ROOM);
     }
 
     #region CallBacks

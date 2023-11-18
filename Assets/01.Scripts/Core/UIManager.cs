@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
         _componentStack = new Stack<UGUIComponent>();
         GenerateUGUI("MenuSceneScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
         GenerateUGUI("BlockScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+        var loading = GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
+        loading.ExecuteLoading(ELoadingType.SERVER_CONNECT, RemoveTopUGUI);
     }
 
     private void Update()
@@ -65,6 +67,7 @@ public class UIManager : MonoBehaviour
     public void RemoveTopUGUI()
     {
         var top = _componentStack.Pop();
+        Debug.Log(top.name);
         top.RemoveUI();
     }
 

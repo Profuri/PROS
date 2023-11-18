@@ -36,9 +36,15 @@ public class RoomListScreen : UGUIComponent
     
     #region CallBacks
 
-    private void EnterRoomCallBack()
+    private void EnterRoomCallBack(int idx)
     {
-        Debug.Log("입장");
+        Debug.Log($"{idx}룸 입장");
+        var room = NetworkManager.Instance.RoomList[idx];
+        UIManager.Instance.GenerateUGUI("WaitingRoomScreen",
+            EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+        var loading = UIManager.Instance.GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
+        loading.ExecuteLoading(ELoadingType.JOIN_ROOM);
+        NetworkManager.Instance.JoinRoom(room.Name);
     }
 
     private void RefreshCallBack()
@@ -50,9 +56,9 @@ public class RoomListScreen : UGUIComponent
         _roomCards.Clear();
         
         var roomList = NetworkManager.Instance.RoomList;
-        foreach (var room in roomList)
+        for (var i = 0; i < roomList.Count; i++)
         {
-            var cp = room.CustomProperties;
+            var cp = roomList[i].CustomProperties;
             var roomCard = UIManager.Instance.GenerateUGUI("RoomCard", EGenerateOption.NONE, _roomCardParent) as RoomCard;
 
             if (roomCard == null)
@@ -62,9 +68,11 @@ public class RoomListScreen : UGUIComponent
 
             // roomCard.SetMode((EStageMode)cp["Mode"]);
             
-            roomCard.SetTitle(room.Name);
-            roomCard.SetPlayerCnt(room.PlayerCount, room.MaxPlayers);
-            roomCard.SetButtonCallBack(EnterRoomCallBack);
+            roomCard.SetTitle(roomList[i].Name);
+            roomCard.SetPlayerCnt(roomList[i].PlayerCount, roomList[i].MaxPlayers);
+
+            var idx = i;
+            roomCard.SetButtonCallBack(() => EnterRoomCallBack(idx));
         }
     }
 

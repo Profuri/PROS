@@ -35,9 +35,9 @@ public class RoundWinnerScreen : UGUIComponent
         {
             var card = UIManager.Instance.GenerateUGUI("PlayerCard", EGenerateOption.NONE, _playerCardPanel) as PlayerCard;
             
-            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
             var color = new Color(r, g, b, 1);
             
             card.SetColor(color);

@@ -64,9 +64,9 @@ namespace MonoPlayer
             //Show sprite player will apppear
             Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
             
-            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var r = (float)revivePlayer.CustomProperties["R"];
+            var g = (float)revivePlayer.CustomProperties["G"];
+            var b = (float)revivePlayer.CustomProperties["B"];
             
             NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, r, g, b);
             yield return _reviveWaitForSeconds;
@@ -214,9 +214,9 @@ namespace MonoPlayer
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
             playerBrain.SetName(player.NickName);
             
-            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
             var color = new Color(r, g, b, 1);
             playerBrain.PlayerColor.SetSpriteColor(color);
 

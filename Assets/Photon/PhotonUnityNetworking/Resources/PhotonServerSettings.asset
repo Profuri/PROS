@@ -66,6 +66,10 @@ MonoBehaviour:
   - StopYSystem
   - UpdateScoreboard
   - ReadyPlayerRPC
+  - ApplyWindRPC
+  - SetVisibleRPC
+  - ShowSpriteRPC
+  - ThroughMapRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

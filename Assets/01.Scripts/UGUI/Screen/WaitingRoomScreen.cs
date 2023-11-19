@@ -66,6 +66,7 @@ public class WaitingRoomScreen : UGUIComponent
         }
         
         _startedRoom = true;
+        UIManager.Instance.ClearPanel();
         
         if (!NetworkManager.Instance.IsMasterClient)
         {
@@ -73,7 +74,6 @@ public class WaitingRoomScreen : UGUIComponent
         }
 
         NetworkManager.Instance.LoadScene(ESceneName.Game);
-        UIManager.Instance.ClearPanel();
     }
 
     #region CallBacks

@@ -26,7 +26,6 @@ namespace MonoPlayer
         
         public List<Player> LoadedPlayerList { get; private set; }
         
-        public Dictionary<Player,Color> ColorDictionary { get; private set; }
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;
@@ -40,8 +39,6 @@ namespace MonoPlayer
             #region Init
         public void Init()
         {
-            ColorDictionary = new Dictionary<Player, Color>();
-            
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
             //OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
@@ -66,21 +63,24 @@ namespace MonoPlayer
         {
             //Show sprite player will apppear
             Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            Color color = ColorDictionary[revivePlayer];
             
-            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, color.r, color.g, color.b, color.a);
+            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
+            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
+            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            
+            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, r, g, b);
             yield return _reviveWaitForSeconds;
             CreatePlayer(revivePlayer, randomPos);
         }
         
         [PunRPC]
-        private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b,float a)
+        private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b)
         {
             PlayerSprite playerSprite = PoolManager.Instance.Pop("PlayerSprite") as PlayerSprite;
          
             playerSprite.Init();
             playerSprite.transform.position = spawnPos;
-            playerSprite.SetColor(new Color(r,g,b,a));
+            playerSprite.SetColor(new Color(r,g,b));
             playerSprite.SetDestroy(_reviveTimer);            
         }
 
@@ -198,11 +198,6 @@ namespace MonoPlayer
             if (!LoadedPlayerList.Contains(player))
             {
                 LoadedPlayerList.Add(player);
-
-                if (ColorDictionary.ContainsKey(player) == false)
-                {
-                    ColorDictionary.Add(player,new Color(r,g,b,a));
-                }
             }
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
@@ -222,8 +217,11 @@ namespace MonoPlayer
 
             if(playerBrain.IsInit == false) return;
             playerBrain.SetName(player.NickName);
-
-            Color color = ColorDictionary[player];
+            
+            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
+            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
+            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var color = new Color(r, g, b, 1);
             playerBrain.PlayerColor.SetSpriteColor(color);
 
             if(BrainDictionary.ContainsKey(player))

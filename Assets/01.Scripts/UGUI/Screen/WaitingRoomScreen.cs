@@ -71,16 +71,18 @@ public class WaitingRoomScreen : UGUIComponent
         {
             return;
         }
-        
-        _startedRoom = true;
-        UIManager.Instance.ClearPanel();
-        
-        if (!NetworkManager.Instance.IsMasterClient)
-        {
-            return;
-        }
 
-        NetworkManager.Instance.LoadScene(ESceneName.Game);
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            NetworkManager.Instance.LoadScene(ESceneName.Game);
+        }
+        
+        var loading = UIManager.Instance.GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
+        loading.ExecuteLoading(ELoadingType.START_GAME, () =>
+        {
+            _startedRoom = true;
+            UIManager.Instance.ClearPanel();
+        });
     }
 
     #region CallBacks
@@ -115,8 +117,13 @@ public class WaitingRoomScreen : UGUIComponent
             Debug.LogWarning("Something wrong when create player card");
             return;
         }
+
+        var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
+        var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
+        var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+        var color = new Color(r, g, b, 1);
         
-        // playerCard.SetColor();
+        playerCard.SetColor(color);
         playerCard.SetNickName(player.NickName);
         
         _playerCardDiction.Add(player, playerCard);

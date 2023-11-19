@@ -65,7 +65,6 @@ public class WaitingRoomScreen : UGUIComponent
             return;
         }
         
-        Debug.Log("START");
         _startedRoom = true;
         
         if (!NetworkManager.Instance.IsMasterClient)
@@ -73,7 +72,6 @@ public class WaitingRoomScreen : UGUIComponent
             return;
         }
 
-        Debug.Log("START22");
         NetworkManager.Instance.LoadScene(ESceneName.Game);
         UIManager.Instance.ClearPanel();
     }

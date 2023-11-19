@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -28,9 +26,11 @@ public class UIManager : MonoBehaviour
     {
         _componentStack = new Stack<UGUIComponent>();
         GenerateUGUI("MenuSceneScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
-        GenerateUGUI("BlockScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
         var loading = GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
-        loading.ExecuteLoading(ELoadingType.SERVER_CONNECT, RemoveTopUGUI);
+        loading.ExecuteLoading(ELoadingType.SERVER_CONNECT, () =>
+        {
+            GenerateUGUI("NickNameInputScreen", EGenerateOption.BLUR | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+        });
     }
 
     private void Update()
@@ -73,31 +73,27 @@ public class UIManager : MonoBehaviour
 
     public void ReturnUGUI()
     {
-        var curComponent = _componentStack.Pop();
-        var prevComponent = _componentStack.Pop();
-
-        if (curComponent == null)
+        if (_componentStack.Count <= 0)
         {
             Debug.LogWarning("There is not exist current UGUI");
             return;
         }
+        var curComponent = _componentStack.Pop();
         
-        if (prevComponent == null)
+        if (_componentStack.Count <= 0)
         {
             Debug.LogWarning("There is not exist prev UGUI");
             return;
         }
-        
+        var prevComponent = _componentStack.Pop();
+
         curComponent.RemoveUI();
         GenerateUGUI(prevComponent.name, prevComponent.Options, prevComponent.Parent);
     }
 
     public void ClearPanel()
     {
-        while (_componentStack.Count > 0)
-        {
-            _componentStack.Pop().RemoveUI();
-        }
+        _componentStack.ToList().ForEach(compo => compo.RemoveUI());
     }
 
     public void SetBlur(bool value)

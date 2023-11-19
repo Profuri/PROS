@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MonoPlayer;
 using Photon.Realtime;
 using UnityEngine;
@@ -9,12 +10,14 @@ public class WaitingRoomScreen : UGUIComponent
     [SerializeField] private Transform _playerCardParent;
 
     private Dictionary<Player, PlayerCard> _playerCardDiction;
+    private bool _startedRoom;
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
 
         _playerCardDiction = new Dictionary<Player, PlayerCard>();
+        _startedRoom = false;
 
         _inputSO.OnEnterPress += ReadyCallBack;
         _inputSO.OnBackPress += ExitCallBack;
@@ -38,8 +41,11 @@ public class WaitingRoomScreen : UGUIComponent
         NetworkManager.Instance.OnJoinedRoomEvent -= JoinRoomCallBack;
         NetworkManager.Instance.OnPlayerEnteredRoomEvent -= EnterPlayerCallBack;
         NetworkManager.Instance.OnPlayerLeftRoomEvent -= LeftPlayerCallBack;
-        
-        NetworkManager.Instance.LeaveRoom();
+
+        if (!_startedRoom)
+        {
+            NetworkManager.Instance.LeaveRoom();
+        }
     }
 
     public override void UpdateUI()
@@ -52,11 +58,38 @@ public class WaitingRoomScreen : UGUIComponent
         _playerCardDiction[player].ReadyToggle();
     }
 
+    private void StartGame()
+    {
+        if (_playerCardDiction.Count < 2)
+        {
+            return;
+        }
+        
+        Debug.Log("START");
+        _startedRoom = true;
+        
+        if (!NetworkManager.Instance.IsMasterClient)
+        {
+            return;
+        }
+
+        Debug.Log("START22");
+        NetworkManager.Instance.LoadScene(ESceneName.Game);
+        UIManager.Instance.ClearPanel();
+    }
+
     #region CallBacks
 
     private void ReadyCallBack()
     {
         PlayerManager.Instance.ReadyPlayer(NetworkManager.Instance.LocalPlayer);
+        
+        if (_playerCardDiction.Any(pair => !pair.Value.Ready))
+        {
+            return;
+        }
+
+        StartGame();
     }
 
     private void ExitCallBack()

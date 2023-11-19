@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (TopComponent is not null)
+        if (_componentStack.Count > 0)
         {
             TopComponent.UpdateUI();
         }
@@ -54,14 +54,14 @@ public class UIManager : MonoBehaviour
         {
             return null;
         }
-        
+
+        ugui.GenerateUI(parent, options);
+
         if (options.HasFlag(EGenerateOption.STACKING))
         {
             _componentStack.Push(ugui);
         }
         
-        ugui.GenerateUI(parent, options);
-
         return ugui;
     }
 
@@ -94,12 +94,9 @@ public class UIManager : MonoBehaviour
 
     public void ClearPanel()
     {
-        var generatedComponents = new List<UGUIComponent>();
-        _mainCanvas.GetComponentsInChildren(generatedComponents);
-
-        foreach (var component in generatedComponents)
+        while (_componentStack.Count > 0)
         {
-            component.RemoveUI();
+            _componentStack.Pop().RemoveUI();
         }
     }
 

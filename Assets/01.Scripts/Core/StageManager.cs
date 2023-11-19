@@ -66,7 +66,7 @@ public class StageManager : MonoBehaviourPunCallbacks
             return;
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
-        int stageIndex = 1;
+        int stageIndex = 0;
         var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
         
         NetworkManager.Instance.PhotonView.RPC("GenerateNextStageRPC", RpcTarget.All, stageIndex, mapIndex);

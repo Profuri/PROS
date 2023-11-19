@@ -194,7 +194,7 @@ namespace MonoPlayer
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
-                Debug.LogError("OnAllPlayerLoad");
+                Debug.Log("OnAllPlayerLoad");
                 OnAllPlayerLoad?.Invoke();
                 IsAllOfPlayerLoad = true;
             }

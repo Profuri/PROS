@@ -29,7 +29,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void StageUpdate()
     {
         if (!NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        {
             return;
+        }
         
         if (RoundCheck(out var roundWinner))
         {

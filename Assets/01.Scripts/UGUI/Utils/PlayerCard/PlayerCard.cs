@@ -7,6 +7,7 @@ public class PlayerCard : UGUIComponent
     private Image _backGroundImage;
     private Image _playerHeadImage;
     private TextMeshProUGUI _playerNickNameTMP;
+    private TextMeshProUGUI _readyTMP;
 
     private bool _ready;
     public bool Ready => _ready;
@@ -21,6 +22,7 @@ public class PlayerCard : UGUIComponent
         _backGroundImage = transform.Find("PlayerIcon").GetComponent<Image>();
         _playerHeadImage = transform.Find("PlayerIcon/PlayerHeadImage").GetComponent<Image>();
         _playerNickNameTMP = transform.Find("NickNameText").GetComponent<TextMeshProUGUI>();
+        _readyTMP = transform.Find("ReadyText").GetComponent<TextMeshProUGUI>();
 
         _ready = false;
     }
@@ -44,5 +46,6 @@ public class PlayerCard : UGUIComponent
     {
         _ready = !_ready;
         _backGroundImage.color = _ready ? _readyColor : _unReadyColor;
+        _readyTMP.text = _ready ? "READY" : "";
     }
 }

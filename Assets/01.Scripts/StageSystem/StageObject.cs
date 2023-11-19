@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageObject : PoolableMono
+public class StageObject : MonoBehaviour
 {
-    private List<Vector3> _spawnPoints;
+    private List<Vector3> _spawnPoints = new List<Vector3>();
     public List<Vector3> SpawnPoints => _spawnPoints;
 
     public void Setting(Vector3 position = default, Quaternion rotation = default)
@@ -19,10 +19,5 @@ public class StageObject : PoolableMono
             var point = pointsTrm.GetChild(i);
             _spawnPoints.Add(point.position);
         }
-    }
-
-    public override void Init()
-    {
-        _spawnPoints = new List<Vector3>();
     }
 }

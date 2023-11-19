@@ -1,6 +1,14 @@
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+[System.Serializable]
+public struct MapBoundStruct
+{
+    public float minX;
+    public float minY;
+    public float maxX;
+    public float maxY;
+}
 
 public class StageManager : MonoBehaviourPunCallbacks
 {
@@ -19,6 +27,8 @@ public class StageManager : MonoBehaviourPunCallbacks
     
     private readonly List<BaseStageSystem> _stageSystems = new List<BaseStageSystem>();
     
+    [SerializeField] private MapBoundStruct _mapBound;
+    public MapBoundStruct MapBound => _mapBound;
     [SerializeField] private int _stageTypeCnt;
     public int StageTypeCnt => _stageTypeCnt;
 
@@ -39,7 +49,7 @@ public class StageManager : MonoBehaviourPunCallbacks
 
     public void GenerateNewMap()
     {
-        var type = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        var type = Random.Range(0, StageTypeCnt) + 1;
         NetworkManager.Instance.PhotonView.RPC("GenerateNewMapRPC", RpcTarget.All, type);
     }
     
@@ -66,7 +76,7 @@ public class StageManager : MonoBehaviourPunCallbacks
             return;
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
-        int stageIndex = 1;
+        int stageIndex = 0;
         var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
         
         NetworkManager.Instance.PhotonView.RPC("GenerateNextStageRPC", RpcTarget.All, stageIndex, mapIndex);

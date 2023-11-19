@@ -15,11 +15,11 @@ TagManager:
   - GROUND
   - DAMAGEABLE
   - WALL
+  - Blur
   - 
   - 
-  - 
-  - 
-  - 
+  - ITEM
+  - ITEMCHECKCOLLIDER
   - 
   - 
   - 
@@ -42,9 +42,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Particle
+  - name: BackGround
+    uniqueID: 2061665087
+    locked: 0
+  - name: Map
+    uniqueID: 2027592255
+    locked: 0
+  - name: Player
+    uniqueID: 1590033203
+    locked: 0
+  - name: Effect
     uniqueID: 3997780379
     locked: 0
-  - name: Visual
-    uniqueID: 1590033203
+  - name: UI
+    uniqueID: 339083185
     locked: 0

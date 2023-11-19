@@ -1,4 +1,5 @@
 using System;
+using MonoPlayer;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
@@ -27,7 +28,7 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     {
         NetworkManager.Instance.OnPlayerLeftRoomEvent += RPCCallRemoveScoreboard;
         SceneManagement.Instance.OnGameSceneLoaded += FindScoreboard;
-        SceneManagement.Instance.OnGameSceneLoaded += SettingScoreUI;
+        PlayerManager.Instance.OnAllPlayerLoad += SettingScoreUI;
     }
 
     private void Update()
@@ -51,7 +52,11 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         if (SceneManagement.Instance)
         {
             SceneManagement.Instance.OnGameSceneLoaded -= FindScoreboard;
-            SceneManagement.Instance.OnGameSceneLoaded -= SettingScoreUI;
+        }
+
+        if (PlayerManager.Instance)
+        {
+            PlayerManager.Instance.OnAllPlayerLoad -= SettingScoreUI;
         }
     }
 
@@ -64,6 +69,7 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     {
         foreach (var p in NetworkManager.Instance.PlayerList)
         {
+            _scoreboard.RemoveEntry(p);
             _scoreboard.CreateNewEntry(p);
         }
     }

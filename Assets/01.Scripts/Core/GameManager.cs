@@ -20,15 +20,9 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
-
-    public event Action<Player> OnGameEnd;
-    public event Action<Player> OnRoundEnd;
-
-    public event Action OnGameStart;
-    public event Action OnRoundStart;
+    
     
     #region INTERNAL VARIABLE
-    [SerializeField] private int _targetWinCnt = 3;
     
     [SerializeField]
     private PoolingListSO _poolingListSO;
@@ -49,10 +43,11 @@ public class GameManager : MonoBehaviour
         PlayerManager.Instance.Init();
         ScoreManager.Instance.Init();
         PoolManager.Instance = new PoolManager(this.transform);
+        _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
         StageManager.Instance.Init();
         ItemManager.Instance.Init();
-
-        _poolingListSO.pairs.ForEach(p => PoolManager.Instance.CreatePool(p.prefab,p.count));
+        DeadManager.Instance.Init();
+        UIManager.Instance.Init();
     }
 
     public void OTCPlayer(Player player, Vector3 attackDir)

@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using MonoPlayer;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
@@ -10,8 +13,19 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     private int _round;
     private StageObject _currentStageObject;
 
+    [SerializeField] protected List<BaseMapEvent> _mapEventList;
+    
+    [SerializeField] protected float _minRandomEvnetTime = 10f; 
+    [SerializeField] protected float _maxRandomEvnetTime = 30f;
+
+    protected Coroutine _generateCor;
+
     public virtual void Init(int mapIndex)
     {
+        _mapEventList = new List<BaseMapEvent>();
+        GetComponents(_mapEventList);
+        _mapEventList.ForEach(mapEvent => mapEvent.Init(StageManager.Instance.MapBound));
+
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
         ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
@@ -28,7 +42,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void StageUpdate()
     {
         if (!NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        {
             return;
+        }
         
         if (RoundCheck(out var roundWinner))
         {
@@ -65,7 +81,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         if (_currentStageObject.SpawnPoints.Count <= 0)
         {
-            Debug.LogError("Stage spawn points is empty!");
+            Debug.LogWarning("Stage spawn points is empty!");
             return Vector3.zero;
         }
         
@@ -74,24 +90,53 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void GenerateNewStage(int index)
     {
+        if (!NetworkManager.Instance.IsMasterClient) return;
         if (_currentStageObject)
         {
             return;
         }
 
-        _currentStageObject = PoolManager.Instance.Pop($"Stage{index}") as StageObject;
+        _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
         
         PlayerManager.Instance.RoundStart();
-        Debug.Log("GenerateNewStage: BaseStageSystem");
+
+            if (_generateCor != null)
+            {
+                StopCoroutine(_generateCor);
+            }
+            _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()
     {
-        PoolManager.Instance.Push(_currentStageObject);
+        PhotonNetwork.Destroy(_currentStageObject.gameObject);
         _currentStageObject = null;
         PlayerManager.Instance.RoundEnd();
     }
+    protected IEnumerator GenerateMapEvent()
+    {
+        float timer = 0f;
+        float randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
+        while (true)
+        {
+            if (timer > randomTime)
+            {
+                timer = 0f;
+                randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
+                GetRandomBaseMapEvent()?.StartEvent();
+            }
+            timer += Time.deltaTime;
+            
+            yield return null;
+        }
+    }
 
+    private BaseMapEvent GetRandomBaseMapEvent()
+    {
+        int index = Random.Range(0,_mapEventList.Count);
+        //int index = 1;
+        return _mapEventList[index];
+    }
     public abstract bool RoundCheck(out Player roundWinner);
 }

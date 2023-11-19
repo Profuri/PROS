@@ -35,69 +35,41 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - ClickRpc
+  - Dash
+  - Defend
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - Init
-  - Jump
-  - Dash
-  - StopYSystem
-  - PlayOTC
-  - DamagedDamageable
-  - Damageable
-  - OTCDamageable
-  - AddPlayer
-  - OnGameSceneLoadedRPC
-  - OTCPlayer
-  - SetNameRPC
-  - AddPlayerToDictionary
-  - ResumeGravity
-  - SpawnExplosion
-  - SpawnParticle
-  - JumpRPC
-  - SetBrainRandomPos
-  - SetBrainRandomPosRPC
-  - InitRPC
-  - ScorePlayer
-  - ScorePlayerRPC
-  - AddPlayerToList
-  - AddPlayerListRPC
-  - SpawnPlayer
-  - RemovePlayer
-  - RemovePlayerRPC
-  - CreatePlayerRPC
-  - SettingPlayer
-  - SettingPlayerData
-  - AddPlayerDataRPC
-  - ClearPlayerMapRPC
-  - AddPlayerList
-  - SetBrainDictionary
-  - LoadPlayerList
-  - LoadPlayerListRPC
-  - SetBrainDictionaryRPC
+  - GenerateItemRPC
+  - GenerateNewMapRPC
+  - GenerateNextStageRPC
   - LoadBrainDictionaryRPC
-  - RoundRestartRPC
-  - Defend
-  - RemoveScoreboard
-  - ReviveRPC
-  - UpdateScoreboard
-  - GenerateNewStageCall
-  - GenerateStageRPC
+  - LoadPlayerListRPC
   - PlayJumpAnimRPC
   - PlayLandAnimRPC
   - PlayMoveAnimRPC
-  - RemoveCurStageCall
+  - PlayParticleRPC
+  - ReadyRPC
+  - RemoveCurMapRPC
+  - RemoveItemRPC
+  - RemovePlayerRPC
+  - RemoveScoreboard
+  - RespawnSpaceship
+  - ResumeGravity
   - RoundEndRPC
   - RoundStartRPC
-  - GenerateItemRPC
-  - RemoveItemRPC
-  - PlayParticleRPC
-  - GenerateNewMapRPC
-  - GenerateNextStageRPC
-  - RemoveCurMapRPC
-  - SetValueRPC
+  - SetColorRPC
+  - SetNameRPC
   - SetOccupationSystemRPC
+  - SetSpriteColorRPC
+  - SetValueRPC
+  - StopYSystem
+  - UpdateScoreboard
+  - ReadyPlayerRPC
+  - ApplyWindRPC
+  - SetVisibleRPC
+  - ShowSpriteRPC
+  - ThroughMapRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

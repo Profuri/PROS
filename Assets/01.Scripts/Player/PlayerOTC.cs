@@ -1,23 +1,19 @@
 using UnityEngine;
 using Photon.Pun;
+using Photon.Pun.Demo.Cockpit;
+using Unity.VisualScripting;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
+    [SerializeField] private ParticleSystem _smokeParticle;
+    
     [SerializeField] private float _otcPower;
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
 
-    public override void Init(PlayerBrain brain)
+    public void Damaged(Vector3 attackDirection, bool priority = false)
     {
-        base.Init(brain);
-        _brain.PlayerBuff.Heavy += Heavy;
-    }
-
-    public void Damaged(Vector3 attackDirection)
-    {
-        if (_brain.PlayerDefend.IsDefend) return;
-
-        //_brain.SetColsTrigger(false);
+        if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
         
         Vector3 otcMovingDir = CalcMovingDir(_brain.ActionData.PreviousPos, _brain.ActionData.CurrentPos);
         Vector3 otcDir = CalcOTCDir(attackDirection.normalized, otcMovingDir);
@@ -62,13 +58,15 @@ public class PlayerOTC : PlayerHandler, IDamageable
             otcDir.y *= -1;
         
         otcDir.Normalize();
-
-        if (_brain.PlayerDefend.IsDefendBounce)
+        
+        if (_brain.PlayerDefend.IsDefendBounce && priority == false)
         {
             _brain.PlayerDefend.IsDefendBounce = false;
             isBounce = true;
             otcDir = attackDirection.normalized;
         }
+        
+        PlaySmokeParticle(otcDir);
 
         if (isBounce)
         {
@@ -77,9 +75,23 @@ public class PlayerOTC : PlayerHandler, IDamageable
         else
         {
             Debug.Log(otcDir);
-            // _brain.Collider.enabled = false;
+            
+            _brain.Collider.isTrigger = true;
+            _brain.ActionData.IsFlying = true;
+            _brain.OnOTC?.Invoke();
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
+    }
+
+    private void PlaySmokeParticle(Vector3 otcDir)
+    {
+            if(_smokeParticle.isPlaying)
+            {
+                _smokeParticle.Stop();
+            }
+            var rotation = Quaternion.LookRotation(-otcDir);
+            _smokeParticle.transform.rotation = rotation;
+            _smokeParticle.Play();
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)
@@ -90,12 +102,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
     private Vector3 CalcMovingDir(Vector3 prevPos, Vector3 curPos)
     {
         return (curPos - prevPos).normalized;
-    }
-
-    private void Heavy(float value)
-    {
-        if (_brain.IsMine)
-            _otcPower = value;
     }
 
     public override void BrainUpdate(){}

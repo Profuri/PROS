@@ -11,6 +11,12 @@ public class PlayerOTC : PlayerHandler, IDamageable
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
 
+    public override void Init(PlayerBrain brain)
+    {
+        base.Init(brain);
+        _brain.PlayerBuff.Heavy += Heavy;
+    }
+
     public void Damaged(Vector3 attackDirection, bool priority = false)
     {
         if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
@@ -102,6 +108,12 @@ public class PlayerOTC : PlayerHandler, IDamageable
     private Vector3 CalcMovingDir(Vector3 prevPos, Vector3 curPos)
     {
         return (curPos - prevPos).normalized;
+    }
+
+    private void Heavy(float value)
+    {
+        if (_brain.IsMine)
+            _otcPower = value;
     }
 
     public override void BrainUpdate(){}

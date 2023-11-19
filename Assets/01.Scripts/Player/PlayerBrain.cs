@@ -41,7 +41,8 @@ public class PlayerBrain : MonoBehaviour
     public bool IsMine => PhotonView.IsMine;
     #endregion
 
-    private void Awake()
+    private void Awake() => Init();
+    public void Init()
     {
         _handlers = new List<PlayerHandler>();
         GetComponentsInChildren(_handlers);
@@ -68,7 +69,6 @@ public class PlayerBrain : MonoBehaviour
             }
         };
     }
-
     public void OnPlayerDead()
     {
         PlayerManager.Instance.RemovePlayer(PhotonView.Owner);

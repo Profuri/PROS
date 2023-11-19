@@ -64,8 +64,24 @@ namespace MonoPlayer
 
         private IEnumerator ReviveRoutine(Player revivePlayer)
         {
+            //Show sprite player will apppear
+            Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
+            Color color = ColorDictionary[revivePlayer];
+            
+            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, color.r, color.g, color.b, color.a);
             yield return _reviveWaitForSeconds;
-            CreatePlayer(revivePlayer, StageManager.Instance.CurStage.GetRandomSpawnPoint());
+            CreatePlayer(revivePlayer, randomPos);
+        }
+        
+        [PunRPC]
+        private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b,float a)
+        {
+            PlayerSprite playerSprite = PoolManager.Instance.Pop("PlayerSprite") as PlayerSprite;
+         
+            playerSprite.Init();
+            playerSprite.transform.position = spawnPos;
+            playerSprite.SetColor(new Color(r,g,b,a));
+            playerSprite.SetDestroy(_reviveTimer);            
         }
 
         private void OnLeftPlayer(Player leftPlayer)

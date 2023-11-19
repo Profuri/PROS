@@ -136,6 +136,8 @@ namespace MonoPlayer
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
+            //prefab.GetComponent<PlayerBrain>().Init();
+
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
             Color randomColor = new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), 1f);
@@ -197,6 +199,8 @@ namespace MonoPlayer
         {
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
+
+            if(playerBrain.IsInit == false) return;
             playerBrain.SetName(player.NickName);
 
             Color color = ColorDictionary[player];

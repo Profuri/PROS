@@ -11,6 +11,8 @@ public class PlayerSprite : PoolableMono
     [SerializeField] private float _alphaChangeSpeed = 5f;
 
     private Color _currentColor = Color.white;
+
+    public bool IsChangeSprite {get; set;} = true;
     public override void Init()
     {
         Transform spriteParent = transform.Find("Visual/Sprites");
@@ -21,6 +23,7 @@ public class PlayerSprite : PoolableMono
 
     private void Update()
     {
+        if(!IsChangeSprite) return;
         transform.position += new Vector3(0f,Mathf.Sin(Time.time * _moveSpeed) * _moveDistance ,0f);
         
         foreach (var renderer in _renderers)

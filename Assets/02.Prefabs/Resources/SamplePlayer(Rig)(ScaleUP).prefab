@@ -464,7 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94833b4afd361214fa82ed0ea661c65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eyeController: {fileID: 379110320296733646}
   rotationSpeed: 5
   eyeSpeed: 5
   pupilSpeed: 10
@@ -784,6 +783,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 5207853329447966988}
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
   _movementSO: {fileID: 11400000, guid: c1f88746544a496448ba65d86a696a10, type: 2}
+  _photonView: {fileID: 2450193743513725957}
 --- !u!114 &6377935075283239163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,7 +1784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94833b4afd361214fa82ed0ea661c65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eyeController: {fileID: 379110320296733646}
   rotationSpeed: 5
   eyeSpeed: 5
   pupilSpeed: 10

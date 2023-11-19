@@ -7,6 +7,7 @@ public class TrainMapEvent : BaseMapEvent
 {
     public override void StartEvent()
     {
+        Debug.Log("TrainMapEvent");
         ExecuteEvent();
     }
 

@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
         var loading = GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
         loading.ExecuteLoading(ELoadingType.SERVER_CONNECT, () =>
         {
-            GenerateUGUI("NickNameInputScreen", EGenerateOption.BLUR | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+            GenerateUGUI("NickNameInputScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
         });
     }
 
@@ -94,10 +94,5 @@ public class UIManager : MonoBehaviour
     public void ClearPanel()
     {
         _componentStack.ToList().ForEach(compo => compo.RemoveUI());
-    }
-
-    public void SetBlur(bool value)
-    {
-        Debug.Log(value ? "blur on!" : "blur off!");
     }
 }

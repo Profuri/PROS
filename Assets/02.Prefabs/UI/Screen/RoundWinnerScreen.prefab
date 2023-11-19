@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5892726180472540949}
   - component: {fileID: 319402698868858677}
   m_Layer: 5
-  m_Name: WinnerPlayerPanel
+  m_Name: PlayerCardPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 2148519571433136358}
   - component: {fileID: 6970481952492474393}
   m_Layer: 5
-  m_Name: RoundWinnerTMP
+  m_Name: DownRoundWinnerTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 5631941828540348963}
   - component: {fileID: 5559183629770250785}
   - component: {fileID: 4491957447270864948}
+  - component: {fileID: 3315754118522469456}
   m_Layer: 5
   m_Name: RoundWinnerScreen
   m_TagString: Untagged
@@ -275,6 +276,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3315754118522469456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5098019604950710841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 847e3bdde9e34556a8ca56809f962aa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeTime: 1
+  _leftLimit: -500
+  _rightLimit: 500
 --- !u!1 &5375864887796563330
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +303,7 @@ GameObject:
   - component: {fileID: 2713527719467281871}
   - component: {fileID: 2189211735439410228}
   m_Layer: 5
-  m_Name: RoundWinnerTMP
+  m_Name: UpperRoundWinnerTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

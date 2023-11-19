@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8387988141917382873}
   - component: {fileID: 4866173796475321434}
   - component: {fileID: 2167086797595021454}
+  - component: {fileID: 400358032718385909}
   m_Layer: 5
   m_Name: StageWinnerScreen
   m_TagString: Untagged
@@ -77,6 +78,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &400358032718385909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142183000099060497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98798fe6db1f40ae829f8f4b4d92df03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _activeTime: 2
 --- !u!1 &8315381668392895176
 GameObject:
   m_ObjectHideFlags: 0

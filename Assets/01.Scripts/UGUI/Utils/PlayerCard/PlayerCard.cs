@@ -14,6 +14,7 @@ public class PlayerCard : UGUIComponent
 
     [SerializeField] private Color _unReadyColor;
     [SerializeField] private Color _readyColor;
+    [SerializeField] private Color _winningColor;
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
@@ -25,6 +26,7 @@ public class PlayerCard : UGUIComponent
         _readyTMP = transform.Find("ReadyText").GetComponent<TextMeshProUGUI>();
 
         _ready = false;
+        _backGroundImage.color = _unReadyColor;
     }
 
     public override void UpdateUI()
@@ -40,6 +42,11 @@ public class PlayerCard : UGUIComponent
     public void SetNickName(string nickName)
     {
         _playerNickNameTMP.text = nickName;
+    }
+
+    public void Winning()
+    {
+        _backGroundImage.color = _winningColor;
     }
 
     public void ReadyToggle()

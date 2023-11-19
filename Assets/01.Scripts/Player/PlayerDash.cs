@@ -24,6 +24,7 @@ public class PlayerDash : PlayerHandler
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         _brain.PlayerBuff.RangeUp += LandRangeUpRPC;
         _brain.PlayerBuff.Dashing += DashBuff;
+
         StopAllCoroutines();
     }
 
@@ -108,6 +109,7 @@ public class PlayerDash : PlayerHandler
         transform.rotation = Quaternion.identity;
         CheckDashCollision(mouseDir, radius * _LandRange);
         _brain.ActionData.IsDashing = false;
+
     }
     #endregion
 

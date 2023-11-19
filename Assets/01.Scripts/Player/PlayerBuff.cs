@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Events;
 
-public class PlayerBuff : PlayerHandler
+public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
 {
     private EBuffType _currentBuff = EBuffType.NONE;
     public EBuffType CurrentBuff => _currentBuff;
@@ -13,7 +13,7 @@ public class PlayerBuff : PlayerHandler
     public event Action<bool> Invincible;
     public event Action<bool> Dashing;
     public event Action<float> RangeUp;
-    public event Action Heavy;
+    public event Action<float> Heavy;
     public event Action DoubleDash;
 
     [HideInInspector]
@@ -38,7 +38,7 @@ public class PlayerBuff : PlayerHandler
                 RangeUp?.Invoke(2);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke();
+                Heavy?.Invoke(50);
                 break;
             case EBuffType.DOUBLEDASH:
                 DoubleDash?.Invoke();
@@ -65,7 +65,7 @@ public class PlayerBuff : PlayerHandler
                 RangeUp?.Invoke(1.5f);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke();
+                Heavy?.Invoke(500);
                 break;
             case EBuffType.DOUBLEDASH:
                 DoubleDash?.Invoke();

@@ -56,6 +56,13 @@ public class WaitingRoomScreen : UGUIComponent
     public void ReadyPlayer(Player player)
     {
         _playerCardDiction[player].ReadyToggle();
+        
+        if (_playerCardDiction.Any(pair => !pair.Value.Ready))
+        {
+            return;
+        }
+
+        StartGame();
     }
 
     private void StartGame()
@@ -81,13 +88,6 @@ public class WaitingRoomScreen : UGUIComponent
     private void ReadyCallBack()
     {
         PlayerManager.Instance.ReadyPlayer(NetworkManager.Instance.LocalPlayer);
-        
-        if (_playerCardDiction.Any(pair => !pair.Value.Ready))
-        {
-            return;
-        }
-
-        StartGame();
     }
 
     private void ExitCallBack()

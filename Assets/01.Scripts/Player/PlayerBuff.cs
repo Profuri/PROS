@@ -12,12 +12,13 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
 
     public event Action<bool> Invincible;
     public event Action<bool> Dashing;
-    public event Action<float> RangeUp;
+    public event Action<float, float> RangeUp;
     public event Action<float> Heavy;
-    public event Action DoubleDash;
+    public event Action<bool, float> DoubleDash;
 
     [HideInInspector]
     public bool IsDashing;
+    public bool IsDoubleDashing;
     
     public void AddBuff(EBuffType buff)
     {
@@ -35,13 +36,13 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Dashing?.Invoke(true);
                 break;
             case EBuffType.RANGEUP:
-                RangeUp?.Invoke(2);
+                RangeUp?.Invoke(2, 5f);
                 break;
             case EBuffType.HEAVY:
                 Heavy?.Invoke(50);
                 break;
             case EBuffType.DOUBLEDASH:
-                DoubleDash?.Invoke();
+                DoubleDash?.Invoke(true, 5f);
                 break;
         }
     }
@@ -62,13 +63,13 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Dashing?.Invoke(false);
                 break;
             case EBuffType.RANGEUP:
-                RangeUp?.Invoke(1.5f);
+                RangeUp?.Invoke(1.5f, 5f);
                 break;
             case EBuffType.HEAVY:
                 Heavy?.Invoke(500);
                 break;
             case EBuffType.DOUBLEDASH:
-                DoubleDash?.Invoke();
+                DoubleDash?.Invoke(false, 5f);
                 break;
         }
     }

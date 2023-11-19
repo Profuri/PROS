@@ -11,8 +11,9 @@ public class PlayerDash : PlayerHandler
     [SerializeField] private float _dashTime = 0.3f;
     private float _LandRange = 1.5f;
 
-    public bool CanDash => !_brain.PlayerMovement.IsGrounded && !_isDashed;
+    public bool CanDash => (!_brain.PlayerMovement.IsGrounded && !_isDashed) || _isDoubleDash;
     private bool _isDashed = false;
+    private bool _isDoubleDash = false;
 
     [SerializeField] private LayerMask _obstacleMask;
     [SerializeField] private LayerMask _dashCollisionMask;
@@ -23,7 +24,8 @@ public class PlayerDash : PlayerHandler
         _brain.InputSO.OnDashKeyPress += DashRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
         _brain.PlayerBuff.RangeUp += LandRangeUpRPC;
-        _brain.PlayerBuff.Dashing += DashBuff;
+        _brain.PlayerBuff.Dashing += DashingBuff;
+        _brain.PlayerBuff.DoubleDash += DoubleDashBuff;
 
         StopAllCoroutines();
     }
@@ -50,6 +52,8 @@ public class PlayerDash : PlayerHandler
             }
             float dashPower = _brain.MovementSO.DashPower;
             _isDashed = true;
+            if (_brain.PlayerBuff.IsDoubleDashing && !_isDoubleDash)
+                _isDoubleDash = true;
             
             _dashCoroutine = StartCoroutine(DashCoroutine(dashPower,mouseDir));
         }
@@ -165,21 +169,44 @@ public class PlayerDash : PlayerHandler
         return returnValue;
     }
 
-    private void LandRangeUpRPC(float value)
+    private void LandRangeUpRPC(float value, float time)
     {
         if (_brain.IsMine)
-            _brain.PhotonView.RPC("LandRangeUp", RpcTarget.All, value);
+            _brain.PhotonView.RPC("LandRangeUp", RpcTarget.All, value, time);
     }
 
     [PunRPC]
-    private void LandRangeUp(float value)
+    private void LandRangeUp(float value, float time)
     {
-        _LandRange = value;
+        StartCoroutine(LandRangeUpTime(value, time));
     }
 
-    private void DashBuff(bool value)
+    private IEnumerator LandRangeUpTime(float value, float time)
     {
-        _brain.PlayerBuff.IsDashing = value;
+        _LandRange = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.RANGEUP))
+            _brain.PlayerBuff.RevertBuff(EBuffType.RANGEUP);
+    }
+
+    private void DashingBuff(bool value)
+    {
+        if(_brain.IsMine)
+            _brain.PlayerBuff.IsDashing = value;
+    }
+    
+    private void DoubleDashBuff(bool value, float time)
+    {
+        if(_brain.IsMine)
+            StartCoroutine(DoubleDashTime(value, time));
+    }
+
+    private IEnumerator DoubleDashTime(bool value, float time)
+    {
+        _brain.PlayerBuff.IsDoubleDashing = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH))
+            _brain.PlayerBuff.RevertBuff(EBuffType.DOUBLEDASH);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -200,6 +227,8 @@ public class PlayerDash : PlayerHandler
         {
             //if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
             _isDashed = false;
+            if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
+                _isDoubleDash = false;
         }
     }
 

@@ -71,16 +71,18 @@ public class WaitingRoomScreen : UGUIComponent
         {
             return;
         }
-        
-        _startedRoom = true;
-        UIManager.Instance.ClearPanel();
-        
-        if (!NetworkManager.Instance.IsMasterClient)
-        {
-            return;
-        }
 
-        NetworkManager.Instance.LoadScene(ESceneName.Game);
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            NetworkManager.Instance.LoadScene(ESceneName.Game);
+        }
+        
+        var loading = UIManager.Instance.GenerateUGUI("LoadingScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as LoadingScreen;
+        loading.ExecuteLoading(ELoadingType.START_GAME, () =>
+        {
+            _startedRoom = true;
+            UIManager.Instance.ClearPanel();
+        });
     }
 
     #region CallBacks

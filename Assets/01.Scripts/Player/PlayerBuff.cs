@@ -18,6 +18,7 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
 
     [HideInInspector]
     public bool IsDashing;
+    [HideInInspector]
     public bool IsDoubleDashing;
     
     public void AddBuff(EBuffType buff)

@@ -48,7 +48,7 @@ public class NickNameInputScreen : UGUIComponent
         NetworkManager.Instance.LocalPlayer.CustomProperties.Add("R", Random.Range(0.5f, 1f));
         NetworkManager.Instance.LocalPlayer.CustomProperties.Add("G", Random.Range(0.5f, 1f));
         NetworkManager.Instance.LocalPlayer.CustomProperties.Add("B", Random.Range(0.5f, 1f));
-        
+
         UIManager.Instance.RemoveTopUGUI();
     }
     

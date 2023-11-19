@@ -1,6 +1,6 @@
 public enum EStageMode
 {
-    NORMAL,
-    OCCUPATION,
-    DEATHMATCH,
+    SURVIVE = 0,
+    DEATHMATCH = 1,
+    OCCUPATION = 2,
 }

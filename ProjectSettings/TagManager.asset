@@ -15,7 +15,7 @@ TagManager:
   - GROUND
   - DAMAGEABLE
   - WALL
-  - 
+  - Blur
   - 
   - 
   - ITEM
@@ -53,4 +53,7 @@ TagManager:
     locked: 0
   - name: Effect
     uniqueID: 3997780379
+    locked: 0
+  - name: UI
+    uniqueID: 339083185
     locked: 0

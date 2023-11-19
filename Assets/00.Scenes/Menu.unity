@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe725cbc81374354bb1952ade3ce1c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reviveTimer: 1.5
+  _reviveTimer: 3
   _playerObj: {fileID: 3958669578175485639, guid: 6e470c094de676345b7228e4292a1eb9,
     type: 3}
 --- !u!114 &148809872

@@ -127,6 +127,24 @@ namespace MonoPlayer
             ResetPlayer();
         }
 
+        public void ReadyPlayer(Player player)
+        {
+            NetworkManager.Instance.PhotonView.RPC(nameof(ReadyPlayerRPC), RpcTarget.All, player);
+        }
+        
+        [PunRPC]
+        public void ReadyPlayerRPC(Player player)
+        {
+            var waitingRoom = UIManager.Instance.TopComponent as WaitingRoomScreen;
+            if (waitingRoom is null)
+            {
+                Debug.Log("Is not waiting other player");
+                return;
+            }
+
+            waitingRoom.ReadyPlayer(player);
+        }
+
         private void ResetPlayer()
         {
             IsAllOfPlayerLoad = false;
@@ -166,7 +184,8 @@ namespace MonoPlayer
                 
                 //Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
-                if (StageManager.Instance.CurStage.Mode != EStageMode.NORMAL)
+
+                if (StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
                 {
                     RevivePlayer(player);
                 }
@@ -188,6 +207,7 @@ namespace MonoPlayer
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
+                Debug.Log("OnAllPlayerLoad");
                 OnAllPlayerLoad?.Invoke();
                 NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
                 IsAllOfPlayerLoad = true;

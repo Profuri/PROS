@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Photon.Realtime;
-using Random = UnityEngine.Random;
 using System.Linq;
+using ExitGames.Client.Photon;
 
 public enum ESceneName
 {
@@ -31,8 +31,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Player LocalPlayer => PhotonNetwork.LocalPlayer;
     public List<RoomInfo> RoomList => _roomList;
     public List<Player> PlayerList => PhotonNetwork.PlayerList.ToList();
-        
-    
+
     private PhotonView _photonView;
     public PhotonView PhotonView => _photonView;
     private List<RoomInfo> _roomList;
@@ -41,7 +40,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public event Action OnJoinedRoomEvent;
     public event Action OnJoinedLobbyEvent;
     public event Action OnLeftRoomEvent;
-    public event Action<List<RoomInfo>> OnRoomListUpdateEvent;
+    public event Action OnPlayerPropertiesUpdateEvent;
+    public event Action OnRoomListUpdateEvent;
     public event Action<Player> OnPlayerEnteredRoomEvent;
     public event Action<Player> OnPlayerLeftRoomEvent;
     
@@ -51,7 +51,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         OnConnectedToMasterEvent += () => Debug.Log("OnConnectedToMaster");
         OnJoinedLobbyEvent += () => Debug.Log("OnJoinedLobby");
         OnJoinedRoomEvent += () => Debug.Log("OnJoinedRoom");
-        OnRoomListUpdateEvent += (list) => _roomList = list;
+        // OnRoomListUpdateEvent += (list) => _roomList = list;
         
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -62,10 +62,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
-    public void CreateRoom() => PhotonNetwork.CreateRoom($"Room: {Random.Range(0,9999)}");
+    public void CreateRoom(Player owner, EStageMode mode)
+    {
+        var options = new RoomOptions
+        {
+            IsVisible = true,
+            IsOpen = true,
+            MaxPlayers = 4,
+        };
+        options.CustomRoomProperties = new Hashtable { { "Mode", (int)mode } };
+        PhotonNetwork.CreateRoom($"{owner.NickName}'S ROOM", options);
+    }
+
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
     public void JoinRoom(string name) => PhotonNetwork.JoinRoom(name);
 
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) => OnPlayerPropertiesUpdateEvent?.Invoke();
     public override void OnJoinedLobby() => OnJoinedLobbyEvent?.Invoke();
     public override void OnJoinedRoom() => OnJoinedRoomEvent?.Invoke();
     public override void OnLeftRoom() => OnLeftRoomEvent?.Invoke();
@@ -73,7 +85,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreateRoomFailed(short returnCode, string message){ }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
+    { 
         OnPlayerEnteredRoomEvent?.Invoke(newPlayer);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -84,7 +96,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("OnRoomListUpdate");
-        OnRoomListUpdateEvent?.Invoke(roomList);
+        _roomList = roomList;
+        OnRoomListUpdateEvent?.Invoke();
     }
 
     public void LoadScene(ESceneName sceneType)

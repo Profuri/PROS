@@ -1,299 +1,299 @@
-using Photon.Pun;
-using Photon.Realtime;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
-
-public enum Panel
-{
-    Lobby = 0, Find = 1, Room = 2
-}
-
-public class MenuScreen : MonoBehaviour
-{
-    private UIDocument _uiDocument;
-
-    [SerializeField] private VisualTreeAsset _playerTempalte;
-    [SerializeField] private VisualTreeAsset _roomTemplate;
-
-    private readonly string _nameKey = "PLAYER_NAME";
-
-    private Panel _currentPanel;
-
-    private VisualElement _content;
-
-    // Popup Panel
-    private VisualElement _popupPanel;
-    private TextField _nameField;
-
-    // Lobby
-    private Button _createBtn;
-    private Button _findBtn;
-
-    // Find
-    private ScrollView _roomList;
-    private TextField _joinCodeField;
-    private Button _joinCodeBtn;
-
-    // Room
-    private ScrollView _playerList;
-    private Label _roomNameLabel;
-    private Label _roomPlayerCount;
-    private Button _startGameBtn;
-    private Button _exitRoomBtn;
-    private Dictionary<Player, VisualElement> _playerDictionary = new Dictionary<Player, VisualElement>();
-    
-    private void Awake()
-    {
-        _uiDocument = GetComponent<UIDocument>();
-    }
-
-    private void OnEnable()
-    {
-        VisualElement root = _uiDocument.rootVisualElement;
-
-        // Page Init
-        _content = root.Q<VisualElement>("content");
-        _content.style.left = new Length(0f, LengthUnit.Percent);
-        _currentPanel = Panel.Lobby;
-
-        #region Popup Panel
-        _popupPanel = root.Q<VisualElement>("popup-panel");
-        _popupPanel.RemoveFromClassList("off");
-        _nameField = _popupPanel.Q<TextField>("name-field");
-        _nameField.value = PlayerPrefs.GetString(_nameKey, "�̸��� �Է��ϼ���.");
-        _popupPanel.Q<Button>("btn-ok").RegisterCallback<ClickEvent>(HandleConfirmName);
-        #endregion
-
-        #region Lobby
-        _createBtn = root.Q<Button>("btn-create");
-        _createBtn.RegisterCallback<ClickEvent>(HandleCreateRoom);
-
-        _findBtn = root.Q<Button>("btn-find");
-        _findBtn.RegisterCallback<ClickEvent>(HandleFindRoom);
-        #endregion
-
-        #region Find
-        _roomList = root.Q<ScrollView>("room-list");
-        _roomList.Clear();
-
-        _joinCodeField = root.Q<TextField>("join-code-field");
-        _joinCodeBtn = root.Q<Button>("btn-join-code");
-        _joinCodeBtn.RegisterCallback<ClickEvent>(HandleJoinCode);
-        root.Q<Button>("btn-refresh").RegisterCallback<ClickEvent>(HandleRefresh);
-
-        root.Q<Button>("btn-back").RegisterCallback<ClickEvent>(evt =>
-        {
-            ChangePanel(Panel.Lobby);
-        });
-        #endregion
-
-        #region Room
-        _playerList = root.Q<ScrollView>("player-list");
-        _playerList.Clear();
-
-        _roomNameLabel = _playerList.parent.Q<Label>("page-title");
-        _roomPlayerCount = root.Q<Label>("player-count");
-
-        _startGameBtn = root.Q<Button>("btn-start-game");
-        _exitRoomBtn = root.Q<Button>("btn-exit-room");
-        _startGameBtn.RegisterCallback<ClickEvent>(HandleStartGame);
-        _exitRoomBtn.RegisterCallback<ClickEvent>(HandleExitRoom);
-        #endregion
-
-        #region Network Event
-        NetworkManager.Instance.OnJoinedLobbyEvent += HandleJoinedLobby;
-        NetworkManager.Instance.OnJoinedRoomEvent += HandleJoinedRoom;
-        NetworkManager.Instance.OnLeftRoomEvent += HandleLeftRoom;
-        NetworkManager.Instance.OnPlayerEnteredRoomEvent += HandlePlayerEnterRoom;
-        NetworkManager.Instance.OnPlayerLeftRoomEvent += HandlePlayerLeftRoom;
-        NetworkManager.Instance.OnRoomListUpdateEvent += HandleRoomListUpdate;
-        #endregion
-    }
-
-    private void OnDisable()
-    {
-        
-    }
-
-    private void ChangePanel(Panel panel)
-    {
-        _currentPanel = panel;
-        _content.style.left = new Length((float)panel * -100f, LengthUnit.Percent);
-    }
-
-    private void HandleConfirmName(ClickEvent evt)
-    {
-        if(string.IsNullOrEmpty(_nameField.value))
-        {
-            Debug.LogError("�̸��� �Է��ϼ���.");
-            return;
-        }
-        NetworkManager.Instance.LocalPlayer.NickName = _nameField.value;
-        PlayerPrefs.SetString(_nameKey, _nameField.value);
-        _popupPanel.AddToClassList("off");
-    }
-
-    private void HandleCreateRoom(ClickEvent evt)
-    {
-        if (_currentPanel != Panel.Lobby) return;
-        NetworkManager.Instance.CreateRoom();
-    }
-
-    private void HandleFindRoom(ClickEvent evt)
-    {
-        if (_currentPanel != Panel.Lobby) return;
-        ChangePanel(Panel.Find);
-    }
-
-    private void HandleJoinCode(ClickEvent evt)
-    {
-        if (NetworkManager.Instance.GetCurRoom != null)
-        {
-            Debug.LogError("�߸��� �����Դϴ�.");
-            return;
-        }
-        if (string.IsNullOrEmpty(_joinCodeField.value))
-        {
-            Debug.LogError("�� �ڵ带 �Է��ϼ���.");
-            return;
-        }
-        NetworkManager.Instance.JoinRoom($"Room: {_joinCodeField.value}");
-    }
-
-    private void HandleRefresh(ClickEvent evt)
-    {
-        HandleRoomListUpdate(NetworkManager.Instance.RoomList);
-    }
-
-    private void HandleExitRoom(ClickEvent evt)
-    {
-        if (NetworkManager.Instance.GetCurRoom == null)
-        {
-            Debug.LogError("�߸��� �����Դϴ�.");
-            return;
-        }
-
-        NetworkManager.Instance.LeaveRoom();
-    }
-
-    private void HandleStartGame(ClickEvent evt)
-    {
-        if (NetworkManager.Instance.GetCurRoom == null)
-        {
-            Debug.LogError("�߸��� �����Դϴ�.");
-            return;
-        }
-        if(!NetworkManager.Instance.IsMasterClient)
-        {
-            Debug.LogError("���常 �÷��� �� �� �ֽ��ϴ�.");
-            return;
-        }
-        if(NetworkManager.Instance.PlayerList.Count < 2)
-        {
-            Debug.LogError("������ �÷����Ϸ��� �÷��̾ 2�� �̻� �־�� �մϴ�.");
-            return;
-        }
-
-        NetworkManager.Instance.LoadScene(ESceneName.Game);
-    }
-
-    #region Network Event
-
-    private void HandleRoomListUpdate(List<RoomInfo> updatedList)
-    {
-        _roomList.Clear();
-        foreach(var room in NetworkManager.Instance.RoomList)
-        {
-            VisualElement newRoom = _roomTemplate.Instantiate();
-            newRoom.Q<Label>("room-name").text = room.Name;
-            Button joinBtn = newRoom.Q<Button>("btn-join");
-            if(room.RemovedFromList)
-            {
-                joinBtn.pickingMode = PickingMode.Ignore;
-                joinBtn.AddToClassList("off");
-            }
-            else
-            {
-                joinBtn.pickingMode = PickingMode.Position;
-                joinBtn.RemoveFromClassList("off");
-                joinBtn.RegisterCallback<ClickEvent>(evt =>
-                {
-                    NetworkManager.Instance.JoinRoom(room.Name);
-                });
-            }
-            _roomList.Add(newRoom);
-        }
-    }
-
-    private void HandlePlayerLeftRoom(Player other)
-    {
-        _playerList.Remove(_playerDictionary[other]);
-        _playerDictionary.Remove(other);
-        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
-    }
-
-    private void HandlePlayerEnterRoom(Player other)
-    {
-        VisualElement newPlayer = _playerTempalte.Instantiate();
-        newPlayer.Q<Label>("player-name").text = other.NickName;
-        _playerList.Add(newPlayer);
-        _playerDictionary.Add(other, newPlayer);
-        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
-    }
-
-    private void HandleLeftRoom()
-    {
-        ChangePanel(Panel.Find);
-
-        HandleRoomListUpdate(NetworkManager.Instance.RoomList);
-    }
-
-    private void HandleJoinedRoom()
-    {
-        RoomInfo room = NetworkManager.Instance.GetCurRoom;
-        _playerList.Clear();
-        _playerDictionary.Clear();
-        _roomNameLabel.text = room.Name;
-        foreach(var player in NetworkManager.Instance.PlayerList)
-        {
-            VisualElement newPlayer = _playerTempalte.Instantiate();
-            newPlayer.Q<Label>("player-name").text = player.NickName;
-            if(player.IsMasterClient)
-            {
-                newPlayer.Q<VisualElement>("master-icon").style.visibility = Visibility.Visible;
-            }
-            _playerList.Add(newPlayer);
-            _playerDictionary.Add(player, newPlayer);
-        }
-
-        _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {room.MaxPlayers}";
-
-        if(NetworkManager.Instance.IsMasterClient)
-        {
-            _startGameBtn.RemoveFromClassList("off");
-            _startGameBtn.pickingMode = PickingMode.Position;
-        }
-        else
-        {
-            _startGameBtn.AddToClassList("off");
-            _startGameBtn.pickingMode = PickingMode.Ignore;
-        }
-
-        ChangePanel(Panel.Room);
-    }
-
-    private void HandleJoinedLobby()
-    {
-        _createBtn.pickingMode = PickingMode.Position;
-        _createBtn.RemoveFromClassList("off");
-        _findBtn.pickingMode = PickingMode.Position;
-        _findBtn.RemoveFromClassList("off");
-    }
-
-    #endregion
-}
+// using Photon.Pun;
+// using Photon.Realtime;
+// using System;
+// using System.Collections;
+// using System.Collections.Generic;
+// using System.Linq;
+// using UnityEngine;
+// using UnityEngine.SceneManagement;
+// using UnityEngine.UIElements;
+//
+// public enum Panel
+// {
+//     Lobby = 0, Find = 1, Room = 2
+// }
+//
+// public class MenuScreen : MonoBehaviour
+// {
+//     private UIDocument _uiDocument;
+//
+//     [SerializeField] private VisualTreeAsset _playerTempalte;
+//     [SerializeField] private VisualTreeAsset _roomTemplate;
+//
+//     private readonly string _nameKey = "PLAYER_NAME";
+//
+//     private Panel _currentPanel;
+//
+//     private VisualElement _content;
+//
+//     // Popup Panel
+//     private VisualElement _popupPanel;
+//     private TextField _nameField;
+//
+//     // Lobby
+//     private Button _createBtn;
+//     private Button _findBtn;
+//
+//     // Find
+//     private ScrollView _roomList;
+//     private TextField _joinCodeField;
+//     private Button _joinCodeBtn;
+//
+//     // Room
+//     private ScrollView _playerList;
+//     private Label _roomNameLabel;
+//     private Label _roomPlayerCount;
+//     private Button _startGameBtn;
+//     private Button _exitRoomBtn;
+//     private Dictionary<Player, VisualElement> _playerDictionary = new Dictionary<Player, VisualElement>();
+//     
+//     private void Awake()
+//     {
+//         _uiDocument = GetComponent<UIDocument>();
+//     }
+//
+//     private void OnEnable()
+//     {
+//         VisualElement root = _uiDocument.rootVisualElement;
+//
+//         // Page Init
+//         _content = root.Q<VisualElement>("content");
+//         _content.style.left = new Length(0f, LengthUnit.Percent);
+//         _currentPanel = Panel.Lobby;
+//
+//         #region Popup Panel
+//         _popupPanel = root.Q<VisualElement>("popup-panel");
+//         _popupPanel.RemoveFromClassList("off");
+//         _nameField = _popupPanel.Q<TextField>("name-field");
+//         _nameField.value = PlayerPrefs.GetString(_nameKey, "�̸��� �Է��ϼ���.");
+//         _popupPanel.Q<Button>("btn-ok").RegisterCallback<ClickEvent>(HandleConfirmName);
+//         #endregion
+//
+//         #region Lobby
+//         _createBtn = root.Q<Button>("btn-create");
+//         _createBtn.RegisterCallback<ClickEvent>(HandleCreateRoom);
+//
+//         _findBtn = root.Q<Button>("btn-find");
+//         _findBtn.RegisterCallback<ClickEvent>(HandleFindRoom);
+//         #endregion
+//
+//         #region Find
+//         _roomList = root.Q<ScrollView>("room-list");
+//         _roomList.Clear();
+//
+//         _joinCodeField = root.Q<TextField>("join-code-field");
+//         _joinCodeBtn = root.Q<Button>("btn-join-code");
+//         _joinCodeBtn.RegisterCallback<ClickEvent>(HandleJoinCode);
+//         root.Q<Button>("btn-refresh").RegisterCallback<ClickEvent>(HandleRefresh);
+//
+//         root.Q<Button>("btn-back").RegisterCallback<ClickEvent>(evt =>
+//         {
+//             ChangePanel(Panel.Lobby);
+//         });
+//         #endregion
+//
+//         #region Room
+//         _playerList = root.Q<ScrollView>("player-list");
+//         _playerList.Clear();
+//
+//         _roomNameLabel = _playerList.parent.Q<Label>("page-title");
+//         _roomPlayerCount = root.Q<Label>("player-count");
+//
+//         _startGameBtn = root.Q<Button>("btn-start-game");
+//         _exitRoomBtn = root.Q<Button>("btn-exit-room");
+//         _startGameBtn.RegisterCallback<ClickEvent>(HandleStartGame);
+//         _exitRoomBtn.RegisterCallback<ClickEvent>(HandleExitRoom);
+//         #endregion
+//
+//         #region Network Event
+//         NetworkManager.Instance.OnJoinedLobbyEvent += HandleJoinedLobby;
+//         NetworkManager.Instance.OnJoinedRoomEvent += HandleJoinedRoom;
+//         NetworkManager.Instance.OnLeftRoomEvent += HandleLeftRoom;
+//         NetworkManager.Instance.OnPlayerEnteredRoomEvent += HandlePlayerEnterRoom;
+//         NetworkManager.Instance.OnPlayerLeftRoomEvent += HandlePlayerLeftRoom;
+//         NetworkManager.Instance.OnRoomListUpdateEvent += HandleRoomListUpdate;
+//         #endregion
+//     }
+//
+//     private void OnDisable()
+//     {
+//         
+//     }
+//
+//     private void ChangePanel(Panel panel)
+//     {
+//         _currentPanel = panel;
+//         _content.style.left = new Length((float)panel * -100f, LengthUnit.Percent);
+//     }
+//
+//     private void HandleConfirmName(ClickEvent evt)
+//     {
+//         if(string.IsNullOrEmpty(_nameField.value))
+//         {
+//             Debug.LogError("�̸��� �Է��ϼ���.");
+//             return;
+//         }
+//         NetworkManager.Instance.LocalPlayer.NickName = _nameField.value;
+//         PlayerPrefs.SetString(_nameKey, _nameField.value);
+//         _popupPanel.AddToClassList("off");
+//     }
+//
+//     private void HandleCreateRoom(ClickEvent evt)
+//     {
+//         if (_currentPanel != Panel.Lobby) return;
+//         NetworkManager.Instance.CreateRoom();
+//     }
+//
+//     private void HandleFindRoom(ClickEvent evt)
+//     {
+//         if (_currentPanel != Panel.Lobby) return;
+//         ChangePanel(Panel.Find);
+//     }
+//
+//     private void HandleJoinCode(ClickEvent evt)
+//     {
+//         if (NetworkManager.Instance.GetCurRoom != null)
+//         {
+//             Debug.LogError("�߸��� �����Դϴ�.");
+//             return;
+//         }
+//         if (string.IsNullOrEmpty(_joinCodeField.value))
+//         {
+//             Debug.LogError("�� �ڵ带 �Է��ϼ���.");
+//             return;
+//         }
+//         NetworkManager.Instance.JoinRoom($"Room: {_joinCodeField.value}");
+//     }
+//
+//     private void HandleRefresh(ClickEvent evt)
+//     {
+//         HandleRoomListUpdate(NetworkManager.Instance.RoomList);
+//     }
+//
+//     private void HandleExitRoom(ClickEvent evt)
+//     {
+//         if (NetworkManager.Instance.GetCurRoom == null)
+//         {
+//             Debug.LogError("�߸��� �����Դϴ�.");
+//             return;
+//         }
+//
+//         NetworkManager.Instance.LeaveRoom();
+//     }
+//
+//     private void HandleStartGame(ClickEvent evt)
+//     {
+//         if (NetworkManager.Instance.GetCurRoom == null)
+//         {
+//             Debug.LogError("�߸��� �����Դϴ�.");
+//             return;
+//         }
+//         if(!NetworkManager.Instance.IsMasterClient)
+//         {
+//             Debug.LogError("���常 �÷��� �� �� �ֽ��ϴ�.");
+//             return;
+//         }
+//         if(NetworkManager.Instance.PlayerList.Count < 2)
+//         {
+//             Debug.LogError("������ �÷����Ϸ��� �÷��̾ 2�� �̻� �־�� �մϴ�.");
+//             return;
+//         }
+//
+//         NetworkManager.Instance.LoadScene(ESceneName.Game);
+//     }
+//
+//     #region Network Event
+//
+//     private void HandleRoomListUpdate(List<RoomInfo> updatedList)
+//     {
+//         _roomList.Clear();
+//         foreach(var room in NetworkManager.Instance.RoomList)
+//         {
+//             VisualElement newRoom = _roomTemplate.Instantiate();
+//             newRoom.Q<Label>("room-name").text = room.Name;
+//             Button joinBtn = newRoom.Q<Button>("btn-join");
+//             if(room.RemovedFromList)
+//             {
+//                 joinBtn.pickingMode = PickingMode.Ignore;
+//                 joinBtn.AddToClassList("off");
+//             }
+//             else
+//             {
+//                 joinBtn.pickingMode = PickingMode.Position;
+//                 joinBtn.RemoveFromClassList("off");
+//                 joinBtn.RegisterCallback<ClickEvent>(evt =>
+//                 {
+//                     NetworkManager.Instance.JoinRoom(room.Name);
+//                 });
+//             }
+//             _roomList.Add(newRoom);
+//         }
+//     }
+//
+//     private void HandlePlayerLeftRoom(Player other)
+//     {
+//         _playerList.Remove(_playerDictionary[other]);
+//         _playerDictionary.Remove(other);
+//         _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
+//     }
+//
+//     private void HandlePlayerEnterRoom(Player other)
+//     {
+//         VisualElement newPlayer = _playerTempalte.Instantiate();
+//         newPlayer.Q<Label>("player-name").text = other.NickName;
+//         _playerList.Add(newPlayer);
+//         _playerDictionary.Add(other, newPlayer);
+//         _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {NetworkManager.Instance.GetCurRoom.MaxPlayers}";
+//     }
+//
+//     private void HandleLeftRoom()
+//     {
+//         ChangePanel(Panel.Find);
+//
+//         HandleRoomListUpdate(NetworkManager.Instance.RoomList);
+//     }
+//
+//     private void HandleJoinedRoom()
+//     {
+//         RoomInfo room = NetworkManager.Instance.GetCurRoom;
+//         _playerList.Clear();
+//         _playerDictionary.Clear();
+//         _roomNameLabel.text = room.Name;
+//         foreach(var player in NetworkManager.Instance.PlayerList)
+//         {
+//             VisualElement newPlayer = _playerTempalte.Instantiate();
+//             newPlayer.Q<Label>("player-name").text = player.NickName;
+//             if(player.IsMasterClient)
+//             {
+//                 newPlayer.Q<VisualElement>("master-icon").style.visibility = Visibility.Visible;
+//             }
+//             _playerList.Add(newPlayer);
+//             _playerDictionary.Add(player, newPlayer);
+//         }
+//
+//         _roomPlayerCount.text = $"{NetworkManager.Instance.PlayerList.Count} / {room.MaxPlayers}";
+//
+//         if(NetworkManager.Instance.IsMasterClient)
+//         {
+//             _startGameBtn.RemoveFromClassList("off");
+//             _startGameBtn.pickingMode = PickingMode.Position;
+//         }
+//         else
+//         {
+//             _startGameBtn.AddToClassList("off");
+//             _startGameBtn.pickingMode = PickingMode.Ignore;
+//         }
+//
+//         ChangePanel(Panel.Room);
+//     }
+//
+//     private void HandleJoinedLobby()
+//     {
+//         _createBtn.pickingMode = PickingMode.Position;
+//         _createBtn.RemoveFromClassList("off");
+//         _findBtn.pickingMode = PickingMode.Position;
+//         _findBtn.RemoveFromClassList("off");
+//     }
+//
+//     #endregion
+// }

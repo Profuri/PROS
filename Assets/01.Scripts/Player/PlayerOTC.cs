@@ -75,6 +75,9 @@ public class PlayerOTC : PlayerHandler, IDamageable
         else
         {
             Debug.Log(otcDir);
+
+            TimeManager.Instance.SetTimeScale();
+
             
             _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;

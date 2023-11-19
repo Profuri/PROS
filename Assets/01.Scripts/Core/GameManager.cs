@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
         ItemManager.Instance.Init();
         DeadManager.Instance.Init();
         UIManager.Instance.Init();
+        CameraManager.Instance.Init();
+        TimeManager.Instance.Init();
     }
 
     public void OTCPlayer(Player player, Vector3 attackDir)

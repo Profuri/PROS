@@ -1,7 +1,5 @@
 using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.XR;
 using UnityEngine;
 
 public class PlayerDefend : PlayerHandler
@@ -52,7 +50,8 @@ public class PlayerDefend : PlayerHandler
 
     private void Invincible(bool value)
     {
-        _brain.PlayerDefend._isDefend = value;
+        if (_brain.IsMine)
+            _brain.PlayerDefend._isDefend = value;
     }
 
     IEnumerator DefendCoroutine()

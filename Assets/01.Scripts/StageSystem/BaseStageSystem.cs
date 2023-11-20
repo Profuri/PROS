@@ -32,35 +32,51 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         ItemManager.Instance.StartGenerateItem();
         GenerateNewStage(mapIndex);
 
+        PlayerManager.Instance.OnPlayerDead += RoundCheck;
         _runningStage = true;
+    }
+
+    protected void RoundWinner(Player winner)
+    {
+        if (!_runningStage || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        {
+            return;
+        }
+        
+        _runningStage = false;
+        ++_round;
+            
+        ScoreManager.Instance.AddScore(winner);
+        StageManager.Instance.RoundWinner(winner);
     }
 
     public virtual void StageLeave()
     {
+        PlayerManager.Instance.OnPlayerDead -= RoundCheck;
         ItemManager.Instance.StopGenerateItem();
         RemoveCurStage();
     }
 
     public virtual void StageUpdate()
     {
-        if (!_runningStage || !NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
-        {
-            return;
-        }
-        
-        if (RoundCheck(out var roundWinner))
-        {
-            if (roundWinner == null)
-            {
-                return;
-            }
-
-            _runningStage = false;
-            ++_round;
-            
-            ScoreManager.Instance.AddScore(roundWinner);
-            StageManager.Instance.RoundWinner(roundWinner);
-        }
+        // if (!_runningStage || !NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        // {
+        //     return;
+        // }
+        //
+        // if (RoundCheck(out var roundWinner))
+        // {
+        //     if (roundWinner == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     _runningStage = false;
+        //     ++_round;
+        //     
+        //     ScoreManager.Instance.AddScore(roundWinner);
+        //     StageManager.Instance.RoundWinner(roundWinner);
+        // }
     }
 
     public Vector3 GetRandomSpawnPoint()
@@ -74,7 +90,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
                 Debug.LogError("Stage doesnt loaded");
                 return Vector3.zero;
             }
-            _currentStageObject.Setting();
         }
         
         if (_currentStageObject.SpawnPoints.Count <= 0)
@@ -88,7 +103,12 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void GenerateNewStage(int index)
     {
-        if (!NetworkManager.Instance.IsMasterClient) return;
+        Debug.Log("Generate");
+        
+        if (!NetworkManager.Instance.IsMasterClient)
+        {
+            return;
+        }
 
         if (_currentStageObject)
         {
@@ -112,11 +132,15 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void RemoveCurStage()
     {
-        if(NetworkManager.Instance.IsMasterClient == false) return;
-        PhotonNetwork.Destroy(_currentStageObject.gameObject);
-        _currentStageObject = null;
+        Debug.Log("REmove");
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(_currentStageObject.gameObject);
+        }
         PlayerManager.Instance.RoundEnd();
+        _currentStageObject = null;
     }
+    
     protected IEnumerator GenerateMapEvent()
     {
         float timer = 0f;
@@ -141,5 +165,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         //int index = 1;
         return _mapEventList[index];
     }
-    public abstract bool RoundCheck(out Player roundWinner);
+    
+    public abstract void RoundCheck(Player player);
 }

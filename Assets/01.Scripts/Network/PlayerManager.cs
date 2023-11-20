@@ -183,12 +183,10 @@ namespace MonoPlayer
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
 
+            LoadedPlayerList.Remove(player);
             OnPlayerDead?.Invoke(player);
             var playerBrain = BrainDictionary[player];
-
-
-            LoadedPlayerList.Remove(player);
-
+            
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;

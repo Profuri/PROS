@@ -6,13 +6,11 @@ public class StageWinnerScreen : UGUIComponent
     [SerializeField] private float _activeTime;
     private float _currentTime;
 
-    private PlayerCard _winnerCard;
+    [SerializeField] private PlayerCard _winnerCard;
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
-
-        _winnerCard = transform.GetComponentInChildren<PlayerCard>();
         
         _currentTime = 0f;
     }

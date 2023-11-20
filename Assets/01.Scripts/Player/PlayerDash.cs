@@ -55,23 +55,20 @@ public class PlayerDash : PlayerHandler
             _dashCoroutine = StartCoroutine(DashCoroutine(dashPower,mouseDir));
         }
     }
-    
+
     private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
         ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
 
-        float prevValue = 0f;
         float timer = 0f;
         
-        Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
-        float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
-        
-        float timeToArrive = distanceFromDestination / power * _dashTime;
+        Vector3 destination = _brain.AgentTrm.position + (mouseDir * power);
 
+        float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
+        float timeToArrive = _dashTime;
         float radius = ((CircleCollider2D)_brain.Collider).radius * 1.5f;
             
         _brain.ActionData.IsDashing = true;
-        
         float percent = 0f;
         
         var hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination, _obstacleMask);
@@ -85,35 +82,88 @@ public class PlayerDash : PlayerHandler
 
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         
-        while (timer < timeToArrive)
+        while (timer < timeToArrive - 0.1f)
         {
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
             
-            float easingValue = EaseOutCubic(percent);
-            float stepEasingValue = easingValue - prevValue;
-            
-            prevValue = easingValue;
-            
-            var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
-            transform.position = pos;
+            transform.position = Vector3.Lerp(transform.position,destination,percent);
 
-            _brain.PlayerMovement.SetRotationByDirection(mouseDir, easingValue);
+            //_brain.PlayerMovement.SetRotationByDirection(mouseDir);
             
             if (CheckDashCollision(mouseDir, radius))
             {
+                //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
                 transform.rotation = Quaternion.identity;
                 yield break;
             }
-            
+
             yield return null;
         }
         
         _brain.PlayerMovement.StopImmediately(0.0f);
+        //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
         transform.rotation = Quaternion.identity;
         CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;
     }
+
+    // private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
+    // {
+    //     ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
+
+    //     float prevValue = 0f;
+    //     float timer = 0f;
+        
+    //     Vector3 destination = _brain.AgentTrm.position + (mouseDir * power);
+
+    //     float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
+    //     float timeToArrive = _dashTime;
+    //     float radius = ((CircleCollider2D)_brain.Collider).radius * 1.5f;
+            
+    //     _brain.ActionData.IsDashing = true;
+    //     float percent = 0f;
+        
+    //     var hit = Physics2D.Raycast(_brain.AgentTrm.position, mouseDir,distanceFromDestination, _obstacleMask);
+        
+    //     if (hit.collider is not null)
+    //     {
+    //         var obstacleCollider = hit.collider;
+    //         destination = hit.point - (Vector2)mouseDir * (_brain.Collider.bounds.size / 2);
+    //         timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
+    //     }
+
+    //     _brain.PlayerMovement.StopImmediately(timeToArrive);
+        
+    //     while (timer < timeToArrive)
+    //     {
+    //         timer += Time.deltaTime;
+    //         percent = timer / timeToArrive;
+            
+    //         float easingValue = EaseOutCubic(percent);
+    //         float stepEasingValue = easingValue - prevValue;
+            
+    //         prevValue = easingValue;
+            
+    //         var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,stepEasingValue);
+    //         transform.position = pos;
+
+    //         _brain.PlayerMovement.SetRotationByDirection(mouseDir, easingValue);
+            
+    //         if (CheckDashCollision(mouseDir, radius))
+    //         {
+    //             transform.rotation = Quaternion.identity;
+    //             yield break;
+    //         }
+
+    //         yield return null;
+    //     }
+        
+    //     //_brain.PlayerMovement.StopImmediately(0.0f);
+    //     transform.rotation = Quaternion.identity;
+    //     CheckDashCollision(mouseDir, radius * 1.5f);
+    //     _brain.ActionData.IsDashing = false;
+    // }
     #endregion
 
     private bool CheckDashCollision(Vector3 dir, float radius, int maxCheckCount = 10)

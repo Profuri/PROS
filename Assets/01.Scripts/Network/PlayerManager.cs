@@ -76,6 +76,7 @@ namespace MonoPlayer
             CreatePlayer(revivePlayer, randomPos);
         }
         
+        
         [PunRPC]
         private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b)
         {
@@ -86,6 +87,7 @@ namespace MonoPlayer
             playerSprite.SetColor(new Color(r,g,b));
             playerSprite.SetDestroy(_reviveTimer);            
         }
+
 
         private void OnLeftPlayer(Player leftPlayer)
         {
@@ -109,6 +111,7 @@ namespace MonoPlayer
             NetworkManager.Instance.PhotonView.RPC("RoundStartRPC", RpcTarget.All);
         }
 
+
         public void RoundEnd()
         {
             if (!NetworkManager.Instance.IsMasterClient)
@@ -117,11 +120,13 @@ namespace MonoPlayer
             NetworkManager.Instance.PhotonView.RPC("RoundEndRPC", RpcTarget.All);
         }
         
+
         [PunRPC]
         private void RoundStartRPC()
         {
             var randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
+            //CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
+            RevivePlayer(NetworkManager.Instance.LocalPlayer);
         }
 
         [PunRPC]
@@ -144,7 +149,6 @@ namespace MonoPlayer
                 Debug.Log("Is not waiting other player");
                 return;
             }
-
             waitingRoom.ReadyPlayer(player);
         }
 
@@ -183,12 +187,14 @@ namespace MonoPlayer
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
 
-            OnPlayerDead?.Invoke(player);
-            var playerBrain = BrainDictionary[player];
-
-
             LoadedPlayerList.Remove(player);
+            if(NetworkManager.Instance.IsMasterClient)
+            {
+                OnPlayerDead?.Invoke(player);
+            }
 
+            var playerBrain = BrainDictionary[player];
+            
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;

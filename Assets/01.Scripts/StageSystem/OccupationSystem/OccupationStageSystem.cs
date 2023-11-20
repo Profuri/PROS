@@ -29,15 +29,13 @@ public class OccupationStageSystem : BaseStageSystem
         _roundEnd = true;
     }
     
-    public override bool RoundCheck(out Player winnerPlayer)
+    public override void RoundCheck(Player player)
     {
-        winnerPlayer = null;
         if (_roundEnd)
         {
-            winnerPlayer = _winPlayer;
-            Debug.LogError($"WinPlayer: {winnerPlayer}");
+            var winnerPlayer = _winPlayer;
+            RoundWinner(winnerPlayer);            
         }
-        return _roundEnd;
     }
 
     public override void GenerateNewStage(int index)

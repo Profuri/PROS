@@ -8,62 +8,45 @@ using UnityEngine;
 public class InvisiblePlatform : BasePlatform
 {
     [SerializeField] private bool _isVisible = true;
-    public bool IsVisible => _isVisible;
+
+    public bool IsVisible
+    {
+        get => _isVisible;
+        set => _isVisible = value;
+    }
 
     [SerializeField] private float _duration = 0.3f;
-    [SerializeField] private float _term = 3f;
     [SerializeField] private float _delay = 0f;
 
-    private PhotonView _photonView;
+    private float _currentTime;
 
-    protected override void Awake()
+    public override void Init(int index)
     {
-        base.Awake();
-        _photonView = GetComponent<PhotonView>();
-        if(NetworkManager.Instance.LocalPlayer.IsMasterClient)
+        base.Init(index);
+
+        _currentTime = 0f;
+        if (NetworkManager.Instance.IsMasterClient)
         {
-            _photonView.RequestOwnership();
+            StartCoroutine(FadeRoutine());
         }
     }
 
-    private void Start()
+    public override void Reset()
     {
-        if (_photonView.Owner != NetworkManager.Instance.LocalPlayer) return;
-        _photonView.RPC(nameof(SetVisibleRPC), RpcTarget.All, !_isVisible);
-        StartCoroutine(ChangeVisibleCoroutine());
+        base.Reset();
+        StopAllCoroutines();
     }
 
-    private IEnumerator ChangeVisibleCoroutine()
+    private IEnumerator FadeRoutine()
     {
-        yield return new WaitForSeconds(_delay);
-        while(true)
+        while (true)
         {
-            yield return new WaitForSeconds(_term);
-            _photonView.RPC(nameof(SetVisibleRPC), RpcTarget.All, !_isVisible);
-        }
-    }
-
-    [PunRPC]
-    public void SetVisibleRPC(bool value)
-    {
-        if (value == _isVisible) return;
-
-        _isVisible = value;
-        ShowSpriteRenderer(value);
-        _collider2D.enabled = value;
-    }
-
-    private void ShowSpriteRenderer(bool value)
-    {
-        if(value)
-        { 
-            _spriteRenderer.DOFade(1f, _duration);
-            _spriteRenderer.enabled = true;
-        }
-        else
-        {
-            _spriteRenderer.DOFade(0f, _duration)
-                .OnComplete(() => _spriteRenderer.enabled = false);
+            yield return new WaitForSeconds(_delay);
+            
+            _currentTime += _isVisible ? -Time.deltaTime : Time.deltaTime;
+            var percent = _currentTime / _duration;
+            StageManager.Instance.SetOpacity(Index, percent);
+            yield return null;
         }
     }
 }

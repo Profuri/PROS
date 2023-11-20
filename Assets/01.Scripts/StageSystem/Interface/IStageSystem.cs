@@ -7,5 +7,5 @@ public interface IStageSystem
     public void RemoveCurStage();
     public void GenerateNewStage(int mapIndex);
     public void StageUpdate();
-    public bool RoundCheck(out Player roundWinner);
+    public void RoundCheck(Player player);
 }

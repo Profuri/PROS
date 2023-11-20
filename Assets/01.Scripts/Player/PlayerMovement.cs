@@ -41,7 +41,6 @@ public class PlayerMovement : PlayerHandler
     {
         base.Init(brain);
 
-        Debug.Log(_brain?.AnimationController);
         _brain.InputSO.OnJumpKeyPress += SetCanJump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         _brain.OnOTC += () => enabled = false;

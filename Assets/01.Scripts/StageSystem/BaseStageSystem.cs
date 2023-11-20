@@ -98,7 +98,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
 
-        Debug.LogError($"CurrentStageObject: {_currentStageObject}");
+        Debug.Log($"CurrentStageObject: {_currentStageObject}");
         
         PlayerManager.Instance.RoundStart();
 

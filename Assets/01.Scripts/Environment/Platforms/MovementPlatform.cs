@@ -14,36 +14,51 @@ public class MovementPlatform : BasePlatform
     [SerializeField] private float _speed;
     [SerializeField] private MoveAxis _moveAxis;
 
-    private PhotonView _photonView;
-
     private Vector2 _startPos;
     private float _velocity;
 
-    protected override void Awake()
+    public override void Init(int index)
     {
-        _photonView = GetComponent<PhotonView>();
-    }
+        base.Init(index);
 
-    private void Start()
-    {
-        if(NetworkManager.Instance.LocalPlayer.IsMasterClient)
-        {
-            _photonView.RequestOwnership();
-        }
         _velocity = _speed * Time.deltaTime;
         _startPos = transform.position;
+        
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            StartCoroutine(UpdatePositionRoutine());
+        }
     }
 
-    private void Update()
+    public override void Reset()
     {
-        if (_photonView.Owner != NetworkManager.Instance.LocalPlayer) return;
+        base.Reset();
+        StopAllCoroutines();
+    }
 
-        if(Vector2.Distance(_startPos, transform.position) > _distance * 0.5f)
+    private IEnumerator UpdatePositionRoutine()
+    {
+        while (true)
         {
-            _velocity *= -1f;
+            if (Vector2.Distance(_startPos, transform.position) > _distance * 0.5f)
+            {
+                _velocity *= -1f;
+            }
+
+            var nextPos = Vector2.zero;
+            
+            if (_moveAxis == MoveAxis.X)
+            {
+                nextPos = transform.position + new Vector3(_velocity, 0);
+            }
+            else
+            {
+                nextPos = transform.position + new Vector3(0, _velocity);
+            }
+            
+            StageManager.Instance.SetPosition(Index, nextPos);
+
+            yield return null;
         }
-        if (_moveAxis == MoveAxis.X)
-            transform.position += new Vector3(_velocity, 0);
-        else transform.position += new Vector3(0, _velocity);
     }
 }

@@ -67,7 +67,7 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     {
         var score = (int)targetPlayer.CustomProperties["Score"];
         targetPlayer.CustomProperties["Score"] = ++score;
-        NetworkManager.Instance.PhotonView.RPC("UpdateScoreboard", RpcTarget.All, targetPlayer);
+        _scoreboard.UpdateScoreboard(targetPlayer);
 
         if (score >= 4)
         {
@@ -75,12 +75,6 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         }
     }
     
-    [PunRPC]
-    private void UpdateScoreboard(Player targetPlayer)
-    {
-        _scoreboard.UpdateScoreboard(targetPlayer);
-    }
-
     private void RPCCallRemoveScoreboard(Player targetPlayer)
     {
         if (_scoreboard is null)

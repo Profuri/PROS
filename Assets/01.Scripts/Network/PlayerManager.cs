@@ -105,32 +105,11 @@ namespace MonoPlayer
 
         public void RoundStart()
         {
-            if (!NetworkManager.Instance.IsMasterClient)
-                return;
-            
-            NetworkManager.Instance.PhotonView.RPC("RoundStartRPC", RpcTarget.All);
+            RevivePlayer(NetworkManager.Instance.LocalPlayer);
         }
 
 
         public void RoundEnd()
-        {
-            if (!NetworkManager.Instance.IsMasterClient)
-                return;
-            
-            NetworkManager.Instance.PhotonView.RPC("RoundEndRPC", RpcTarget.All);
-        }
-        
-
-        [PunRPC]
-        private void RoundStartRPC()
-        {
-            var randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            //CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
-            RevivePlayer(NetworkManager.Instance.LocalPlayer);
-        }
-
-        [PunRPC]
-        private void RoundEndRPC()
         {
             ResetPlayer();
         }
@@ -187,15 +166,11 @@ namespace MonoPlayer
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
 
-            if(NetworkManager.Instance.IsMasterClient)
-            {
-                OnPlayerDead?.Invoke(player);
-            }
-            var playerBrain = BrainDictionary[player];
-
-
             LoadedPlayerList.Remove(player);
+            OnPlayerDead?.Invoke(player);
 
+            var playerBrain = BrainDictionary[player];
+            
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;

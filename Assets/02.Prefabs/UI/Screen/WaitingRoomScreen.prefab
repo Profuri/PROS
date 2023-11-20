@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
   _playerCardParent: {fileID: 4788751028173303605}
+  _readyClip: {fileID: 8300000, guid: 2fab95af4183c07498f9c419d967fcd1, type: 3}
 --- !u!1 &6150747047056709299
 GameObject:
   m_ObjectHideFlags: 0

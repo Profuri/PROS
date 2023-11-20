@@ -28,7 +28,7 @@ public abstract class BaseItem : PoolableMono, IItem
         _isSpawnEnd = false;
         _currentHitCnt = 0;
 
-        transform.Find("Visual").GetComponent<SpriteRenderer>().sprite = _itemSO.Sprite;
+        //transform.Find("Visual").GetComponent<SpriteRenderer>().sprite = _itemSO.Sprite;
         SpawnEvent?.Invoke();
     }
 

@@ -46,18 +46,20 @@ public class RangeUpItem : BaseItem
         playerCol = Physics2D.OverlapCircleAll(transform.position, 100f, LayerMask.GetMask("DAMAGEABLE"));
     }
 
-    private void Start()
-    {
-        GenerateSetting(Vector2.left, new Vector2(Random.Range(-5f, 5f),Random.Range(-5f,5f)), 2f);
-    }
+    #region DebugÄÚµå
+    //private void Start()
+    //{
+    //    GenerateSetting(Vector2.left, new Vector2(Random.Range(-5f, 5f),Random.Range(-5f,5f)), 2f);
+    //}
 
-    private void Update()
-    {
+    //private void Update()
+    //{
 
-        RunAwayMove();
-        transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
+    //    RunAwayMove();
+    //    transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
 
-    }
+    //}
+    #endregion
 
     public override void UpdateItem()
     {

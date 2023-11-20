@@ -15,7 +15,7 @@ public class ScaleUpItem : BaseItem
 
     public override void OnTakeItem(Player takenPlayer)
     {
-        PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<ItemAbillity>().UseSkill(EItemType.SCALEUP, _skillTime);
+        //PlayerManager.Instance.BrainDictionary[takenPlayer].GetComponent<ItemAbility>().UseSkill(EItemType.SCALEUP, _skillTime);
     }
 
     public override void UpdateItem()

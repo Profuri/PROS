@@ -35,6 +35,7 @@ public class PlayerBrain : MonoBehaviour
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerOTC PlayerOTC { get; private set; }
     public PlayerDefend PlayerDefend { get; private set; }
+    public PlayerBuff PlayerBuff { get; private set; }
     public PlayerActionData ActionData { get; private set; }
     public PlayerColor PlayerColor { get; private set; }
     public AnimationController AnimationController { get; private set; }
@@ -64,6 +65,7 @@ public class PlayerBrain : MonoBehaviour
         PlayerOTC = GetHandlerComponent<PlayerOTC>();
         AnimationController = GetComponent<AnimationController>();
         PlayerDefend = GetHandlerComponent<PlayerDefend>();
+        //PlayerBuff = GetHandlerComponent<PlayerBuff>();
         PlayerMovement = GetHandlerComponent<PlayerMovement>();
         PlayerColor = GetHandlerComponent<PlayerColor>();
 

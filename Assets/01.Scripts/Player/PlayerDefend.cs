@@ -1,6 +1,5 @@
 using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDefend : PlayerHandler
@@ -22,6 +21,8 @@ public class PlayerDefend : PlayerHandler
         _prevTime = Time.time;
         _brain.InputSO.OnDefendKeyPress += DefendRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDefendKeyPress -= DefendRPC;
+
+        //_brain.PlayerBuff.Invincible += Invincible;
         StopAllCoroutines();
     }
     
@@ -45,6 +46,20 @@ public class PlayerDefend : PlayerHandler
         _isDefend = true;
         _prevTime = Time.time;
         _defendCoroutine = StartCoroutine(DefendCoroutine());
+    }
+
+    private void Invincible(bool value, float time)
+    {
+        if (_brain.IsMine)
+            StartCoroutine(InvincibleTime(value, time));
+    }
+
+    private IEnumerator InvincibleTime(bool value, float time)
+    {
+        _brain.PlayerDefend._isDefend = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.INVINCIBLE))
+            _brain.PlayerBuff.RevertBuff(EBuffType.INVINCIBLE);
     }
 
     IEnumerator DefendCoroutine()

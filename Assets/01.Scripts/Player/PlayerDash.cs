@@ -186,10 +186,18 @@ public class PlayerDash : PlayerHandler
             _brain.PlayerBuff.RevertBuff(EBuffType.RANGEUP);
     }
 
-    private void DashingBuff(bool value)
+    private void DashingBuff(bool value, float time)
     {
         if (_brain.IsMine)
-            _brain.PlayerBuff.IsDashing = value;
+            StartCoroutine(DashingTime(value, time));
+    }
+
+    private IEnumerator DashingTime(bool value, float time)
+    {
+        _brain.PlayerBuff.IsDashing = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DASHING))
+            _brain.PlayerBuff.RevertBuff(EBuffType.DASHING);
     }
 
     private void DoubleDashBuff(bool value, float time)

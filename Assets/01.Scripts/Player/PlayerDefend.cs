@@ -48,10 +48,18 @@ public class PlayerDefend : PlayerHandler
         _defendCoroutine = StartCoroutine(DefendCoroutine());
     }
 
-    private void Invincible(bool value)
+    private void Invincible(bool value, float time)
     {
         if (_brain.IsMine)
-            _brain.PlayerDefend._isDefend = value;
+            StartCoroutine(InvincibleTime(value, time));
+    }
+
+    private IEnumerator InvincibleTime(bool value, float time)
+    {
+        _brain.PlayerDefend._isDefend = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.INVINCIBLE))
+            _brain.PlayerBuff.RevertBuff(EBuffType.INVINCIBLE);
     }
 
     IEnumerator DefendCoroutine()

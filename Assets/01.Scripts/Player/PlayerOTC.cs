@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using UnityEngine.Events;
+using System.Collections;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
@@ -113,10 +114,18 @@ public class PlayerOTC : PlayerHandler, IDamageable
         return (curPos - prevPos).normalized;
     }
 
-    private void Heavy(float value)
+    private void Heavy(float value, float time)
     {
         if (_brain.IsMine)
-            _otcPower = value;
+            StartCoroutine(HeavyTime(value, time));
+    }
+
+    private IEnumerator HeavyTime(float value, float time)
+    {
+        _otcPower = value;
+        yield return new WaitForSeconds(time);
+        if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.HEAVY))
+            _brain.PlayerBuff.RevertBuff(EBuffType.HEAVY);
     }
 
     public override void BrainUpdate(){}

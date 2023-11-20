@@ -10,10 +10,10 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
     private EBuffType _currentBuff = EBuffType.NONE;
     public EBuffType CurrentBuff => _currentBuff;
 
-    public event Action<bool> Invincible;
-    public event Action<bool> Dashing;
+    public event Action<bool, float> Invincible;
+    public event Action<bool, float> Dashing;
     public event Action<float, float> RangeUp;
-    public event Action<float> Heavy;
+    public event Action<float, float> Heavy;
     public event Action<bool, float> DoubleDash;
 
     [HideInInspector]
@@ -37,16 +37,16 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Debug.LogError("No Buff Added");
                 break;
             case EBuffType.INVINCIBLE:
-                Invincible?.Invoke(true);
+                Invincible?.Invoke(true, 3f);
                 break;
             case EBuffType.DASHING:
-                Dashing?.Invoke(true);
+                Dashing?.Invoke(true, 3f);
                 break;
             case EBuffType.RANGEUP:
                 RangeUp?.Invoke(2, 5f);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke(50);
+                Heavy?.Invoke(50, 3f);
                 break;
             case EBuffType.DOUBLEDASH:
                 DoubleDash?.Invoke(true, 5f);
@@ -64,19 +64,19 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Debug.LogError("Buff Not Determined");
                 break;
             case EBuffType.INVINCIBLE:
-                Invincible?.Invoke(false);
+                Invincible?.Invoke(false, 1f);
                 break;
             case EBuffType.DASHING:
-                Dashing?.Invoke(false);
+                Dashing?.Invoke(false, 1f);
                 break;
             case EBuffType.RANGEUP:
-                RangeUp?.Invoke(1.5f, 5f);
+                RangeUp?.Invoke(1.5f, 1f);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke(500);
+                Heavy?.Invoke(500, 1f);
                 break;
             case EBuffType.DOUBLEDASH:
-                DoubleDash?.Invoke(false, 5f);
+                DoubleDash?.Invoke(false, 1f);
                 break;
         }
     }

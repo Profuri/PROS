@@ -83,7 +83,7 @@ public class PlayerDash : PlayerHandler
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
             
-            float easingValue = EaseOutCubic(percent);
+            float easingValue = EaseInBack(percent);
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
@@ -95,7 +95,7 @@ public class PlayerDash : PlayerHandler
             
             if (CheckDashCollision(mouseDir, radius))
             {
-                transform.rotation = Quaternion.identity;
+                //transform.rotation = Quaternion.identity;
                 yield break;
             }
             
@@ -103,7 +103,7 @@ public class PlayerDash : PlayerHandler
         }
         
         _brain.PlayerMovement.StopImmediately(0.0f);
-        transform.rotation = Quaternion.identity;
+        //transform.rotation = Quaternion.identity;
         CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;
     }

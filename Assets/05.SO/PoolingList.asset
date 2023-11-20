@@ -56,3 +56,6 @@ MonoBehaviour:
   - prefab: {fileID: 8724323151021369271, guid: 0c22b230040ef4e52be894cb192db77b,
       type: 3}
     count: 10
+  - prefab: {fileID: 6859102672215585656, guid: caeb7ecc4c742c440a761f1418721bbd,
+      type: 3}
+    count: 10

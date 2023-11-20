@@ -22,7 +22,7 @@ public class PlayerDefend : PlayerHandler
         _brain.InputSO.OnDefendKeyPress += DefendRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDefendKeyPress -= DefendRPC;
 
-        _brain.PlayerBuff.Invincible += Invincible;
+        //_brain.PlayerBuff.Invincible += Invincible;
         StopAllCoroutines();
     }
     

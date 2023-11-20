@@ -174,11 +174,11 @@ namespace MonoPlayer
             //StopAllCoroutines();
             var playerBrain = BrainDictionary[player];
 
+            LoadedPlayerList.Remove(player);
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;
 
-                LoadedPlayerList.Remove(player);
                 //BrainDictionary.Remove(player);
                 //ColorDictionary.Remove(player);
                 

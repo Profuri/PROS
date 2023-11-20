@@ -625,6 +625,7 @@ Transform:
   - {fileID: 2235442059599410929}
   - {fileID: 3745422637507405164}
   - {fileID: 3393111673726234489}
+  - {fileID: 8727270844857234511}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2383871243906609423
@@ -920,6 +921,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smokeParticle: {fileID: 2831619488367386624}
+  _OnPlayerOTCEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2420778057564567578}
+        m_TargetAssemblyTypeName: ShakeFeedback, Assembly-CSharp
+        m_MethodName: CreateFeedback
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _otcPower: 100
   _bouncePer: 0.5
 --- !u!114 &-5486951534985572951
@@ -1439,6 +1455,69 @@ MonoBehaviour:
     m_Extent: {x: 0.21000016, y: 0.3000002, z: 0}
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
+--- !u!1 &7284384678558030346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8727270844857234511}
+  - component: {fileID: 2124921956415377170}
+  - component: {fileID: 2420778057564567578}
+  m_Layer: 7
+  m_Name: ShakeFeedback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8727270844857234511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7284384678558030346}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 834011163841520039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2124921956415377170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7284384678558030346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23cd8e3970e3cad4f980b223a7d44007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2420778057564567578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7284384678558030346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f36d0a28b0b9e340ac0f00d5ad8fbc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _duration: 0.2
+  _strength: 1
+  _randomness: 90
+  _vibrato: 10
+  _snapping: 0
+  _fadeOut: 0
 --- !u!1 &7672240333318753833
 GameObject:
   m_ObjectHideFlags: 0

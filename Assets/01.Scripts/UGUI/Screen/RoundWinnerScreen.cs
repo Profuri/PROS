@@ -42,6 +42,11 @@ public class RoundWinnerScreen : UGUIComponent
             
             card.SetColor(color);
             card.SetNickName(player.NickName);
+
+            if (card.Ready)
+            {
+                card.ReadyToggle();
+            }
             
             _playerCardDiction.Add(player, card);
         }
@@ -68,6 +73,8 @@ public class RoundWinnerScreen : UGUIComponent
         if (percent >= 1f)
         {
             UIManager.Instance.RemoveTopUGUI();
+            StageManager.Instance.RemoveCurMap();
+            StageManager.Instance.GenerateNewMap();
         }
 
         _upperWinnerNameTMP.rectTransform.anchoredPosition =
@@ -78,7 +85,6 @@ public class RoundWinnerScreen : UGUIComponent
 
     public void SetWinner(Player player)
     {
-        _upperWinnerNameTMP.text = player.NickName;
         _downWinnerNameTMP.text = player.NickName;
         _playerCardDiction[player].Winning();
     }

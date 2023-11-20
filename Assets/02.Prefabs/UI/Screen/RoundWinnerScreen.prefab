@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847e3bdde9e34556a8ca56809f962aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeTime: 1
+  _activeTime: 2
   _leftLimit: -500
   _rightLimit: 500
 --- !u!1 &5375864887796563330
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NICKNAME
+  m_text: WINNER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e52e457aa21ec49f5aab1556a8fbd2f8, type: 2}
   m_sharedMaterial: {fileID: -1076632725156270103, guid: e52e457aa21ec49f5aab1556a8fbd2f8,

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 [System.Serializable]
 public struct MapBoundStruct
@@ -45,6 +46,30 @@ public class StageManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         _curStage?.StageUpdate();
+    }
+
+    public void RoundWinner(Player winner)
+    {
+        NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPC), RpcTarget.All, winner);
+    }
+    
+    [PunRPC]
+    public void RoundWinnerRPC(Player winner)
+    {
+        var winnerScreen = UIManager.Instance.GenerateUGUI("RoundWinnerScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as RoundWinnerScreen;
+        winnerScreen.SetWinner(winner);
+    }
+
+    public void StageWinner(Player winner)
+    {
+        NetworkManager.Instance.PhotonView.RPC(nameof(StageWinnerRPC), RpcTarget.All, winner);
+    }
+
+    [PunRPC]
+    public void StageWinnerRPC(Player winner)
+    {
+        var winnerScreen = UIManager.Instance.GenerateUGUI("StageWinnerScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as StageWinnerScreen;
+        winnerScreen.SetWinner(winner);
     }
 
     public void GenerateNewMap()

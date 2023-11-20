@@ -25,6 +25,7 @@ public class StageWinnerScreen : UGUIComponent
         if (percent >= 1f)
         {
             UIManager.Instance.RemoveTopUGUI();
+            NetworkManager.Instance.LoadScene(ESceneName.Menu);
         }
     }
     

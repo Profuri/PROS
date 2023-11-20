@@ -25,7 +25,11 @@ public class PlayerCard : UGUIComponent
         _playerNickNameTMP = transform.Find("NickNameText").GetComponent<TextMeshProUGUI>();
         _readyTMP = transform.Find("ReadyText").GetComponent<TextMeshProUGUI>();
 
-        _ready = false;
+        if (_ready)
+        {
+            ReadyToggle();    
+        }
+        
         _backGroundImage.color = _unReadyColor;
     }
 

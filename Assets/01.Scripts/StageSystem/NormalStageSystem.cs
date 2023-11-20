@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class NormalStageSystem : BaseStageSystem
 {
-    public override bool RoundCheck(out Player roundWinner)
+    public override void RoundCheck(Player player)
     {
-        roundWinner = null;
         if (PlayerManager.Instance.LoadedPlayerList.Count == 1)
         {
             var winner = PlayerManager.Instance.LoadedPlayerList[0]; ;

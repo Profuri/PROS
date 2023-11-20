@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.1341472, b: 0.121078566, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -237,6 +237,7 @@ GameObject:
   - component: {fileID: 148809881}
   - component: {fileID: 148809883}
   - component: {fileID: 148809884}
+  - component: {fileID: 148809885}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -498,6 +499,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02fa878981ba18443b8e2668faf2df5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &148809885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148809866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272893e9965446c41b6a3a47ad213662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _masterMixer: {fileID: 24100000, guid: 704e87021229f514d93ff317ddc1be45, type: 2}
+  _bgmGroup: {fileID: 2329295299246352983, guid: 704e87021229f514d93ff317ddc1be45,
+    type: 2}
+  _sfxGroup: {fileID: 4481392112053102831, guid: 704e87021229f514d93ff317ddc1be45,
+    type: 2}
+  _lobbyBgmClip: {fileID: 8300000, guid: 5560dab8d4e025f4fae616c8db7cac5f, type: 3}
+  _gameBgmClip: {fileID: 8300000, guid: 494eeb358657c024f918e18835ca1aaf, type: 3}
+  uiClickSoundClip: {fileID: 8300000, guid: 6fd88ded1ad8246458e1721d0280d79c, type: 3}
+  soundFadeOnTime: 1
 --- !u!1 &195089640
 GameObject:
   m_ObjectHideFlags: 0

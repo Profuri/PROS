@@ -661,3 +661,5 @@ MonoBehaviour:
   _unReadyColor: {r: 0, g: 0, b: 0, a: 1}
   _readyColor: {r: 0.101960786, g: 0.3019608, b: 0.101960786, a: 1}
   _winningColor: {r: 0.85882354, g: 0.81960785, b: 0, a: 1}
+  _readyClip: {fileID: 8300000, guid: dd342998a4b88d94c88222df199c2eb1, type: 3}
+  _cancelClip: {fileID: 8300000, guid: 2fab95af4183c07498f9c419d967fcd1, type: 3}

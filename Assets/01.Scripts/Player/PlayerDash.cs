@@ -39,7 +39,7 @@ public class PlayerDash : PlayerHandler
     {
         if (CanDash)
         {
-            _brain.AnimationController.PlayDashAnim();
+            //_brain.AnimationController.PlayDashAnim();
             if (_dashCoroutine != null)
             {
                 StopCoroutine(_dashCoroutine);

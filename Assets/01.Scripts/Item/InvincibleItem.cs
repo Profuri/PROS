@@ -45,8 +45,9 @@ public class InvincibleItem : BaseItem
         _isMove = false;
     }
 
+    #region DebugÄÚµå
     //private void Update()
-    //{
+    //{M
 
     //    QuidditchMove();
 
@@ -54,6 +55,7 @@ public class InvincibleItem : BaseItem
     //        transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
 
     //}
+    #endregion
 
     public override void UpdateItem()
     {

@@ -144,7 +144,6 @@ namespace MonoPlayer
                 Debug.Log("Is not waiting other player");
                 return;
             }
-
             waitingRoom.ReadyPlayer(player);
         }
 
@@ -183,7 +182,10 @@ namespace MonoPlayer
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
 
-            OnPlayerDead?.Invoke(player);
+            if(NetworkManager.Instance.IsMasterClient)
+            {
+                OnPlayerDead?.Invoke(player);
+            }
             var playerBrain = BrainDictionary[player];
 
 

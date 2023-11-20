@@ -78,12 +78,14 @@ public class PlayerBrain : MonoBehaviour
         OnUpdateEvent += OnPlayerDead;
         CUR_STATE = EPLAYER_STATE.SETUP;
     }
+
     
     private void OnPlayerDead()
     {
         if(IsDead) return;
         if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
         {
+            //RemovePlayer Called many;
             PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
             IsDead = true;
         }
@@ -92,7 +94,7 @@ public class PlayerBrain : MonoBehaviour
 
     #region UnityMessage
     public delegate void UnityMessageListener();
-    
+        
     public event UnityMessageListener OnEnableEvent;
     public event UnityMessageListener OnDisableEvent;
     public event UnityMessageListener OnUpdateEvent;
@@ -109,8 +111,9 @@ public class PlayerBrain : MonoBehaviour
         if (IsMine) { OnUpdateEvent?.Invoke(); } 
     }
     private void OnDisable() 
-    { 
-        if(!IsInit) return; 
+    {
+        OnUpdateEvent -= OnPlayerDead;
+        if (!IsInit) return; 
         if(IsMine) { OnDisableEvent?.Invoke();} 
     }
     private void FixedUpdate() 

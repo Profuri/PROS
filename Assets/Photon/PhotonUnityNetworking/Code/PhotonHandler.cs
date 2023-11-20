@@ -239,7 +239,7 @@ namespace Photon.Pun
                         ex = e;
                     }
                 }
-
+                
                 Profiler.EndSample();
             }
 

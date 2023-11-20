@@ -35,8 +35,6 @@ public class PlayerMovement : PlayerHandler
 
     public bool CanMoveAnim { get; private set; } = false;
 
-    
-    
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
@@ -48,6 +46,7 @@ public class PlayerMovement : PlayerHandler
         _jumpingTime = 0f;
         StopAllCoroutines();
     }
+
     public void ApplyWind(float windPower,int dir) => _brain.PhotonView.RPC(nameof(ApplyWindRPC),RpcTarget.All,windPower,(int)dir);
     
     [PunRPC]

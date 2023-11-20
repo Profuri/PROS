@@ -12,6 +12,8 @@ public class StageWinnerScreen : UGUIComponent
     {
         base.GenerateUI(parent, options);
         
+        _winnerCard.GenerateUI(_winnerCard.transform.parent, EGenerateOption.NONE);
+        
         _currentTime = 0f;
     }
 
@@ -33,7 +35,9 @@ public class StageWinnerScreen : UGUIComponent
         var g = (float)player.CustomProperties["G"];
         var b = (float)player.CustomProperties["B"];
         var color = new Color(r, g, b, 1);
-        
+
+        Debug.Log(_winnerCard);
+        Debug.Log(color);
         _winnerCard.SetColor(color);
         _winnerCard.SetNickName(player.NickName);
         _winnerCard.Winning();

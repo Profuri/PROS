@@ -63,16 +63,20 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         }
     }
     
-    public void AddScore(Player targetPlayer)
+    public bool AddScore(Player targetPlayer)
     {
         var score = (int)targetPlayer.CustomProperties["Score"];
         targetPlayer.CustomProperties["Score"] = ++score;
         _scoreboard.UpdateScoreboard(targetPlayer);
 
-        if (score >= 4)
+        if (score < 4)
         {
-            StageManager.Instance.StageWinner(targetPlayer);
+            return false;
         }
+        
+        StageManager.Instance.StageWinner(targetPlayer);
+        return true;
+
     }
     
     private void RPCCallRemoveScoreboard(Player targetPlayer)

@@ -5,13 +5,7 @@ using System.Net.NetworkInformation;
 using MonoPlayer;
 using UnityEngine;
 using Photon.Pun;
-enum Dir
-{
-    LEFT = -1,
-    NONE = 0,
-    RIGHT = 1,
-    END,
-}
+
 public class WindMapEvent : BaseMapEvent
 {
     [SerializeField] private float _windPower = 20f;
@@ -26,7 +20,7 @@ public class WindMapEvent : BaseMapEvent
     [SerializeField] private Bounds _colBounds;
     
 
-    private Dir _curDir;
+    private int _curDir;
     private Coroutine _coroutine;
     public override void StartEvent()
     {
@@ -51,8 +45,11 @@ public class WindMapEvent : BaseMapEvent
         float timer = 0f;
         float targetTime = Random.Range(_minWindTime, _maxWindTime);
 
-        _curDir = (Dir)Random.Range((int)Dir.LEFT, (int)Dir.END);
-        //_curDir = Dir.LEFT;
+        _curDir = Random.Range(0, 2) == 0 ? -1 : 1;
+
+        var pos = _curDir == -1 ? new Vector2(30, 0) : new Vector2(-30, 0); 
+        
+        ParticleManager.Instance.PlayParticleAll("WindParticle", pos, Quaternion.identity, targetTime);
         
         while (timer <= targetTime)
         {
@@ -61,9 +58,7 @@ public class WindMapEvent : BaseMapEvent
             yield return null;
         }
     }
-    
-    
-    
+
     //It Works master client only
     [PunRPC]
     private void ApplyWindRPC(int dir)

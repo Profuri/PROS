@@ -1,5 +1,9 @@
 public enum EItemType
 {
-    SCALEUP,
+    INVINCIBLE_ITEM,
+    DASHING_ITEM,
+    RANGEUP_ITEM,
+    HEAVY_ITEM,
+    DOUBLEDASH_ITEM,
     COUNT,
 }

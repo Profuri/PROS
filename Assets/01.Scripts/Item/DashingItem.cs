@@ -19,13 +19,6 @@ public class DashingItem : BaseItem
         base.UpdateItem();
     }
 
-    //ContactPoint2D[] contacts = new ContactPoint2D[2];
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    Debug.Log("GetContacts");
-    //    collision.GetContacts(contacts);
-    //    _moveDir = Vector2.Reflect(_moveDir, -1 * contacts[0].normal);
-    //}
     private void OnCollisionEnter2D(Collision2D collision)
     {
         _moveDir = Vector2.Reflect(_moveDir, collision.contacts[0].normal);

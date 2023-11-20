@@ -18,7 +18,7 @@ public class ParticleManager : MonoBehaviour
 
     public void PlayParticleAll(string particleName, Vector3 position = default, Quaternion rotation = default, float duration = -1f)
     {
-        NetworkManager.Instance.PhotonView.RPC("PlayParticleRPC", RpcTarget.All, particleName, position, rotation);
+        NetworkManager.Instance.PhotonView.RPC("PlayParticleRPC", RpcTarget.All, particleName, position, rotation, duration);
     }
     
     [PunRPC]

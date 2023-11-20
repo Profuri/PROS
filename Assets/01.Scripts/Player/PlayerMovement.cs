@@ -11,6 +11,9 @@ public class PlayerMovement : PlayerHandler
     private Vector2 _prevInputVec = Vector2.zero;
     public Vector2 PrevInputVec => _prevInputVec;
     
+    [SerializeField] private AudioClip _landClip;
+    [SerializeField] private AudioClip _jumpClip;
+
     private Coroutine _stopCoroutine;
     private float _originGravityScale;
     
@@ -29,6 +32,7 @@ public class PlayerMovement : PlayerHandler
     
     public bool CanJump { get; private set; }
     private float _jumpingTime = 0f;
+
     public bool CanMoveAnim { get; private set; } = false;
 
     
@@ -92,6 +96,7 @@ public class PlayerMovement : PlayerHandler
     public void PlayJumpAnimRPC(Vector2 _input)
     {
         _brain?.AnimationController.PlayJumpAnim(_input);
+        AudioManager.Instance.Play(_jumpClip);
     }
 
     [PunRPC]
@@ -105,6 +110,7 @@ public class PlayerMovement : PlayerHandler
     {
         _brain?.AnimationController.PlayLandAnim(_input);
         _prevInputVec = Vector2.zero;
+        AudioManager.Instance.Play(_landClip);
     }    
 
     public void JumpAction() //Play Action in JumpAnim Event

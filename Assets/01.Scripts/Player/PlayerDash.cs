@@ -87,10 +87,9 @@ public class PlayerDash : PlayerHandler
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
             
-            var pos = Vector3.Lerp(_brain.AgentTrm.position,destination,percent);
-            transform.position = pos;
+            transform.position = Vector3.Lerp(transform.position,destination,percent);
 
-            _brain.PlayerMovement.SetRotationByDirection(mouseDir);
+            //_brain.PlayerMovement.SetRotationByDirection(mouseDir);
             
             if (CheckDashCollision(mouseDir, radius))
             {

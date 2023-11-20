@@ -44,7 +44,6 @@ public class PlayerDash : PlayerHandler
     {
         if (CanDash)
         {
-            _brain.AnimationController.PlayDashAnim();
             if (_dashCoroutine != null)
             {
                 StopCoroutine(_dashCoroutine);
@@ -80,6 +79,9 @@ public class PlayerDash : PlayerHandler
             timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
         }
 
+        _brain.AnimationController.PlayDashAnim();
+
+
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         
         while (timer < timeToArrive - 0.1f)
@@ -94,12 +96,14 @@ public class PlayerDash : PlayerHandler
             if (CheckDashCollision(mouseDir, radius))
             {
                 //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
+                _brain.AnimationController.PlayLandAnim(_brain.PlayerMovement.InputVec);
                 transform.rotation = Quaternion.identity;
                 yield break;
             }
 
             yield return null;
         }
+        _brain.AnimationController.PlayLandAnim(_brain.PlayerMovement.InputVec);
         
         _brain.PlayerMovement.StopImmediately(0.0f);
         //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);

@@ -73,7 +73,16 @@ public class StageManager : MonoBehaviourPunCallbacks
 
     public void GenerateNewMap()
     {
+        if (!NetworkManager.Instance.IsMasterClient)
+            return;
+        
         var type = Random.Range(0, StageTypeCnt) + 1;
+        NetworkManager.Instance.PhotonView.RPC(nameof(GenerateNewMapRPC), RpcTarget.All, type);
+    }
+    
+    [PunRPC]
+    public void GenerateNewMapRPC(int type)
+    {
         _curStage.GenerateNewStage(type);
     }
     

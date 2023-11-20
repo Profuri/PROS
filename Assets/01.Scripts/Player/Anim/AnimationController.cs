@@ -236,6 +236,7 @@ public class AnimationController : MonoBehaviour
         _animator.Play(_dashHash);
     }
     
+    
     public void PlayLandAnim(Vector2 _input)
     {
         EKeyInputState inputstate;

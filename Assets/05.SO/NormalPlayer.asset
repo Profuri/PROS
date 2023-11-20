@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 10
   JumpPower: 15
-  DashPower: 3
+  DashPower: 6

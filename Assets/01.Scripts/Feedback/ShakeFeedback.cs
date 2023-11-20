@@ -16,11 +16,11 @@ public class ShakeFeedback : Feedback
 
     public override void CreateFeedback()
     {
-        Define.VCam.transform.DOShakePosition(_duration, _strength, _vibrato,_randomness,_snapping,_fadeOut);
+        Define.MainCam.transform.DOShakePosition(_duration, _strength, _vibrato,_randomness,_snapping,_fadeOut);
     }
 
     public override void FinishFeedback()
     {
-        Define.VCam.transform.DOComplete();
+        Define.MainCam.transform.DOComplete();
     }
 }

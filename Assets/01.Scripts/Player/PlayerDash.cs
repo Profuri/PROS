@@ -44,7 +44,7 @@ public class PlayerDash : PlayerHandler
     {
         if (CanDash)
         {
-            //_brain.AnimationController.PlayDashAnim();
+            _brain.AnimationController.PlayDashAnim();
             if (_dashCoroutine != null)
             {
                 StopCoroutine(_dashCoroutine);
@@ -56,7 +56,7 @@ public class PlayerDash : PlayerHandler
         }
     }
 
-        private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
+    private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
         ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
 
@@ -82,7 +82,7 @@ public class PlayerDash : PlayerHandler
 
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         
-        while (timer < timeToArrive)
+        while (timer < timeToArrive - 0.1f)
         {
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
@@ -94,6 +94,7 @@ public class PlayerDash : PlayerHandler
             
             if (CheckDashCollision(mouseDir, radius))
             {
+                //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
                 transform.rotation = Quaternion.identity;
                 yield break;
             }
@@ -101,7 +102,8 @@ public class PlayerDash : PlayerHandler
             yield return null;
         }
         
-        //_brain.PlayerMovement.StopImmediately(0.0f);
+        _brain.PlayerMovement.StopImmediately(0.0f);
+        //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
         transform.rotation = Quaternion.identity;
         CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;

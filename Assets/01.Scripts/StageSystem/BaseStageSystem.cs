@@ -67,8 +67,14 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     {
         if (!_currentStageObject)
         {
-            Debug.LogError("Stage doesnt loaded");
-            return Vector3.zero;
+            GameObject obj = GameObject.Find($"Map{StageManager.Instance.MapIdx}(Clone)");
+            _currentStageObject = obj.GetComponent<StageObject>();
+            if(!_currentStageObject)
+            {
+                Debug.LogError("Stage doesnt loaded");
+                return Vector3.zero;
+            }
+            _currentStageObject.Setting();
         }
         
         if (_currentStageObject.SpawnPoints.Count <= 0)

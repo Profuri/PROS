@@ -13,7 +13,8 @@ public class PlayerColor : PlayerHandler
     {
         base.Init(brain);
         _rendererList = new List<SpriteRenderer>();
-        _spriteRenderParent.GetComponentsInChildren<SpriteRenderer>(_rendererList);
+        _spriteRenderParent.GetComponentsInChildren(_rendererList);
+
     }
     public override void BrainUpdate()
     {
@@ -27,6 +28,7 @@ public class PlayerColor : PlayerHandler
     
     public void SetSpriteColor(Color color)
     {
+        if(_brain.IsInit == false) return;
         _brain.PhotonView.RPC("SetSpriteColorRPC",RpcTarget.All,color.r,color.g,color.b,color.a);
     }
 
@@ -34,9 +36,11 @@ public class PlayerColor : PlayerHandler
     private void SetSpriteColorRPC(float r, float g, float b, float a)
     {
         CurrentColor = new Color(r, g, b, a);
+
         foreach (var spRenderer in _rendererList)
         {
-            spRenderer.material.color = CurrentColor;
+            if(spRenderer != null)
+                spRenderer.material.color = CurrentColor;
         }
     }
 }

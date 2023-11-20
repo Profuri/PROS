@@ -26,7 +26,6 @@ namespace MonoPlayer
         
         public List<Player> LoadedPlayerList { get; private set; }
         
-        public Dictionary<Player,Color> ColorDictionary { get; private set; }
         public Dictionary<Player,PlayerBrain> BrainDictionary { get; private set; }
 
         public bool IsAllOfPlayerLoad { get; private set; } = false;
@@ -37,11 +36,12 @@ namespace MonoPlayer
 
         [SerializeField] private GameObject _playerObj;
 
+
+        public event Action<Player> OnPlayerDead;
+
             #region Init
         public void Init()
         {
-            ColorDictionary = new Dictionary<Player, Color>();
-            
             NetworkManager.Instance.OnPlayerLeftRoomEvent += OnLeftPlayer;
             //SceneManagement.Instance.OnGameSceneLoaded += RoundStart;
             //OnAllPlayerLoad += () => NetworkManager.Instance.PhotonView.RPC("LoadBrainDictionaryRPC",RpcTarget.All,NetworkManager.Instance.LocalPlayer);
@@ -66,21 +66,24 @@ namespace MonoPlayer
         {
             //Show sprite player will apppear
             Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            Color color = ColorDictionary[revivePlayer];
             
-            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, color.r, color.g, color.b, color.a);
+            var r = (float)revivePlayer.CustomProperties["R"];
+            var g = (float)revivePlayer.CustomProperties["G"];
+            var b = (float)revivePlayer.CustomProperties["B"];
+            
+            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, r, g, b);
             yield return _reviveWaitForSeconds;
             CreatePlayer(revivePlayer, randomPos);
         }
         
         [PunRPC]
-        private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b,float a)
+        private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b)
         {
             PlayerSprite playerSprite = PoolManager.Instance.Pop("PlayerSprite") as PlayerSprite;
          
             playerSprite.Init();
             playerSprite.transform.position = spawnPos;
-            playerSprite.SetColor(new Color(r,g,b,a));
+            playerSprite.SetColor(new Color(r,g,b));
             playerSprite.SetDestroy(_reviveTimer);            
         }
 
@@ -154,11 +157,20 @@ namespace MonoPlayer
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
+
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            Color randomColor = new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), 1f);
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, 
-                localPlayer,randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
+            
+            NetworkManager.Instance.PhotonView.RPC(nameof(LoadPlayerListRPC), RpcTarget.All, localPlayer, r, g, b, 1f);
+            NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC), RpcTarget.All, player);
+            
+            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
+            {
+                Debug.Log("OnAllPlayerLoad");
+            }
         }
 
         public void RemovePlayer(Player player) =>
@@ -170,19 +182,18 @@ namespace MonoPlayer
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
+
+            OnPlayerDead?.Invoke(player);
             var playerBrain = BrainDictionary[player];
+
+
+            LoadedPlayerList.Remove(player);
 
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;
 
-                LoadedPlayerList.Remove(player);
-                //BrainDictionary.Remove(player);
-                //ColorDictionary.Remove(player);
-                
-                //Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
-
                 if (StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
                 {
                     RevivePlayer(player);
@@ -196,30 +207,23 @@ namespace MonoPlayer
             if (!LoadedPlayerList.Contains(player))
             {
                 LoadedPlayerList.Add(player);
-
-                if (ColorDictionary.ContainsKey(player) == false)
-                {
-                    ColorDictionary.Add(player,new Color(r,g,b,a));
-                }
-            }
-            
-            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
-            {
-                Debug.Log("OnAllPlayerLoad");
-                OnAllPlayerLoad?.Invoke();
-                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
-                IsAllOfPlayerLoad = true;
             }
         }
 
         [PunRPC]
         private void LoadBrainDictionaryRPC(Player player)
         {
+            OnAllPlayerLoad?.Invoke();
+            
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
-            playerBrain.SetName(player.NickName);
 
-            Color color = ColorDictionary[player];
+            playerBrain.SetName(player.NickName);
+            
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
+            var color = new Color(r, g, b, 1);
             playerBrain.PlayerColor.SetSpriteColor(color);
 
             if(BrainDictionary.ContainsKey(player))
@@ -230,6 +234,8 @@ namespace MonoPlayer
             {
                 BrainDictionary.TryAdd(player,playerBrain);
             }
+            
+            IsAllOfPlayerLoad = true;
         }
         #endregion
     }

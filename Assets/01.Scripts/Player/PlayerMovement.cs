@@ -37,7 +37,7 @@ public class PlayerMovement : PlayerHandler
     {
         base.Init(brain);
 
-        Debug.Log(_brain.AnimationController);
+        Debug.Log(_brain?.AnimationController);
         _brain.InputSO.OnJumpKeyPress += SetCanJump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         _brain.OnOTC += () => enabled = false;
@@ -91,19 +91,19 @@ public class PlayerMovement : PlayerHandler
     [PunRPC]
     public void PlayJumpAnimRPC(Vector2 _input)
     {
-        _brain.AnimationController.PlayJumpAnim(_input);
+        _brain?.AnimationController.PlayJumpAnim(_input);
     }
 
     [PunRPC]
     public void PlayMoveAnimRPC(Vector2 _input)
     {
-        _brain.AnimationController.PlayMoveAnim(_input);
+        _brain?.AnimationController.PlayMoveAnim(_input);
     }
 
     [PunRPC]
     public void PlayLandAnimRPC(Vector2 _input)
     {
-        _brain.AnimationController.PlayLandAnim(_input);
+        _brain?.AnimationController.PlayLandAnim(_input);
         _prevInputVec = Vector2.zero;
     }    
 

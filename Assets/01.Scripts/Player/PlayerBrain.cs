@@ -8,20 +8,30 @@ using PlayerManager = MonoPlayer.PlayerManager;
 using Random = UnityEngine.Random;
 using System;
 
+public enum EPLAYER_STATE
+{
+    NONE = 0,
+    LOADING = 1,
+    SETUP = 2,
+    END = 3,
+}
 public class PlayerBrain : MonoBehaviour
 {
     private List<PlayerHandler> _handlers;
+
 
     [SerializeField] private Transform _agentTrm;
     [SerializeField] private Collider2D _collider;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private MovementSO _movementSO;
+    [SerializeField] private PhotonView _photonView;
+
+    private EPLAYER_STATE CUR_STATE {get; set;}
     
     public Action OnOTC;
-    
+
     #region Property
-    public PhotonView PhotonView { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerOTC PlayerOTC { get; private set; }
     public PlayerDefend PlayerDefend { get; private set; }
@@ -30,6 +40,7 @@ public class PlayerBrain : MonoBehaviour
     public AnimationController AnimationController { get; private set; }
     public float OriginGravityScale { get; private set; }
     public Vector3 MousePos { get; private set; }
+    public bool IsDead {get; private set;}
 
 
     public MovementSO MovementSO => _movementSO;
@@ -37,8 +48,10 @@ public class PlayerBrain : MonoBehaviour
     public Rigidbody2D Rigidbody => _rigidbody;
     public Collider2D Collider => _collider;
     public Transform AgentTrm => _agentTrm;
+    public PhotonView PhotonView => _photonView;
 
     public bool IsMine => PhotonView.IsMine;
+    public bool IsInit => CUR_STATE == EPLAYER_STATE.SETUP;
     #endregion
 
     private void Awake() => Init();
@@ -47,7 +60,6 @@ public class PlayerBrain : MonoBehaviour
         _handlers = new List<PlayerHandler>();
         GetComponentsInChildren(_handlers);
 
-        PhotonView = GetComponent<PhotonView>();
         ActionData = GetComponent<PlayerActionData>();
         PlayerOTC = GetHandlerComponent<PlayerOTC>();
         AnimationController = GetComponent<AnimationController>();
@@ -61,18 +73,22 @@ public class PlayerBrain : MonoBehaviour
 
         _inputSO.OnMouseAim += AimToWorldPoint;
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
-        OnUpdateEvent += () =>
-        {
-            if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
-            {
-                PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
-            }
-        };
+
+        IsDead = false;
+        OnUpdateEvent += OnPlayerDead;
+        CUR_STATE = EPLAYER_STATE.SETUP;
     }
-    public void OnPlayerDead()
+    
+    private void OnPlayerDead()
     {
-        PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+        if(IsDead) return;
+        if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
+        {
+            PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+            IsDead = true;
+        }
     }
+
 
     #region UnityMessage
     public delegate void UnityMessageListener();
@@ -82,10 +98,26 @@ public class PlayerBrain : MonoBehaviour
     public event UnityMessageListener OnUpdateEvent;
     public event UnityMessageListener OnFixedUpdateEvent;
 
-    private void OnEnable() { if (IsMine) { OnEnableEvent?.Invoke(); } }
-    private void Update() { if (IsMine) { OnUpdateEvent?.Invoke(); } }
-    private void OnDisable() { if(IsMine) { OnDisableEvent?.Invoke();} }
-    private void FixedUpdate() { if (IsMine) { OnFixedUpdateEvent?.Invoke(); } }
+    private void OnEnable() 
+    { 
+        if(!IsInit) return; 
+        if (IsMine) { OnEnableEvent?.Invoke(); } 
+    }
+    private void Update() 
+    {
+        if(!IsInit) return; 
+        if (IsMine) { OnUpdateEvent?.Invoke(); } 
+    }
+    private void OnDisable() 
+    { 
+        if(!IsInit) return; 
+        if(IsMine) { OnDisableEvent?.Invoke();} 
+    }
+    private void FixedUpdate() 
+    {
+        if(!IsInit) return; 
+        if (IsMine) { OnFixedUpdateEvent?.Invoke(); } 
+    }
     #endregion
     
     private T GetHandlerComponent<T>() where T : PlayerHandler

@@ -37,7 +37,7 @@ public class ScoreboardEntry
 
     public void UpdateEntry()
     {
-        var score = _player.GetScore();
+        var score = (int)_player.CustomProperties["Score"];
 
         for (var i = 0; i < 4; i++)
         {

@@ -1,5 +1,6 @@
 using MonoPlayer;
 using Photon.Realtime;
+using Debug = UnityEngine.Debug;
 
 public class NormalStageSystem : BaseStageSystem
 {
@@ -7,21 +8,22 @@ public class NormalStageSystem : BaseStageSystem
     {
         base.Init(mapIndex);
 
+        if (NetworkManager.Instance.IsMasterClient == false) return;
         PlayerManager.Instance.OnPlayerDead += (player) => 
         {
             var roundWinner = PlayerManager.Instance.LoadedPlayerList[0];
-                if (roundWinner == null)
-                {
-                    return;
-                }
-                
-                _runningStage = false;
-                ++_round;
-            
-                ScoreManager.Instance.AddScore(roundWinner);
-                StageManager.Instance.RoundWinner(roundWinner);
-        };
+            if (roundWinner == null)
+            {
+                return;
+            }
 
+            _runningStage = false;
+            ++_round;
+
+            ScoreManager.Instance.AddScore(roundWinner);
+            StageManager.Instance.RoundWinner(roundWinner);
+            //Debug.Break();
+        };
     }
     public override void StageUpdate()
     {

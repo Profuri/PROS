@@ -20,7 +20,13 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
     public bool IsDashing;
     [HideInInspector]
     public bool IsDoubleDashing;
-    
+
+    public override void Init(PlayerBrain brain)
+    {
+        base.Init(brain);
+        DisconnectEvent();
+    }
+
     public void AddBuff(EBuffType buff)
     {
         _currentBuff |= buff;
@@ -75,13 +81,18 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
         }
     }
 
+    private void DisconnectEvent()
+    {
+        if (Invincible != null) Invincible = null;
+        if (Dashing != null) Dashing = null;
+        if (RangeUp != null) RangeUp = null;
+        if (Heavy != null) Heavy = null;
+        if (DoubleDash != null) DoubleDash = null;
+    }
+
     private void OnDestroy()
     {
-        Invincible = null;
-        Dashing = null;
-        RangeUp = null;
-        Heavy = null;
-        DoubleDash = null;
+        DisconnectEvent();
     }
 
     public override void BrainUpdate(){}

@@ -70,7 +70,8 @@ MonoBehaviour:
   - SetVisibleRPC
   - ShowSpriteRPC
   - ThroughMapRPC
-  - SetTimeScaleRPC
+  - RoundWinnerRPC
+  - StageWinnerRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

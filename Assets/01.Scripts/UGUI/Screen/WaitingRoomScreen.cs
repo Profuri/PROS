@@ -118,9 +118,9 @@ public class WaitingRoomScreen : UGUIComponent
             return;
         }
 
-        var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-        var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-        var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+        var r = (float)player.CustomProperties["R"];
+        var g = (float)player.CustomProperties["G"];
+        var b = (float)player.CustomProperties["B"];
         var color = new Color(r, g, b, 1);
         
         playerCard.SetColor(color);

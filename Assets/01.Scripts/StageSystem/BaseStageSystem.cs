@@ -20,6 +20,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     protected Coroutine _generateCor;
 
+    private bool _runningStage;
+
     public virtual void Init(int mapIndex)
     {
         _mapEventList = new List<BaseMapEvent>();
@@ -28,20 +30,20 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
-        ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
         GenerateNewStage(mapIndex);
+
+        _runningStage = true;
     }
 
     public virtual void StageLeave()
     {
         ItemManager.Instance.StopGenerateItem();
-        ScoreManager.Instance.OnDecideWinnerEvent -= OnDecideWinner;
         RemoveCurStage();
     }
 
     public virtual void StageUpdate()
     {
-        if (!NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        if (!_runningStage || !NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
         {
             return;
         }
@@ -52,23 +54,13 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             {
                 return;
             }
-            
+
+            _runningStage = false;
             ++_round;
-            Scoring(roundWinner);
             
-            StageManager.Instance.RemoveCurMap();
-            StageManager.Instance.GenerateNewMap();
+            ScoreManager.Instance.AddScore(roundWinner);
+            StageManager.Instance.RoundWinner(roundWinner);
         }
-    }
-
-    public virtual void OnDecideWinner(Player winner)
-    {
-        Debug.Log(winner.NickName);
-    }
-
-    public virtual void Scoring(Player targetPlayer)
-    {
-        ScoreManager.Instance.AddScore(targetPlayer);
     }
 
     public Vector3 GetRandomSpawnPoint()
@@ -91,6 +83,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void GenerateNewStage(int index)
     {
         if (!NetworkManager.Instance.IsMasterClient) return;
+
         if (_currentStageObject)
         {
             return;
@@ -101,11 +94,13 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         PlayerManager.Instance.RoundStart();
 
-            if (_generateCor != null)
-            {
-                StopCoroutine(_generateCor);
-            }
-            _generateCor = StartCoroutine(GenerateMapEvent());
+        if (_generateCor != null)
+        {
+            StopCoroutine(_generateCor);
+        }
+
+        _runningStage = true;
+        _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()

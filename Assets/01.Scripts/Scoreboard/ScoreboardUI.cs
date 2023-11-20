@@ -33,9 +33,9 @@ public class ScoreboardUI : MonoBehaviourPunCallbacks
 
     public void CreateNewEntry(Player newPlayer)
     {
-        var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-        var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-        var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+        var r = (float)newPlayer.CustomProperties["R"];
+        var g = (float)newPlayer.CustomProperties["G"];
+        var b = (float)newPlayer.CustomProperties["B"];
         var color = new Color(r, g, b, 1);
         var entry = new ScoreboardEntry(color, newPlayer, _userScoreboardAsset, _scoreboardContainer);
         _entries.Add(entry);

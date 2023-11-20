@@ -64,9 +64,9 @@ namespace MonoPlayer
             //Show sprite player will apppear
             Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
             
-            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var r = (float)revivePlayer.CustomProperties["R"];
+            var g = (float)revivePlayer.CustomProperties["G"];
+            var b = (float)revivePlayer.CustomProperties["B"];
             
             NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, r, g, b);
             yield return _reviveWaitForSeconds;
@@ -158,9 +158,17 @@ namespace MonoPlayer
 
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            Color randomColor = new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), 1f);
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, 
-                localPlayer,randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
+            
+            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer, r, g, b, 1f);
+            
+            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
+            {
+                Debug.Log("OnAllPlayerLoad");
+                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC), RpcTarget.All, player);
+            }
         }
 
         public void RemovePlayer(Player player) =>
@@ -180,6 +188,7 @@ namespace MonoPlayer
                 var obj = playerBrain.gameObject;
 
                 //BrainDictionary.Remove(player);
+                LoadedPlayerList.Remove(player);
                 //ColorDictionary.Remove(player);
                 
                 //Debug.LogError($"Destroy Player: {player}");
@@ -199,28 +208,22 @@ namespace MonoPlayer
             {
                 LoadedPlayerList.Add(player);
             }
-            
-            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
-            {
-                Debug.Log("OnAllPlayerLoad");
-                OnAllPlayerLoad?.Invoke();
-                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
-                IsAllOfPlayerLoad = true;
-            }
         }
 
         [PunRPC]
         private void LoadBrainDictionaryRPC(Player player)
         {
+            OnAllPlayerLoad?.Invoke();
+            
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
 
             if(playerBrain.IsInit == false) return;
             playerBrain.SetName(player.NickName);
             
-            var r = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["R"];
-            var g = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["G"];
-            var b = (float)NetworkManager.Instance.LocalPlayer.CustomProperties["B"];
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
             var color = new Color(r, g, b, 1);
             playerBrain.PlayerColor.SetSpriteColor(color);
 
@@ -232,6 +235,8 @@ namespace MonoPlayer
             {
                 BrainDictionary.TryAdd(player,playerBrain);
             }
+            
+            IsAllOfPlayerLoad = true;
         }
         #endregion
     }

@@ -60,24 +60,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void StageUpdate()
     {
-        // if (!_runningStage || !NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
-        // {
-        //     return;
-        // }
-        //
-        // if (RoundCheck(out var roundWinner))
-        // {
-        //     if (roundWinner == null)
-        //     {
-        //         return;
-        //     }
-        //
-        //     _runningStage = false;
-        //     ++_round;
-        //     
-        //     ScoreManager.Instance.AddScore(roundWinner);
-        //     StageManager.Instance.RoundWinner(roundWinner);
-        // }
+        
     }
 
     public Vector3 GetRandomSpawnPoint()
@@ -104,13 +87,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void GenerateNewStage(int index)
     {
-        Debug.Log("Generate");
-        
-        if (!NetworkManager.Instance.IsMasterClient)
-        {
-            return;
-        }
-
         if (_currentStageObject)
         {
             return;
@@ -133,7 +109,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void RemoveCurStage()
     {
-        Debug.Log("REmove");
         PoolManager.Instance.Push(_currentStageObject);
         PlayerManager.Instance.RoundEnd();
         _currentStageObject = null;

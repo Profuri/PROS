@@ -810,7 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7547ae2e9ccbb4db68c9fbfa61fc67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dashTime: 0.15
+  _dashTime: 0.5
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 320

@@ -10,7 +10,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
-    private int _round;
+    protected int _round;
     private StageObject _currentStageObject;
 
     [SerializeField] protected List<BaseMapEvent> _mapEventList;
@@ -20,7 +20,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     protected Coroutine _generateCor;
 
-    private bool _runningStage;
+    protected bool _runningStage;
 
     public virtual void Init(int mapIndex)
     {
@@ -91,6 +91,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
         _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
+
+        Debug.LogError($"CurrentStageObject: {_currentStageObject}");
         
         PlayerManager.Instance.RoundStart();
 
@@ -98,13 +100,13 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         {
             StopCoroutine(_generateCor);
         }
-
         _runningStage = true;
         _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()
     {
+        if(NetworkManager.Instance.IsMasterClient == false) return;
         PhotonNetwork.Destroy(_currentStageObject.gameObject);
         _currentStageObject = null;
         PlayerManager.Instance.RoundEnd();

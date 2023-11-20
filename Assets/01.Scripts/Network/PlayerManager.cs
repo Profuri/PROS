@@ -36,6 +36,9 @@ namespace MonoPlayer
 
         [SerializeField] private GameObject _playerObj;
 
+
+        public event Action<Player> OnPlayerDead;
+
             #region Init
         public void Init()
         {
@@ -154,7 +157,6 @@ namespace MonoPlayer
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
-            //prefab.GetComponent<PlayerBrain>().Init();
 
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
@@ -162,12 +164,12 @@ namespace MonoPlayer
             var g = (float)player.CustomProperties["G"];
             var b = (float)player.CustomProperties["B"];
             
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer, r, g, b, 1f);
+            NetworkManager.Instance.PhotonView.RPC(nameof(LoadPlayerListRPC), RpcTarget.All, localPlayer, r, g, b, 1f);
+            NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC), RpcTarget.All, player);
             
             if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
             {
                 Debug.Log("OnAllPlayerLoad");
-                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC), RpcTarget.All, player);
             }
         }
 
@@ -180,20 +182,18 @@ namespace MonoPlayer
             if (BrainDictionary.ContainsKey(player) == false || LoadedPlayerList.Contains(player) == false) return;
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
+
+            OnPlayerDead?.Invoke(player);
             var playerBrain = BrainDictionary[player];
 
+
             LoadedPlayerList.Remove(player);
+
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;
 
-                //BrainDictionary.Remove(player);
-                LoadedPlayerList.Remove(player);
-                //ColorDictionary.Remove(player);
-                
-                //Debug.LogError($"Destroy Player: {player}");
                 PhotonNetwork.Destroy(obj);
-
                 if (StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
                 {
                     RevivePlayer(player);
@@ -218,7 +218,6 @@ namespace MonoPlayer
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
 
-            if(playerBrain.IsInit == false) return;
             playerBrain.SetName(player.NickName);
             
             var r = (float)player.CustomProperties["R"];

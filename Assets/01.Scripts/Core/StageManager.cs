@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+
 [System.Serializable]
 public struct MapBoundStruct
 {
@@ -50,7 +51,8 @@ public class StageManager : MonoBehaviourPunCallbacks
 
     public void RoundWinner(Player winner)
     {
-        NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPC), RpcTarget.All, winner);
+        if(NetworkManager.Instance.IsMasterClient)
+            NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPC), RpcTarget.All, winner);
     }
     
     [PunRPC]
@@ -102,7 +104,7 @@ public class StageManager : MonoBehaviourPunCallbacks
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
         int stageIndex = 0;
-        var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        var mapIndex = Random.Range(0, StageTypeCnt) + 1;
         
         NetworkManager.Instance.PhotonView.RPC("GenerateNextStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }

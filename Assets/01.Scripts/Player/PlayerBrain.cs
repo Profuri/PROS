@@ -40,6 +40,7 @@ public class PlayerBrain : MonoBehaviour
     public AnimationController AnimationController { get; private set; }
     public float OriginGravityScale { get; private set; }
     public Vector3 MousePos { get; private set; }
+    public bool IsDead {get; private set;}
 
 
     public MovementSO MovementSO => _movementSO;
@@ -52,8 +53,6 @@ public class PlayerBrain : MonoBehaviour
     public bool IsMine => PhotonView.IsMine;
     public bool IsInit => CUR_STATE == EPLAYER_STATE.SETUP;
     #endregion
-
-
 
     private void Awake() => Init();
     public void Init()
@@ -74,17 +73,22 @@ public class PlayerBrain : MonoBehaviour
 
         _inputSO.OnMouseAim += AimToWorldPoint;
         OnDisableEvent += () => _inputSO.OnMouseAim -= AimToWorldPoint;
+
+        IsDead = false;
         OnUpdateEvent += OnPlayerDead;
+        CUR_STATE = EPLAYER_STATE.SETUP;
     }
     
     private void OnPlayerDead()
     {
+        if(IsDead) return;
         if (DeadManager.Instance.IsDeadPosition(_agentTrm.position))
         {
             PlayerManager.Instance.RemovePlayer(PhotonView.Owner);
+            IsDead = true;
         }
-        CUR_STATE = EPLAYER_STATE.SETUP;
     }
+
 
     #region UnityMessage
     public delegate void UnityMessageListener();

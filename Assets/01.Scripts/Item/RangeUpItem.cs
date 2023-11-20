@@ -39,7 +39,7 @@ public class RangeUpItem : BaseItem
         base.GenerateSetting(moveDir, spawnPos, movementSpeed);
         _baseMovementSpeed = _movementSpeed;
         _runawayTime = 0f;
-        _turnDuration = 1f;
+        _turnDuration = 2f;
         _curveTime = 0f;
         _isTurning = false;
 
@@ -120,44 +120,54 @@ public class RangeUpItem : BaseItem
             transform.rotation = Quaternion.Euler(0, 0, angle);
 
         }
-
-        if (dot < 0.9 && !(minDis < _detectDistance)) // turning
+        
+        if(_isTurning && minDis < _detectDistance)
         {
-            _isTurning = true;
-            _curveTime += Time.deltaTime;
-            _afterturnDuration = 0f;
-            Debug.Log("CosValue: " + CosInOut(_curveTime));
-            _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);            
+            _movementSpeed = _baseMovementSpeed;
+            _isTurning = false;
+            _turnDuration = 2f;
         }
         else
         {
-            if(_isTurning)
+            if (dot < 0.9 && !(minDis < _detectDistance)) // turning
             {
-                _afterturnDuration += Time.deltaTime;
-                if (_afterturnDuration > 0.3f)
-                {
-                    if (_curveTime != 0)
-                        _turnDuration = _curveTime;
-                    _curveTime = 0f;
-                    _movementSpeed = _baseMovementSpeed;
-                    _isTurning = false;
-                }
-                else
-                {
-                    _curveTime += Time.deltaTime;
-                    _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);
-                }
+                _isTurning = true;
+                _curveTime += Time.deltaTime;
+                _afterturnDuration = 0f;
+                _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);
+                //Debug.Log("CosValue: " + CosInOut(_curveTime));
             }
             else
             {
-                Debug.Log("Constant");
+                if (_isTurning)
+                {
+                    _afterturnDuration += Time.deltaTime;
+                    if (_afterturnDuration > 0.3f)
+                    {
+                        if (_curveTime != 0)
+                            _turnDuration = _curveTime;
+                        _curveTime = 0f;
+                        _movementSpeed = _baseMovementSpeed;
+                        _isTurning = false;
+                    }
+                    else
+                    {
+                        _curveTime += Time.deltaTime;
+                        _movementSpeed = _baseMovementSpeed * CosInOut(_curveTime / _turnDuration);
+                    }
+                }
+                else
+                {
+                    //Debug.Log("Constant");
+                }
             }
-
         }
-        
-        Debug.Log("MovementSpeed : " + _movementSpeed);
-
         _moveDir = transform.up;
+        
+        //_movementSpeed = _baseMovementSpeed * CosInOut(Time.time);
+
+        //Debug.Log("MovementSpeed : " + _movementSpeed);
+
         //float sinValue = Mathf.Sin(Time.time) / 2 + 0.5f;
         //if (sinValue < 0.3)
         //    _movementSpeed = Mathf.Lerp(_minSpeed, _maxSpeed, sinValue);

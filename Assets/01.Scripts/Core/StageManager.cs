@@ -37,6 +37,9 @@ public class StageManager : MonoBehaviourPunCallbacks
     private BaseStageSystem _curStage = null;
     public BaseStageSystem CurStage => _curStage;
 
+    private int _curMapIdx;
+    public int MapIdx => _curMapIdx;
+
     public void Init()
     {
         _stageSystems.Add(GetComponent<NormalStageSystem>());
@@ -126,6 +129,7 @@ public class StageManager : MonoBehaviourPunCallbacks
         }
 
         _curStage = nextStage;
+        _curMapIdx = mapIndex;
         
         _curStage.Init(mapIndex);
     }

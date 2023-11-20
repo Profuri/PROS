@@ -67,8 +67,14 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     {
         if (!_currentStageObject)
         {
-            Debug.LogError("Stage doesnt loaded");
-            return Vector3.zero;
+            GameObject obj = GameObject.Find($"Map{StageManager.Instance.MapIdx}(Clone)");
+            _currentStageObject = obj.GetComponent<StageObject>();
+            if(!_currentStageObject)
+            {
+                Debug.LogError("Stage doesnt loaded");
+                return Vector3.zero;
+            }
+            _currentStageObject.Setting();
         }
         
         if (_currentStageObject.SpawnPoints.Count <= 0)
@@ -92,7 +98,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
 
-        Debug.LogError($"CurrentStageObject: {_currentStageObject}");
+        Debug.Log($"CurrentStageObject: {_currentStageObject}");
         
         PlayerManager.Instance.RoundStart();
 

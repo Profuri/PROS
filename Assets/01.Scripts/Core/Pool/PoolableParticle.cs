@@ -11,6 +11,12 @@ public class PoolableParticle : PoolableMono
         _particleSystem.transform.SetPositionAndRotation(position, rotation);    
     }
 
+    public void SetDuration(float duration)
+    {
+        var main = _particleSystem.main;
+        main.duration = duration;
+    }
+
     public void PlayParticle()
     {
         if (_runningRoutine != null)

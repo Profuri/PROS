@@ -156,9 +156,17 @@ namespace MonoPlayer
             var prefab = PhotonNetwork.Instantiate(_playerObj.name,spawnPos,Quaternion.identity);
             var localPlayer = NetworkManager.Instance.LocalPlayer;
                         
-            Color randomColor = new Color(Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), Random.Range(0.5f, 1f), 1f);
-            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, 
-                localPlayer,randomColor.r,randomColor.g,randomColor.b,randomColor.a);
+            var r = (float)player.CustomProperties["R"];
+            var g = (float)player.CustomProperties["G"];
+            var b = (float)player.CustomProperties["B"];
+            
+            NetworkManager.Instance.PhotonView.RPC("LoadPlayerListRPC", RpcTarget.All, localPlayer, r, g, b, 1f);
+            
+            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
+            {
+                Debug.Log("OnAllPlayerLoad");
+                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC), RpcTarget.All, player);
+            }
         }
 
         public void RemovePlayer(Player player) =>
@@ -176,8 +184,8 @@ namespace MonoPlayer
             {
                 var obj = playerBrain.gameObject;
 
-                LoadedPlayerList.Remove(player);
                 //BrainDictionary.Remove(player);
+                LoadedPlayerList.Remove(player);
                 //ColorDictionary.Remove(player);
                 
                 //Debug.LogError($"Destroy Player: {player}");
@@ -197,19 +205,13 @@ namespace MonoPlayer
             {
                 LoadedPlayerList.Add(player);
             }
-            
-            if (LoadedPlayerList.Count == NetworkManager.Instance.PlayerList.Count)
-            {
-                Debug.Log("OnAllPlayerLoad");
-                OnAllPlayerLoad?.Invoke();
-                NetworkManager.Instance.PhotonView.RPC(nameof(LoadBrainDictionaryRPC),RpcTarget.All,player);
-                IsAllOfPlayerLoad = true;
-            }
         }
 
         [PunRPC]
         private void LoadBrainDictionaryRPC(Player player)
         {
+            OnAllPlayerLoad?.Invoke();
+            
             var players = FindObjectsOfType<PlayerBrain>().ToList();
             PlayerBrain playerBrain = players.Find(p => p.PhotonView.Owner == player);
             playerBrain.SetName(player.NickName);
@@ -228,6 +230,8 @@ namespace MonoPlayer
             {
                 BrainDictionary.TryAdd(player,playerBrain);
             }
+            
+            IsAllOfPlayerLoad = true;
         }
         #endregion
     }

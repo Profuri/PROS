@@ -120,7 +120,11 @@ public class OccupationSystem
                     {
                         _currentPlayer = player;
                         
-                        Color color = MonoPlayer.PlayerManager.Instance.ColorDictionary[player];
+                        var r = (float)_currentPlayer.CustomProperties["R"];
+                        var g = (float)_currentPlayer.CustomProperties["G"];
+                        var b = (float)_currentPlayer.CustomProperties["B"];
+                        var color = new Color(r, g, b, 1);
+                        
                         _areaObj?.SetColor(color);
                         _areaObj?.SetValue(_curOccupationTime / targetTime);
 

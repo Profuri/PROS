@@ -6,27 +6,29 @@ using UnityEngine.InputSystem;
 
 public class EyeTracking : MonoBehaviour
 {
-    [SerializeField]
     private EyeController _eyeController;
-    public float rotationSpeed = 5f; // È¸Àü ¼Óµµ Á¶Àý
-    public float eyeSpeed = 5f; // ´«ÀÇ ÀÌµ¿ ¼Óµµ
-    public float pupilSpeed = 10f; // ´«µ¿ÀÚÀÇ ÀÌµ¿ ¼Óµµ
+    public float rotationSpeed = 5f; // È¸ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float eyeSpeed = 5f; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½
+    public float pupilSpeed = 10f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½Óµï¿½
     public float _moveFieldScale = 1;
 
-    private Transform _eyePupil; // ´«µ¿ÀÚÀÇ Transform
+    private PlayerBrain _brain;
+
+    private Transform _eyePupil; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Transform
     private Camera _mainCam;
 
-    private void Awake()
+    public void Init(EyeController eyeController, PlayerBrain brain)
     {
         _eyePupil = transform.GetChild(0).transform;
         _mainCam = Camera.main;
+
+        _eyeController = eyeController;
+        _brain = brain;
     }
-
-
-    void Update()
+    public void EyeUpdate()
     {
-        if (!_eyeController.Brain.IsMine) return;
-        Vector2 mousePosition = _eyeController.Brain.InputSO.CurrentMousePos;
+        if (!_brain.IsMine) return;
+        Vector2 mousePosition = _brain.InputSO.CurrentMousePos;
         Vector2 lookDir =  mousePosition - (Vector2)_eyeController.MainCam.WorldToScreenPoint((Vector2)_eyePupil.position);
         lookDir.Normalize();
         if (_eyeController.OnHead) lookDir = Vector2.zero;

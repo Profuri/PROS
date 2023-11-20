@@ -38,6 +38,10 @@ public class LoadingScreen : UGUIComponent
                 NetworkManager.Instance.OnRoomListUpdateEvent += OnLoadingComplete;
                 _loadingCompleteCallBack += () => NetworkManager.Instance.OnRoomListUpdateEvent -= OnLoadingComplete;
                 break;
+            case ELoadingType.START_GAME:
+                SceneManagement.Instance.OnGameSceneLoaded += OnLoadingComplete;
+                _loadingCompleteCallBack += () => SceneManagement.Instance.OnGameSceneLoaded -= OnLoadingComplete;
+                break;
         }
     }
 

@@ -12,9 +12,4 @@ public abstract class Feedback : MonoBehaviour
     {
         _agentTransform = agent;
     }
-
-    protected virtual void OnDisable()
-    {
-        FinishFeedback();
-    }
 }

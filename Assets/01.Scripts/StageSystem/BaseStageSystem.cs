@@ -10,7 +10,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
-    private int _round;
+    protected int _round;
     private StageObject _currentStageObject;
 
     [SerializeField] protected List<BaseMapEvent> _mapEventList;
@@ -20,6 +20,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     protected Coroutine _generateCor;
 
+    protected bool _runningStage;
+
     public virtual void Init(int mapIndex)
     {
         _mapEventList = new List<BaseMapEvent>();
@@ -28,20 +30,20 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
         _round = 1;
         ItemManager.Instance.StartGenerateItem();
-        ScoreManager.Instance.OnDecideWinnerEvent += OnDecideWinner;
         GenerateNewStage(mapIndex);
+
+        _runningStage = true;
     }
 
     public virtual void StageLeave()
     {
         ItemManager.Instance.StopGenerateItem();
-        ScoreManager.Instance.OnDecideWinnerEvent -= OnDecideWinner;
         RemoveCurStage();
     }
 
     public virtual void StageUpdate()
     {
-        if (!NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
+        if (!_runningStage || !NetworkManager.Instance.IsMasterClient || !PlayerManager.Instance.IsAllOfPlayerLoad)
         {
             return;
         }
@@ -52,31 +54,27 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             {
                 return;
             }
-            
+
+            _runningStage = false;
             ++_round;
-            Scoring(roundWinner);
             
-            StageManager.Instance.RemoveCurMap();
-            StageManager.Instance.GenerateNewMap();
+            ScoreManager.Instance.AddScore(roundWinner);
+            StageManager.Instance.RoundWinner(roundWinner);
         }
-    }
-
-    public virtual void OnDecideWinner(Player winner)
-    {
-        Debug.Log(winner.NickName);
-    }
-
-    public virtual void Scoring(Player targetPlayer)
-    {
-        ScoreManager.Instance.AddScore(targetPlayer);
     }
 
     public Vector3 GetRandomSpawnPoint()
     {
         if (!_currentStageObject)
         {
-            Debug.LogError("Stage doesnt loaded");
-            return Vector3.zero;
+            GameObject obj = GameObject.Find($"Map{StageManager.Instance.MapIdx}(Clone)");
+            _currentStageObject = obj.GetComponent<StageObject>();
+            if(!_currentStageObject)
+            {
+                Debug.LogError("Stage doesnt loaded");
+                return Vector3.zero;
+            }
+            _currentStageObject.Setting();
         }
         
         if (_currentStageObject.SpawnPoints.Count <= 0)
@@ -91,6 +89,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void GenerateNewStage(int index)
     {
         if (!NetworkManager.Instance.IsMasterClient) return;
+
         if (_currentStageObject)
         {
             return;
@@ -98,18 +97,22 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
         _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
         _currentStageObject?.Setting();
+
+        Debug.LogError($"CurrentStageObject: {_currentStageObject}");
         
         PlayerManager.Instance.RoundStart();
 
-            if (_generateCor != null)
-            {
-                StopCoroutine(_generateCor);
-            }
-            _generateCor = StartCoroutine(GenerateMapEvent());
+        if (_generateCor != null)
+        {
+            StopCoroutine(_generateCor);
+        }
+        _runningStage = true;
+        _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()
     {
+        if(NetworkManager.Instance.IsMasterClient == false) return;
         PhotonNetwork.Destroy(_currentStageObject.gameObject);
         _currentStageObject = null;
         PlayerManager.Instance.RoundEnd();

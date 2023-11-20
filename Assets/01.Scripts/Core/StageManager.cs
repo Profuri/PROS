@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
+
 [System.Serializable]
 public struct MapBoundStruct
 {
@@ -35,6 +37,9 @@ public class StageManager : MonoBehaviourPunCallbacks
     private BaseStageSystem _curStage = null;
     public BaseStageSystem CurStage => _curStage;
 
+    private int _curMapIdx;
+    public int MapIdx => _curMapIdx;
+
     public void Init()
     {
         _stageSystems.Add(GetComponent<NormalStageSystem>());
@@ -45,6 +50,31 @@ public class StageManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         _curStage?.StageUpdate();
+    }
+
+    public void RoundWinner(Player winner)
+    {
+        if(NetworkManager.Instance.IsMasterClient)
+            NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPC), RpcTarget.All, winner);
+    }
+    
+    [PunRPC]
+    public void RoundWinnerRPC(Player winner)
+    {
+        var winnerScreen = UIManager.Instance.GenerateUGUI("RoundWinnerScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as RoundWinnerScreen;
+        winnerScreen.SetWinner(winner);
+    }
+
+    public void StageWinner(Player winner)
+    {
+        NetworkManager.Instance.PhotonView.RPC(nameof(StageWinnerRPC), RpcTarget.All, winner);
+    }
+
+    [PunRPC]
+    public void StageWinnerRPC(Player winner)
+    {
+        var winnerScreen = UIManager.Instance.GenerateUGUI("StageWinnerScreen", EGenerateOption.STACKING | EGenerateOption.RESETING_POS) as StageWinnerScreen;
+        winnerScreen.SetWinner(winner);
     }
 
     public void GenerateNewMap()
@@ -77,7 +107,7 @@ public class StageManager : MonoBehaviourPunCallbacks
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
         int stageIndex = 0;
-        var mapIndex = Random.Range(0, StageManager.Instance.StageTypeCnt) + 1;
+        var mapIndex = Random.Range(0, StageTypeCnt) + 1;
         
         NetworkManager.Instance.PhotonView.RPC("GenerateNextStageRPC", RpcTarget.All, stageIndex, mapIndex);
     }
@@ -99,6 +129,7 @@ public class StageManager : MonoBehaviourPunCallbacks
         }
 
         _curStage = nextStage;
+        _curMapIdx = mapIndex;
         
         _curStage.Init(mapIndex);
     }

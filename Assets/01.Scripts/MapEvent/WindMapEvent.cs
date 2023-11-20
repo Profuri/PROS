@@ -30,6 +30,7 @@ public class WindMapEvent : BaseMapEvent
     private Coroutine _coroutine;
     public override void StartEvent()
     {
+        Debug.Log("WindMapEvent");
         ExecuteEvent();
     }
     public override void EndEvent()
@@ -47,7 +48,6 @@ public class WindMapEvent : BaseMapEvent
 
     private IEnumerator WindCoroutine()
     {
-        Debug.LogError("WindCoroutine");
         float timer = 0f;
         float targetTime = Random.Range(_minWindTime, _maxWindTime);
 

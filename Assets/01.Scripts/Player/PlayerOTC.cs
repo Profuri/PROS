@@ -1,11 +1,12 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
-using Unity.VisualScripting;
+using UnityEngine.Events;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
     [SerializeField] private ParticleSystem _smokeParticle;
+    [SerializeField] private UnityEvent _OnPlayerOTCEvent;
     
     [SerializeField] private float _otcPower;
     [Range(0f, 1f)]
@@ -81,7 +82,9 @@ public class PlayerOTC : PlayerHandler, IDamageable
         else
         {
             Debug.Log(otcDir);
-            
+
+
+            _OnPlayerOTCEvent?.Invoke();
             _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;
             _brain.OnOTC?.Invoke();

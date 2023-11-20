@@ -21,11 +21,6 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
             UIManager.Instance.ClearPanel();
         }
 
-        if (options.HasFlag(EGenerateOption.BLUR))
-        {
-            UIManager.Instance.SetBlur(true);
-        }
-        
         transform.SetParent(parent);
 
         if (options.HasFlag(EGenerateOption.RESETING_POS))
@@ -37,11 +32,6 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
 
     public virtual void RemoveUI()
     {
-        if (_options.HasFlag(EGenerateOption.BLUR))
-        {
-            UIManager.Instance.SetBlur(false);
-        }
-        
         transform.SetParent(_prevParent);
         PoolManager.Instance.Push(this);
     }

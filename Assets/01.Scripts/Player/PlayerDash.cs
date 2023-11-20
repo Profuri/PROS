@@ -56,10 +56,14 @@ public class PlayerDash : PlayerHandler
         float prevValue = 0f;
         float timer = 0f;
         
-        Vector3 destination = _brain.AgentTrm.position + mouseDir * power;
+        Vector3 destination = _brain.AgentTrm.position + (mouseDir * power);
+
+        Debug.Log($"Power: {power}");
+        Debug.Log($"Destionation: {destination}");
+
         float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
         
-        float timeToArrive = distanceFromDestination / power * _dashTime;
+        float timeToArrive = _dashTime;
 
         float radius = ((CircleCollider2D)_brain.Collider).radius * 1.5f;
             
@@ -83,7 +87,7 @@ public class PlayerDash : PlayerHandler
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
             
-            float easingValue = EaseInBack(percent);
+            float easingValue = EaseOutCubic(percent);
             float stepEasingValue = easingValue - prevValue;
             
             prevValue = easingValue;
@@ -95,15 +99,15 @@ public class PlayerDash : PlayerHandler
             
             if (CheckDashCollision(mouseDir, radius))
             {
-                //transform.rotation = Quaternion.identity;
+                transform.rotation = Quaternion.identity;
                 yield break;
             }
-            
+
             yield return null;
         }
         
-        _brain.PlayerMovement.StopImmediately(0.0f);
-        //transform.rotation = Quaternion.identity;
+        //_brain.PlayerMovement.StopImmediately(0.0f);
+        transform.rotation = Quaternion.identity;
         CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;
     }

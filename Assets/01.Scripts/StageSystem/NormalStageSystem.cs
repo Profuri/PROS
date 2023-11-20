@@ -22,7 +22,7 @@ public class NormalStageSystem : BaseStageSystem
 
             ScoreManager.Instance.AddScore(roundWinner);
             StageManager.Instance.RoundWinner(roundWinner);
-            Debug.Break();
+            //Debug.Break();
         };
     }
     public override void StageUpdate()

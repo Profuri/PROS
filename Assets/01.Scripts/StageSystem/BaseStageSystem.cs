@@ -12,6 +12,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     protected int _round;
     private StageObject _currentStageObject;
+    public StageObject CurStageObject => _currentStageObject;
 
     [SerializeField] protected List<BaseMapEvent> _mapEventList;
     
@@ -83,8 +84,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     {
         if (!_currentStageObject)
         {
-            GameObject obj = GameObject.Find($"Map{StageManager.Instance.MapIdx}(Clone)");
-            _currentStageObject = obj.GetComponent<StageObject>();
+            _currentStageObject = PoolManager.Instance.Pop($"Map{StageManager.Instance.MapIdx}") as StageObject;
+            
             if(!_currentStageObject)
             {
                 Debug.LogError("Stage doesnt loaded");
@@ -115,7 +116,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             return;
         }
 
-        _currentStageObject = PhotonNetwork.Instantiate($"Map{index}", Vector2.zero, Quaternion.identity).GetComponent<StageObject>();
+        _currentStageObject = PoolManager.Instance.Pop($"Map{index}") as StageObject;
         _currentStageObject?.Setting();
 
         Debug.Log($"CurrentStageObject: {_currentStageObject}");
@@ -133,10 +134,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void RemoveCurStage()
     {
         Debug.Log("REmove");
-        if (NetworkManager.Instance.IsMasterClient)
-        {
-            PhotonNetwork.Destroy(_currentStageObject.gameObject);
-        }
+        PoolManager.Instance.Push(_currentStageObject);
         PlayerManager.Instance.RoundEnd();
         _currentStageObject = null;
     }

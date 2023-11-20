@@ -414,6 +414,11 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6662823358083092279, guid: ab913556a28b34d45afdea48fe5a1445,
+        type: 3}
+      propertyPath: ObservedComponentsFoldoutOpen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7795148028587587958, guid: ab913556a28b34d45afdea48fe5a1445,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -515,7 +520,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52466
+  m_InstanceId: 34586
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -674,7 +679,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52504
+  m_InstanceId: 34624
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -823,7 +828,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52582
+  m_InstanceId: 34702
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -909,7 +914,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120270
+      value: -2360
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1046,7 +1051,7 @@ MonoBehaviour:
   - {x: 0.5000001, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52514
+  m_InstanceId: 34634
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.50000006, y: 0.5, z: 0}
@@ -1211,7 +1216,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52580
+  m_InstanceId: 34700
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1350,7 +1355,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52540
+  m_InstanceId: 34660
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1436,7 +1441,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120290
+      value: -2298
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1525,7 +1530,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120198
+      value: -2372
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1673,7 +1678,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52554
+  m_InstanceId: 34674
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1753,7 +1758,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120248
+      value: -2402
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1896,7 +1901,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52488
+  m_InstanceId: 34608
   m_LocalBounds:
     m_Center: {x: -0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.50000006, y: 0.5, z: 0}
@@ -1976,7 +1981,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120228
+      value: -2348
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2128,7 +2133,7 @@ MonoBehaviour:
   - {x: 0.49819782, y: -0.49761704, z: 0}
   m_ShapePathHash: -706152084
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52536
+  m_InstanceId: 34656
   m_LocalBounds:
     m_Center: {x: -0.0007599592, y: 0.010200292, z: 0}
     m_Extent: {x: 0.49980432, y: 0.5078173, z: 0}
@@ -2283,7 +2288,7 @@ MonoBehaviour:
   - {x: 0.5014658, y: -0.4486046, z: 0}
   m_ShapePathHash: -1669371489
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52592
+  m_InstanceId: 34712
   m_LocalBounds:
     m_Center: {x: -0.0020398498, y: 0.030597001, z: 0}
     m_Extent: {x: 0.5035056, y: 0.50065434, z: 0}
@@ -2448,7 +2453,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52616
+  m_InstanceId: 34736
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -2528,7 +2533,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -120312
+      value: -2318
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

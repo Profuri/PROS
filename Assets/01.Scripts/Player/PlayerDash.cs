@@ -22,9 +22,9 @@ public class PlayerDash : PlayerHandler
         base.Init(brain);
         _brain.InputSO.OnDashKeyPress += DashRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
-        _brain.PlayerBuff.RangeUp += LandRangeUpRPC;
-        _brain.PlayerBuff.Dashing += DashingBuff;
-        _brain.PlayerBuff.DoubleDash += DoubleDashBuff;
+        //_brain.PlayerBuff.RangeUp += LandRangeUpRPC;
+        //_brain.PlayerBuff.Dashing += DashingBuff;
+        //_brain.PlayerBuff.DoubleDash += DoubleDashBuff;
         _brain.OnOTC += () => enabled = false;
         StopAllCoroutines();
     }
@@ -58,6 +58,8 @@ public class PlayerDash : PlayerHandler
     
     private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
+        ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
+
         float prevValue = 0f;
         float timer = 0f;
         
@@ -214,17 +216,17 @@ public class PlayerDash : PlayerHandler
             _brain.PlayerBuff.RevertBuff(EBuffType.DOUBLEDASH);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (_brain.PlayerBuff.IsDashing)
-        {
-            if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
-            {
-                Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
-                player.PlayerOTC.Damaged(dir);
-            }
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (_brain.PlayerBuff.IsDashing)
+    //    {
+    //        if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
+    //        {
+    //            Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
+    //            player.PlayerOTC.Damaged(dir);
+    //        }
+    //    }
+    //}
 
     public override void BrainUpdate()
     {
@@ -232,8 +234,8 @@ public class PlayerDash : PlayerHandler
         {
             //if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
             _isDashed = false;
-            if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
-                _isDoubleDash = false;
+            //if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
+            //    _isDoubleDash = false;
         }
     }
 

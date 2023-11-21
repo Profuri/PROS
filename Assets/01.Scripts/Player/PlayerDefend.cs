@@ -6,6 +6,7 @@ public class PlayerDefend : PlayerHandler
 {
     [SerializeField] private float _coolTime = 2f;
     [SerializeField] private float _defendTime = 1.5f;
+    [SerializeField] private ParticleSystem _defendParticle;
 
     private Coroutine _defendCoroutine;
     private float _prevTime;
@@ -39,6 +40,9 @@ public class PlayerDefend : PlayerHandler
     private void Defend()
     {
         if (_prevTime + _coolTime >= Time.time) return;
+        
+        PlayDefendParticle();
+
         if (_defendCoroutine != null)
         {
             StopCoroutine(_defendCoroutine);
@@ -47,6 +51,15 @@ public class PlayerDefend : PlayerHandler
         _isDefend = true;
         _prevTime = Time.time;
         _defendCoroutine = StartCoroutine(DefendCoroutine());
+    }
+
+    private void PlayDefendParticle()
+    {
+        if (_defendParticle.isPlaying)
+        {
+            _defendParticle.Stop();
+        }
+        _defendParticle.Play();
     }
 
     private void Invincible(bool value, float time)

@@ -91,7 +91,8 @@ public class PlayerOTC : PlayerHandler, IDamageable
         else
         {
             _OnPlayerOTCEvent?.Invoke();
-            _brain.Collider.isTrigger = true;
+            if (!_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.INVINCIBLE))
+               _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;
             _brain.OnOTC?.Invoke();
             PlayerManager.Instance.OnPlayerAttacked?.Invoke(attacker,_brain.PhotonView.Owner);

@@ -77,7 +77,8 @@ public class StageManager : MonoBehaviourPunCallbacks
         if (!NetworkManager.Instance.IsMasterClient)
             return;
         
-        var type = Random.Range(0, StageTypeCnt) + 1;
+        // var type = Random.Range(0, StageTypeCnt) + 1;
+        var type = 0;
         NetworkManager.Instance.PhotonView.RPC(nameof(GenerateNewMapRPC), RpcTarget.All, type);
     }
     
@@ -98,9 +99,10 @@ public class StageManager : MonoBehaviourPunCallbacks
             return;
 
         //var stageIndex = Random.Range(0, _stageSystems.Count);
-        //int stageIndex = 0;
+        // int stageIndex = 0;
         int stageIndex = (int)NetworkManager.Instance.GetCurRoom.CustomProperties["Mode"];
-        var mapIndex = Random.Range(0, StageTypeCnt) + 1;
+        // var mapIndex = Random.Range(0, StageTypeCnt) + 1;
+        var mapIndex = 0;
         
         NetworkManager.Instance.PhotonView.RPC(nameof(GenerateNextStageRPC), RpcTarget.All, stageIndex, mapIndex);
     }

@@ -9,6 +9,7 @@ public class OccupationStageSystem : BaseStageSystem
     private OccupationSystem _occupationSystem;
     [SerializeField] private LayerMask _targetLayerMask;
     [SerializeField] private float _targetOccupationTime;
+
     public Action OnTargetChangeTime;
     public Action<Player> OnPlayerWinEvent;
 
@@ -30,7 +31,12 @@ public class OccupationStageSystem : BaseStageSystem
         _winPlayer = player;
         _roundEnd = true;
     }
-    
+
+    public override void StageUpdate()
+    {
+        base.StageUpdate();
+        RoundCheck(null);
+    }
     public override void RoundCheck(Player player)
     {
         if (_roundEnd)
@@ -59,7 +65,7 @@ public class OccupationStageSystem : BaseStageSystem
     private void SetOccupationSystemRPC()
     {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,
-            minChangeTime: 20f,maxChangeTime: 40f,10f,_targetLayerMask);
+            minChangeTime: 60f,maxChangeTime: 80f, 10f, _targetLayerMask);
 
         if (_occupationSystem == null)
         {

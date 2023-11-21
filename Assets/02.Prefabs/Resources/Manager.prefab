@@ -152,7 +152,7 @@ MonoBehaviour:
     minY: -3
     maxX: 3
     maxY: 3
-  _stageTypeCnt: 3
+  _stageTypeCnt: 12
 --- !u!114 &6712497442807464409
 MonoBehaviour:
   m_ObjectHideFlags: 0

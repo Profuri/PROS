@@ -104,12 +104,17 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         PlayerManager.Instance.RoundStart();
 
-        if (_generateCor != null)
-        {
-            StopCoroutine(_generateCor);
-        }
         _runningStage = true;
-        _generateCor = StartCoroutine(GenerateMapEvent());
+
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            if (_generateCor != null)
+            {
+                StopCoroutine(_generateCor);
+            }
+            _generateCor = StartCoroutine(GenerateMapEvent());
+        }
+
     }
 
     public virtual void RemoveCurStage()

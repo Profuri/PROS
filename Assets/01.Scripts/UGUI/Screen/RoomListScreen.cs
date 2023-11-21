@@ -49,11 +49,16 @@ public class RoomListScreen : UGUIComponent
         
     private void RefreshCallBack()
     {
-        foreach (var roomCard in _roomCards)
+        if (_roomCards.Count > 0)
         {
-            roomCard.RemoveUI();
+            foreach (var roomCard in _roomCards)
+            {
+                roomCard.RemoveUI();
+            }
+            _roomCards.Clear();
         }
-        _roomCards.Clear();
+
+
         
         var roomList = NetworkManager.Instance.RoomList;
         for (var i = 0; i < roomList.Count; i++)
@@ -73,6 +78,8 @@ public class RoomListScreen : UGUIComponent
 
             var idx = i;
             roomCard.SetButtonCallBack(() => EnterRoomCallBack(idx));
+
+            _roomCards.Add(roomCard);
         }
     }
 

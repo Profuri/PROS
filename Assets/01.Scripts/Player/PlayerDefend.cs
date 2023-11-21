@@ -18,6 +18,7 @@ public class PlayerDefend : PlayerHandler
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
+
         _prevTime = Time.time;
         _brain.InputSO.OnDefendKeyPress += DefendRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDefendKeyPress -= DefendRPC;
@@ -30,7 +31,7 @@ public class PlayerDefend : PlayerHandler
     {
         if (_brain.IsMine)
         {
-            _brain.PhotonView.RPC("Defend", RpcTarget.All);
+            _brain.PhotonView.RPC(nameof(Defend), RpcTarget.All);
         }
     }
 

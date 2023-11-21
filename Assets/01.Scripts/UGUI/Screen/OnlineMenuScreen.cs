@@ -30,7 +30,7 @@ public class OnlineMenuScreen : UGUIComponent
 
     public void QuickMatchCallBack()
     {
-        
+        NetworkManager.Instance.JoinRandomRoom();
     }
 
     public void RoomListCallBack()

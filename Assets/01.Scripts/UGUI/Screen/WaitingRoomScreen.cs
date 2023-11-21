@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonoPlayer;
 using Photon.Realtime;
+using Photon.Pun;
 using UnityEngine;
 
 public class WaitingRoomScreen : UGUIComponent
@@ -74,6 +75,9 @@ public class WaitingRoomScreen : UGUIComponent
 
         if (NetworkManager.Instance.IsMasterClient)
         {
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
             NetworkManager.Instance.LoadScene(ESceneName.Game);
         }
         

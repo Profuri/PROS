@@ -56,6 +56,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.AutomaticallySyncScene = true;
     }
+
     public override void OnConnectedToMaster()
     {
         OnConnectedToMasterEvent?.Invoke();
@@ -80,6 +81,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
     public void JoinRoom(string name) => PhotonNetwork.JoinRoom(name);
+    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) => OnPlayerPropertiesUpdateEvent?.Invoke();
     public override void OnJoinedLobby() => OnJoinedLobbyEvent?.Invoke();

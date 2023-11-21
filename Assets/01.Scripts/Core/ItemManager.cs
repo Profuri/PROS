@@ -37,7 +37,10 @@ public class ItemManager : MonoBehaviourPunCallbacks
         {
             if (_items[i].Used)
             {
-                NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);       
+                if(NetworkManager.Instance.IsMasterClient)
+                {
+                    NetworkManager.Instance.PhotonView.RPC(nameof(RemoveItemRPC), RpcTarget.All, i);       
+                }
             }
             else
             {
@@ -89,7 +92,7 @@ public class ItemManager : MonoBehaviourPunCallbacks
         {
             NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);
         }
-        Debug.Log("¾ÆÀÌÅÛ »èÁ¦");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         _items.Clear();
     }
 

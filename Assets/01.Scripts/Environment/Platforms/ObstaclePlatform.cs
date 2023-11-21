@@ -6,7 +6,6 @@ using UnityEngine;
 public class ObstaclePlatform : BasePlatform
 {
     private int _targetLayer;
-
     public override void Init(int index)
     {
         base.Init(index);

@@ -19,7 +19,7 @@ public class WindMapEvent : BaseMapEvent
     [SerializeField] private Vector3 _colPos;
     [SerializeField] private Bounds _colBounds;
     
-
+    
     private int _curDir;
     private Coroutine _coroutine;
     public override void StartEvent()
@@ -29,7 +29,7 @@ public class WindMapEvent : BaseMapEvent
     }
     public override void EndEvent()
     {
-        
+        StopAllCoroutines();
     }
     public override void ExecuteEvent()
     {

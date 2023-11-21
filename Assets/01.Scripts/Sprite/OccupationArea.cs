@@ -49,6 +49,7 @@ public class OccupationArea : MonoBehaviourPunCallbacks
     private readonly int _colorHash = Shader.PropertyToID("_Color");
 
     private Color _currentColor;
+
     public void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -73,9 +74,14 @@ public class OccupationArea : MonoBehaviourPunCallbacks
     [PunRPC]
     private void SetValueRPC(float value)
     {
-        SpriteRenderer.material.SetFloat(_rateHash,value);
+        float setValue = value;
+        if(value >= 1f)
+        {
+            setValue = 1f;
+        }
+        SpriteRenderer.material.SetFloat(_rateHash, setValue);
         SpriteRenderer.material.SetColor(_colorHash,_currentColor);
-        PercentTxt.text = String.Format("{0:0.0}",value * 100f);
+        PercentTxt.text = String.Format("{0:0.0}", setValue * 100f);
         //Debug.Log(SpriteRenderer.material.GetFloat(_rateHash));
     }
 }

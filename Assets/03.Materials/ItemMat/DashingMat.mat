@@ -43,10 +43,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _NoiseSpeed: 1.5
-    - _OutLineThickness: 10
+    - _OutLineThickness: 3
     m_Colors:
-    - _OutLineColor: {r: 23.968622, g: 23.968622, b: 23.968622, a: 1}
-    - _OutLineColor_2: {r: 23.968628, g: 23.968628, b: 23.968628, a: 1}
+    - _OutLineColor: {r: 11.984315, g: 11.984315, b: 11.984315, a: 1}
+    - _OutLineColor_2: {r: 11.984314, g: 11.984314, b: 11.984314, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &104811296674965882
 MonoBehaviour:

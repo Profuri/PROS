@@ -83,10 +83,21 @@ public class ItemManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void RemoveAllItem()
+    {
+        for(int i = 0; i < _items.Count; i++)
+        {
+            NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);
+        }
+        Debug.Log("아이템 삭제");
+        _items.Clear();
+    }
+
     [PunRPC]
     public void GenerateItemRPC(int type, Vector2 moveDir, Vector2 spawnPos, float moveSpeed)
     {
-        var item = PoolManager.Instance.Pop($"{(EItemType)type}Item") as BaseItem;
+        var item = PoolManager.Instance.Pop($"{(EItemType)type}") as BaseItem;
+        //Debug.Log("ItemSpawn");
 
         if (item == null)
         {

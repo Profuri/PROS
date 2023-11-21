@@ -56,7 +56,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public virtual void StageLeave()
     {
         PlayerManager.Instance.OnPlayerDead -= RoundCheck;
+        ItemManager.Instance.RemoveAllItem();
         ItemManager.Instance.StopGenerateItem();
+        Debug.Log("DeleteAllItem");
         RemoveCurStage();
     }
 

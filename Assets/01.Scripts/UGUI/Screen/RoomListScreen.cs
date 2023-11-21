@@ -68,7 +68,7 @@ public class RoomListScreen : UGUIComponent
             {
                 return;
             }
-
+            
             roomCard.SetMode((EStageMode)cp["Mode"]);
             
             roomCard.SetTitle(roomList[i].Name);

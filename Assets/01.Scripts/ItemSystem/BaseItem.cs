@@ -1,6 +1,7 @@
 using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.Events;
 
 public abstract class BaseItem : PoolableMono, IItem
@@ -10,12 +11,12 @@ public abstract class BaseItem : PoolableMono, IItem
     
     protected Vector2 _moveDir;
 
-    public bool Used { get; set; }
 
     protected float _movementSpeed;
     protected bool _isSpawnEnd;
     protected float _spawnT;
 
+    protected PhotonView _photonView;
     public UnityEvent SpawnEvent;
     public UnityEvent HitEvent;
 
@@ -25,12 +26,11 @@ public abstract class BaseItem : PoolableMono, IItem
         transform.position = spawnPos;
         _moveDir = moveDir;
 
-        Used = false;
         _isSpawnEnd = false;
         _currentHitCnt = 0;
         _spawnT = 0;
 
-        //transform.Find("Visual").GetComponent<SpriteRenderer>().sprite = _itemSO.Sprite;
+        _photonView = GetComponent<PhotonView>();
         SpawnEvent?.Invoke();
     }
 
@@ -39,10 +39,10 @@ public abstract class BaseItem : PoolableMono, IItem
         _spawnT += Time.deltaTime;
         if(_spawnT > 1) _isSpawnEnd = true;
 
-        if (Used || !_isSpawnEnd)
-        {
-            return;
-        }
+        //if (Used || !_isSpawnEnd)
+        //{
+        //    return;
+        //}
         
         transform.Translate(_moveDir * (_movementSpeed * Time.deltaTime), Space.World);
     }
@@ -54,15 +54,14 @@ public abstract class BaseItem : PoolableMono, IItem
         Debug.Log("ItemHit");
         if (_currentHitCnt >= _itemSO.UsableHitCnt)
         {
-            Used = true;
+            ItemManager.Instance.RemoveItem(this);
             OnTakeItem(hitPlayer);
         }
         else
         {
             HitEvent?.Invoke();
         }
-
-        return Used;
+        return true;
     }
 
     public abstract void OnTakeItem(Player takenPlayer);

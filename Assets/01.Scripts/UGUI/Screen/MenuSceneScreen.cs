@@ -24,17 +24,17 @@ public class MenuSceneScreen : UGUIComponent
     }
 
     #region CallBacks
+
+     public void CreateRoomCallBack()
+    {
+        UIManager.Instance.GenerateUGUI("ModeSelectScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+    }
+
+    public void RoomListCallBack()
+    {
+        UIManager.Instance.GenerateUGUI("RoomListScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
+    }
     
-    public void OnlineCallBack()
-    {
-        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", EGenerateOption.CLEAR_PANEL | EGenerateOption.STACKING | EGenerateOption.RESETING_POS);
-    }
-
-    public void OptionsCallBack()
-    {
-        Debug.Log("option");
-    }
-
     public void QuitCallBack()
     {
         Application.Quit();

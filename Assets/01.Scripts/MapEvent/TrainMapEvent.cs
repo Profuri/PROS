@@ -18,8 +18,8 @@ public class TrainMapEvent : BaseMapEvent
         {
             if(_curTrain.gameObject != null)
             {
-                _curTrain = null;
                 PhotonNetwork.Destroy(_curTrain.gameObject);
+                _curTrain = null;
             }
         }
     }

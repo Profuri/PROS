@@ -73,6 +73,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         };
         Hashtable modeInfo = new Hashtable { { "Mode", (int)mode } };
         string[] customRoomPropsForLobby = {"Mode" };
+        
         options.CustomRoomProperties = modeInfo;
         options.CustomRoomPropertiesForLobby = customRoomPropsForLobby;
 

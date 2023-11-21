@@ -16,17 +16,17 @@ public class ParticleManager : MonoBehaviour
         }
     }
 
-    public void PlayParticleAll(string particleName, Vector3 position = default, Vector3 scale = default, Quaternion rotation = default)
+    public void PlayParticleAll(string particleName, Vector3 position = default, Vector3 scale = default, Quaternion rotation = default, float duration = -1)
     {
         if (scale == default)
         {
             scale = Vector3.one;
         }
-        NetworkManager.Instance.PhotonView.RPC("PlayParticleRPC", RpcTarget.All, particleName, position, scale, rotation);
+        NetworkManager.Instance.PhotonView.RPC("PlayParticleRPC", RpcTarget.All, particleName, position, scale, rotation, duration);
     }
     
     [PunRPC]
-    public void PlayParticleRPC(string particleName, Vector3 position, Vector3 scale, Quaternion rotation)
+    public void PlayParticleRPC(string particleName, Vector3 position, Vector3 scale, Quaternion rotation, float duration)
     {
         var particle = PoolManager.Instance.Pop(particleName) as PoolableParticle;
 
@@ -37,6 +37,6 @@ public class ParticleManager : MonoBehaviour
         
         particle.SetPositionAndRotation(position, rotation);
         particle.SetScale(scale);
-        particle.PlayParticle();
+        particle.PlayParticle(duration);
     }
 }

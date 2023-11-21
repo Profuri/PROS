@@ -136,7 +136,7 @@ public class StageManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPositionRPC(int index, Vector2 position)
     {
-        var platform = _curStage.CurStageObject.Platforms[index];
+        var platform = _curStage?.CurStageObject?.Platforms[index];
 
         if (platform == null)
         {

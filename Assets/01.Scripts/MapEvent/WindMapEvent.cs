@@ -49,11 +49,13 @@ public class WindMapEvent : BaseMapEvent
 
         _curDir = Random.Range(0, 2) == 0 ? -1 : 1;
 
-        var pos = _curDir == -1 ? new Vector2(30, 0) : new Vector2(-30, 0);
-        var scale = _curDir == -1 ? Vector3.one : new Vector3(-1, 1, 1);
+        var pos = _curDir != -1 ? new Vector2(30, 0) : new Vector2(-30, 0);
+        var scale = _curDir != -1 ? Vector3.one : new Vector3(-1, 1, 1);
 
-        ParticleManager.Instance.PlayParticleAll("WindZoneParticle", pos, scale);
         
+
+        
+        ParticleManager.Instance.PlayParticleAll("WindZoneParticle", pos, scale, default, targetTime);
         while (timer <= targetTime)
         {
             timer += Time.deltaTime;

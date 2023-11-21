@@ -17,7 +17,7 @@ public class PoolableParticle : PoolableMono
         _particleSystem.transform.localScale = scale;
     }
 
-    public void PlayParticle()
+    public void PlayParticle(float duration = -1)
     {
         if (_runningRoutine != null)
         {
@@ -25,14 +25,19 @@ public class PoolableParticle : PoolableMono
             _runningRoutine = null;
         }
 
-        _runningRoutine = StartCoroutine(ParticlePlayRoutine());
+        if(duration <= 0)
+        {
+            duration = _particleSystem.main.duration;
+        }
+
+        _runningRoutine = StartCoroutine(ParticlePlayRoutine(duration));
     }
 
-    private IEnumerator ParticlePlayRoutine()
+    private IEnumerator ParticlePlayRoutine(float duration)
     {
-        var duration = _particleSystem.main.duration;
         const float offset = 0.1f;
         
+        Debug.LogError($"Duration: {duration}");
         _particleSystem.Play();
         yield return new WaitForSeconds(duration + offset);
         _particleSystem.Stop();

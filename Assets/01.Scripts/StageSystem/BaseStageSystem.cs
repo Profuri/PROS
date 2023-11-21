@@ -17,10 +17,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public StageObject CurStageObject => _currentStageObject;
 
     [SerializeField] protected List<BaseMapEvent> _mapEventList;
-    
     [SerializeField] protected float _minRandomEvnetTime = 10f; 
     [SerializeField] protected float _maxRandomEvnetTime = 30f;
-
     protected Coroutine _generateCor;
 
     protected bool _runningStage;
@@ -99,8 +97,11 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         }
 
         _currentMapEvent?.EndEvent();
+
+
         _currentStageObject = PoolManager.Instance.Pop($"Map{index}") as StageObject;
         _currentStageObject?.Setting();
+
 
         Debug.Log($"CurrentStageObject: {_currentStageObject}");
         
@@ -116,7 +117,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             }
             _generateCor = StartCoroutine(GenerateMapEvent());
         }
-
     }
 
     public virtual void RemoveCurStage()

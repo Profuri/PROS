@@ -24,4 +24,5 @@ public class NormalStageSystem : BaseStageSystem
             RoundWinner(winner);
         }
     }
+
 }

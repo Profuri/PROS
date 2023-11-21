@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1868564098924612844}
   - component: {fileID: 2254507365188514069}
   - component: {fileID: 2296090151485256360}
+  - component: {fileID: 4282189260285405224}
+  - component: {fileID: 446903836911401754}
   m_Layer: 0
   m_Name: Obstacle
   m_TagString: Untagged
@@ -114,10 +116,59 @@ MonoBehaviour:
   - {x: 2.294726, y: 6.308203, z: 0}
   m_ShapePathHash: -815771048
   m_Mesh: {fileID: 0}
-  m_InstanceId: -2585414
+  m_InstanceId: -2633030
   m_LocalBounds:
     m_Center: {x: 0.029571056, y: 5.421438, z: 0}
     m_Extent: {x: 5.12132, y: 0.88676524, z: 0}
+--- !u!114 &4282189260285405224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610624855683405683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3561acb746cf4794cb1331b0802799d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _edgeTransform: {fileID: 714198587101363251}
+  _rotateSpeed: 50
+--- !u!58 &446903836911401754
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610624855683405683}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 6.5
 --- !u!1 &640367423921293911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,7 +1123,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 200
       minScalar: 10
       maxCurve:
         serializedVersion: 2

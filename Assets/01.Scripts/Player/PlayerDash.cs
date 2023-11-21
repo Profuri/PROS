@@ -18,7 +18,6 @@ public class PlayerDash : PlayerHandler
     [SerializeField] private LayerMask _obstacleMask;
     [SerializeField] private LayerMask _dashCollisionMask;
     [SerializeField] private AudioClip _dashClip;
-    [SerializeField] private ParticleSystem _dashParticle;
 
     public override void Init(PlayerBrain brain)
     {

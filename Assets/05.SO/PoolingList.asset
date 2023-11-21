@@ -95,15 +95,12 @@ MonoBehaviour:
   - prefab: {fileID: 3332414718358656061, guid: 21b128eaa760faf43a89f550c396449c,
       type: 3}
     count: 10
-  - prefab: {fileID: 5366037344895951356, guid: 623e4331a563eb84ca70b0257fa874a6,
-      type: 3}
-    count: 10
-  - prefab: {fileID: -4125883386210312627, guid: 48985ad78d1eb424dbe8b1a86acfe30c,
-      type: 3}
-    count: 10
-  - prefab: {fileID: 8800580541232815524, guid: 75307d0bd072d2846bc7297be96c4b7e,
-      type: 3}
-    count: 10
   - prefab: {fileID: 7375625161057842360, guid: 4a62aac8fce894ce38b4d5873d45c49f,
+      type: 3}
+    count: 10
+  - prefab: {fileID: 5080088238173507471, guid: c6f5bb35442e43b409bc45a6fa7c7efe,
+      type: 3}
+    count: 10
+  - prefab: {fileID: 5397450018389586841, guid: bdc874049cc266d489e98e84fbcd7e34,
       type: 3}
     count: 10

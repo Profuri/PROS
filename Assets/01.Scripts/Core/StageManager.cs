@@ -76,7 +76,8 @@ public class StageManager : MonoBehaviourPunCallbacks
         if (!NetworkManager.Instance.IsMasterClient)
             return;
         
-        var type = Random.Range(0, StageTypeCnt) + 1;
+        // var type = Random.Range(0, StageTypeCnt) + 1;
+        var type = 1;
         NetworkManager.Instance.PhotonView.RPC(nameof(GenerateNewMapRPC), RpcTarget.All, type);
     }
     

@@ -10,6 +10,7 @@ public abstract class BasePlatform : MonoBehaviour
     public int Index => _index;
     
     private Vector3 _initPos;
+    private Quaternion _initRot;
     
     private SpriteRenderer _spriteRenderer;
     private Collider2D _collider;
@@ -22,6 +23,8 @@ public abstract class BasePlatform : MonoBehaviour
     public virtual void Init(int index)
     {
         _index = index;
+        _initPos = transform.position;
+        _initRot = transform.rotation;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<Collider2D>();
         _shadowCaster = GetComponent<ShadowCaster2D>();
@@ -29,8 +32,7 @@ public abstract class BasePlatform : MonoBehaviour
 
     public virtual void Reset()
     {
-        _collider.enabled = false;
+        transform.rotation = _initRot;
         transform.position = _initPos;
-        _collider.enabled = true;
     }
 }

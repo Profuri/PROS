@@ -100,7 +100,7 @@ public class WaitingRoomScreen : UGUIComponent
     {
         UIManager.Instance.RemoveTopUGUI();
         UIManager.Instance.RemoveTopUGUI();
-        UIManager.Instance.GenerateUGUI("OnlineMenuScreen", EGenerateOption.STACKING | EGenerateOption.CLEAR_PANEL | EGenerateOption.RESETING_POS);
+        UIManager.Instance.GenerateUGUI("MenuSceneScreen", EGenerateOption.STACKING | EGenerateOption.CLEAR_PANEL | EGenerateOption.RESETING_POS);
     }
 
     private void JoinRoomCallBack()

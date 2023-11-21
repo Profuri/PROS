@@ -48,23 +48,23 @@ public class ItemManager : MonoBehaviourPunCallbacks
 
     public void StartGenerateItem()
     {
-        if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
-        {
-            return;
-        }
-        
-        _runningRoutine = StartCoroutine(GenerateItemRoutine());
+        // if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
+        // {
+        //     return;
+        // }
+        //
+        // _runningRoutine = StartCoroutine(GenerateItemRoutine());
     }
 
     public void StopGenerateItem()
     {
-        if (!NetworkManager.Instance.IsMasterClient || _runningRoutine == null)
-        {
-            return;
-        }
-
-        StopCoroutine(_runningRoutine);
-        _runningRoutine = null;
+        // if (!NetworkManager.Instance.IsMasterClient || _runningRoutine == null)
+        // {
+        //     return;
+        // }
+        //
+        // StopCoroutine(_runningRoutine);
+        // _runningRoutine = null;
     }
 
     private IEnumerator GenerateItemRoutine()
@@ -89,7 +89,7 @@ public class ItemManager : MonoBehaviourPunCallbacks
         {
             NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);
         }
-        Debug.Log("¾ÆÀÌÅÛ »èÁ¦");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         _items.Clear();
     }
 

@@ -71,6 +71,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             MaxPlayers = 4,
         };
+        
         Hashtable modeInfo = new Hashtable { { "Mode", (int)mode } };
         string[] customRoomPropsForLobby = {"Mode" };
         

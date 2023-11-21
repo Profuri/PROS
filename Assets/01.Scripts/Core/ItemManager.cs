@@ -20,6 +20,7 @@ public class ItemManager : MonoBehaviourPunCallbacks
         }
     }
 
+
     [SerializeField] private float _minItemSpawnDelay;
     [SerializeField] private float _maxItemSpawnDelay;
 
@@ -33,6 +34,7 @@ public class ItemManager : MonoBehaviourPunCallbacks
     }
     public void StartGenerateItem()
     {
+        return;
         if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
         {
             return;
@@ -43,6 +45,7 @@ public class ItemManager : MonoBehaviourPunCallbacks
 
     public void StopGenerateItem()
     {
+        return;
         if (!NetworkManager.Instance.IsMasterClient || _runningRoutine == null)
         {
             return;
@@ -59,7 +62,8 @@ public class ItemManager : MonoBehaviourPunCallbacks
             var delay = Random.Range(_minItemSpawnDelay, _maxItemSpawnDelay);
             yield return new WaitForSeconds(delay);
 
-            var type = Random.Range(0, (int)EItemType.COUNT);
+            //var type = Random.Range(0, (int)EItemType.COUNT);
+            var type = (int)EItemType.DOUBLEDASH_ITEM;
             var moveDir = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)).normalized;
             var spawnPos = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
             var moveSpeed = Random.Range(1f, 2f);

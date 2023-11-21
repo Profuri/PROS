@@ -43,7 +43,7 @@ public class StageManager : MonoBehaviourPunCallbacks
     public void Init()
     {
         _stageSystems.Add(GetComponent<NormalStageSystem>());
-        _stageSystems.Add(GetComponent<DeathMatchStageSystem>());
+        //_stageSystems.Add(GetComponent<DeathMatchStageSystem>());
         _stageSystems.Add(GetComponent<OccupationStageSystem>());
         SceneManagement.Instance.OnGameSceneLoaded += GenerateNextStage;
     }

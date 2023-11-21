@@ -174,6 +174,7 @@ public class PlayerDash : PlayerHandler
     [PunRPC]
     private void LandRangeUp(float value, float time)
     {
+        StopCoroutine(LandRangeUpTime(value, time));
         StartCoroutine(LandRangeUpTime(value, time));
     }
 
@@ -190,7 +191,10 @@ public class PlayerDash : PlayerHandler
     private void DashingBuff(bool value, float time)
     {
         if (_brain.IsMine)
+        {
+            StopCoroutine(DashingTime(value, time));
             StartCoroutine(DashingTime(value, time));
+        }
     }
 
     private IEnumerator DashingTime(bool value, float time)
@@ -206,7 +210,10 @@ public class PlayerDash : PlayerHandler
     private void DoubleDashBuff(bool value, float time)
     {
         if (_brain.IsMine)
+        {
+            StopCoroutine(DoubleDashTime(value, time));
             StartCoroutine(DoubleDashTime(value, time));
+        }
     }
 
     private IEnumerator DoubleDashTime(bool value, float time)

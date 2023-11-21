@@ -64,7 +64,10 @@ public class PlayerDefend : PlayerHandler
     private void Invincible(bool value, float time)
     {
         if (_brain.IsMine)
+        {
+            StopCoroutine(InvincibleTime(value, time));
             StartCoroutine(InvincibleTime(value, time));
+        }
     }
 
     private IEnumerator InvincibleTime(bool value, float time)

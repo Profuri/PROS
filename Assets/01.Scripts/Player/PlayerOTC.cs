@@ -124,7 +124,10 @@ public class PlayerOTC : PlayerHandler, IDamageable
     private void Heavy(float value, float time)
     {
         if (_brain.IsMine)
+        {
+            StopCoroutine(HeavyTime(value, time));
             StartCoroutine(HeavyTime(value, time));
+        }
     }
 
     private IEnumerator HeavyTime(float value, float time)

@@ -45,7 +45,7 @@ Material:
     - _NoiseSpeed: 1.5
     - _OutLineThickness: 25.02
     m_Colors:
-    - _OutLineColor: {r: 4.402524, g: 1.7290903, b: 8.564653, a: 1}
+    - _OutLineColor: {r: 24.641382, g: 9.677897, b: 47.937252, a: 1}
     - _OutLineColor_2: {r: 3.2216432, g: 3.476841, b: 12.935388, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &6197045025688167262

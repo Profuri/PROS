@@ -58,7 +58,9 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void StageLeave()
     {
+        ItemManager.Instance.RemoveAllItem();
         ItemManager.Instance.StopGenerateItem();
+        Debug.Log("DeleteAllItem");
         RemoveCurStage();
     }
 

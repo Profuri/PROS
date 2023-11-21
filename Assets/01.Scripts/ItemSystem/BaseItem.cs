@@ -14,6 +14,7 @@ public abstract class BaseItem : PoolableMono, IItem
 
     protected float _movementSpeed;
     protected bool _isSpawnEnd;
+    protected float _spawnT;
 
     public UnityEvent SpawnEvent;
     public UnityEvent HitEvent;
@@ -27,6 +28,7 @@ public abstract class BaseItem : PoolableMono, IItem
         Used = false;
         _isSpawnEnd = false;
         _currentHitCnt = 0;
+        _spawnT = 0;
 
         //transform.Find("Visual").GetComponent<SpriteRenderer>().sprite = _itemSO.Sprite;
         SpawnEvent?.Invoke();
@@ -34,6 +36,9 @@ public abstract class BaseItem : PoolableMono, IItem
 
     public virtual void UpdateItem()
     {
+        _spawnT += Time.deltaTime;
+        if(_spawnT > 1) _isSpawnEnd = true;
+
         if (Used || !_isSpawnEnd)
         {
             return;
@@ -46,10 +51,12 @@ public abstract class BaseItem : PoolableMono, IItem
     {
         _currentHitCnt++;
 
+        Debug.Log("ItemHit");
         if (_currentHitCnt >= _itemSO.UsableHitCnt)
         {
             Used = true;
             OnTakeItem(hitPlayer);
+            Debug.Log($"TakeItem : {typeof(This)}");
         }
         else
         {

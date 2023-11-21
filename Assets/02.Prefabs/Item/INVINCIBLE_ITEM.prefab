@@ -201,7 +201,7 @@ MonoBehaviour:
   - {x: -0.45126486, y: -0.75065583, z: 0}
   m_ShapePathHash: 1092670153
   m_Mesh: {fileID: 0}
-  m_InstanceId: -67358
+  m_InstanceId: 146082
   m_LocalBounds:
     m_Center: {x: -0.020936608, y: 0.0017717481, z: 0}
     m_Extent: {x: 0.759868, y: 0.7524276, z: 0}
@@ -219,9 +219,9 @@ GameObject:
   - component: {fileID: 6207540623990148408}
   - component: {fileID: 4234704234316080255}
   - component: {fileID: 8463837325962952751}
-  - component: {fileID: 9035823220909707735}
+  - component: {fileID: -4125883386210312627}
   m_Layer: 12
-  m_Name: InvincibleItem
+  m_Name: INVINCIBLE_ITEM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +397,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 10
---- !u!114 &9035823220909707735
+--- !u!114 &-4125883386210312627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6206582011162576369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 842942067229c524bae6e78e16e77d1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 77b5439de3933654782ac5a72e5d0b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemSO: {fileID: 11400000, guid: 4322d3e0a46716e4ab16723f1a1cea6b, type: 2}
@@ -418,10 +418,8 @@ MonoBehaviour:
       m_Calls: []
   _shakeDuration: 0.5
   _detectDistance: 5
-  _baseStopMoveDuration: 1
-  _stoptimeDeviation: 1
-  _basePower: 3
-  _powerDeviation: 0.5
-  RunAwayEvt:
-    m_PersistentCalls:
-      m_Calls: []
+  _turnAngleValue: 100
+  _runawayMaxtime: 2
+  _runawayDelaytime: 2
+  _minSpeed: 2
+  _maxSpeed: 4

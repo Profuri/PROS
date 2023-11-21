@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2081983609644690147}
   - component: {fileID: 6932254358930985423}
   - component: {fileID: 7307582557752412258}
-  - component: {fileID: 4313964086796749734}
+  - component: {fileID: -5441339754518654850}
   m_Layer: 12
-  m_Name: DashingItem
+  m_Name: DASHING_ITEM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,7 +103,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 8640
+    m_Bits: 8320
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -148,7 +148,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 10
---- !u!114 &4313964086796749734
+--- !u!114 &-5441339754518654850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,14 +201,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2117546034166650136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aabda2052fbd5d419ec58f429bbabd7, type: 3}
+  m_Script: {fileID: 11500000, guid: 842942067229c524bae6e78e16e77d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemSO: {fileID: 11400000, guid: 4e1952e235a80dd4f8c65d1279503a89, type: 2}
+  _itemSO: {fileID: 11400000, guid: 4322d3e0a46716e4ab16723f1a1cea6b, type: 2}
   SpawnEvent:
     m_PersistentCalls:
       m_Calls: []
   HitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  _shakeDuration: 0.5
+  _detectDistance: 5
+  _baseStopMoveDuration: 1
+  _stoptimeDeviation: 1
+  _basePower: 3
+  _powerDeviation: 0.5
+  RunAwayEvt:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &3417618167514100554
@@ -333,7 +342,7 @@ MonoBehaviour:
   - {x: -0.3382947, y: -0.5874653, z: 0}
   m_ShapePathHash: 1856370858
   m_Mesh: {fileID: 0}
-  m_InstanceId: -67012
+  m_InstanceId: 37756
   m_LocalBounds:
     m_Center: {x: 0.080777824, y: -0.11346692, z: 0}
     m_Extent: {x: 0.94597113, y: 0.7538328, z: 0}

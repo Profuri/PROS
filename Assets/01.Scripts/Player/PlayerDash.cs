@@ -94,7 +94,6 @@ public class PlayerDash : PlayerHandler
             percent = timer / timeToArrive;
             
             transform.position = Vector3.Lerp(transform.position,destination,percent);
-            PlayDashEffect(mouseDir);
 
             //_brain.PlayerMovement.SetRotationByDirection(mouseDir);
             
@@ -249,16 +248,6 @@ public class PlayerDash : PlayerHandler
             _isDashed = false;
             if (_brain.PlayerBuff.IsDoubleDashing && _brain.IsMine)
                 _isDoubleDash = false;
-        }
-    }
-
-    private void PlayDashEffect(Vector3 mouseDir)
-    {
-        if (_brain.PhotonView.Owner.Equals(NetworkManager.Instance.LocalPlayer))
-        {
-            var angle = Mathf.Atan2(-mouseDir.y, -mouseDir.x);
-            var rot = Quaternion.Euler(0, 0, angle - 90f);
-            ParticleManager.Instance.PlayParticleAll("PlayerDashEffect", _brain.AgentTrm.position, default, rot);
         }
     }
 

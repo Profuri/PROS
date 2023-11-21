@@ -10,6 +10,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     [SerializeField] private EStageMode _mode;
     public EStageMode Mode => _mode;
 
+    protected BaseMapEvent _currentMapEvent;
+
     protected int _round;
     private StageObject _currentStageObject;
     public StageObject CurStageObject => _currentStageObject;
@@ -131,7 +133,8 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             {
                 timer = 0f;
                 randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
-                GetRandomBaseMapEvent()?.StartEvent();
+                _currentMapEvent = GetRandomBaseMapEvent();
+                _currentMapEvent?.StartEvent();
             }
             timer += Time.deltaTime;
             

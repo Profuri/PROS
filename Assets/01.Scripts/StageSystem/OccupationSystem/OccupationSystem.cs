@@ -107,7 +107,6 @@ public class OccupationSystem
             if (_curOccupationTime >= targetTime)
             {
                 if(_currentPlayer == null) Debug.LogError($"Player is null");
-                Debug.LogError("GameWinMessage");
                 _stageSystem.OnPlayerWinEvent.Invoke(_currentPlayer);
             }
             

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using Photon.Pun;
 
 public class DeathMatchStageSystem : BaseStageSystem
 {
@@ -38,16 +39,34 @@ public class DeathMatchStageSystem : BaseStageSystem
             if (_killDictionary.ContainsKey(player)) continue;
             _killDictionary.Add(player, 0);
         }
-        StartCoroutine(TimerCor());
+
+        if(null != _coroutine)
+        {
+            StopCoroutine(_coroutine);
+        }
+        _coroutine = StartCoroutine(TimerCor());
     }
+    
     public override void StageLeave()
     {
         base.StageLeave();
+
+        if (null != _coroutine)
+        {
+            StopCoroutine(_coroutine);
+        }
+
         PlayerManager.Instance.OnAllPlayerLoad -= InitKillDictionary;
         PlayerManager.Instance.OnPlayerAttacked -= OnPlayerAttacked;
     }
 
     public override void RoundCheck(Player player)
+    {
+        NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPCDeath), RpcTarget.All,player);
+    }
+
+    [PunRPC]
+    private void RoundWinnerRPCDeath(Player player)
     {
         RoundWinner(player);
     }
@@ -59,6 +78,7 @@ public class DeathMatchStageSystem : BaseStageSystem
             _killDictionary[attacker]++;
         }
     }
+
     private IEnumerator TimerCor()
     {
         float timer = 0f;

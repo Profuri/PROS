@@ -19,47 +19,50 @@ public class OccupationStageSystem : BaseStageSystem
     {
         base.Init(mapIndex);
         OnPlayerWinEvent += RoundCheck;
+        OnTargetChangeTime += SetOccupationSystem;
     }
 
     public override void StageLeave()
     {
         base.StageLeave();
         OnPlayerWinEvent -= RoundCheck;
-        OnTargetChangeTime -= SetRandomOccupationPos;
+        OnTargetChangeTime -= SetOccupationSystem;
     }
 
     public override void RoundCheck(Player player)
     {
-        RoundWinner(player);            
-    }  
+        NetworkManager.Instance.PhotonView.RPC(nameof(RoundWinnerRPCOccupation), RpcTarget.All,player);
+    }
+
+    [PunRPC]
+    private void RoundWinnerRPCOccupation(Player player)
+    {
+        RoundWinner(player);
+    }
 
     public override void GenerateNewStage(int index)
     {
         base.GenerateNewStage(index);
         
-        if (false == NetworkManager.Instance.IsMasterClient) return;
-        NetworkManager.Instance.PhotonView.RPC(nameof(SetOccupationSystemRPC),RpcTarget.All);
+        if (NetworkManager.Instance.IsMasterClient)
+        {
+            SetOccupationSystem();
+        }
     }
     
-    [PunRPC]
-    private void SetOccupationSystemRPC()
+    private void SetOccupationSystem()
     {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,
             minChangeTime: 60f,maxChangeTime: 80f, 10f, _targetLayerMask);
 
-        if (_occupationSystem == null)
+        if (null == _occupationSystem)
         {
             _occupationSystem = new OccupationSystem(this,data);
         }
         _occupationSystem.Init();
-        SetRandomOccupationPos();
-        
-        OnTargetChangeTime += SetRandomOccupationPos;
-    }
-    private void SetRandomOccupationPos()
-    {
+
         Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-        
+
         _occupationSystem.SetOccupationPos(randomPos);
     }
 }

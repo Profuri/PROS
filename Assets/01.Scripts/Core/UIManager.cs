@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
 
     public UGUIComponent GenerateUGUI(string componentName, EGenerateOption options = EGenerateOption.NONE, Transform parent = null)
     {
-        if (parent == null)
+        if (parent is null)
         {
             parent = _mainCanvas.transform;
         }
@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
         }
 
         ugui.GenerateUI(parent, options);
-
+        
         if (options.HasFlag(EGenerateOption.STACKING))
         {
             _componentStack.Push(ugui);
@@ -93,6 +93,12 @@ public class UIManager : MonoBehaviour
 
     public void ClearPanel()
     {
-        _componentStack.ToList().ForEach(compo => compo.RemoveUI());
+        var generatedComponents = new List<UGUIComponent>();
+        _mainCanvas.GetComponentsInChildren(generatedComponents);
+        
+        foreach (var component in generatedComponents)
+        {
+            component.RemoveUI();
+        }
     }
 }

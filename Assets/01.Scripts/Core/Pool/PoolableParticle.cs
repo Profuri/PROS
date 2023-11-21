@@ -37,7 +37,6 @@ public class PoolableParticle : PoolableMono
     {
         const float offset = 0.1f;
         
-        Debug.LogError($"Duration: {duration}");
         _particleSystem.Play();
         yield return new WaitForSeconds(duration + offset);
         _particleSystem.Stop();

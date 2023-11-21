@@ -98,12 +98,12 @@ MonoBehaviour:
   - prefab: {fileID: 5366037344895951356, guid: 623e4331a563eb84ca70b0257fa874a6,
       type: 3}
     count: 10
-  - prefab: {fileID: 1910223946703298914, guid: 071edd7e331255c43940067effee06bd,
-      type: 3}
-    count: 10
   - prefab: {fileID: -4125883386210312627, guid: 48985ad78d1eb424dbe8b1a86acfe30c,
       type: 3}
     count: 10
-  - prefab: {fileID: 2712799032463002867, guid: 75307d0bd072d2846bc7297be96c4b7e,
+  - prefab: {fileID: -5441339754518654850, guid: 3b2396a7e783cf242bee3800b4192f27,
+      type: 3}
+    count: 10
+  - prefab: {fileID: 8800580541232815524, guid: 75307d0bd072d2846bc7297be96c4b7e,
       type: 3}
     count: 10

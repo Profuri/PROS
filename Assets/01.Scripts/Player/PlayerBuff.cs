@@ -43,7 +43,7 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Dashing?.Invoke(true, 10f);
                 break;
             case EBuffType.RANGEUP:
-                RangeUp?.Invoke(2, 10f);
+                RangeUp?.Invoke(10, 10f);
                 break;
             case EBuffType.HEAVY:
                 Heavy?.Invoke(1, 10f);

@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5477487147903873133}
   - component: {fileID: 35603723008784839}
-  - component: {fileID: 4154133950030566222}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -169,44 +168,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4154133950030566222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2696732805119812151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_ComponentVersion: 1
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_ApplyToSortingLayers: 000000003f83e27a3f9ada7833fbc55e9b4949ee57ad959d
-  m_ShapePath:
-  - {x: -6.4000006, y: -6.4, z: 0}
-  - {x: -5.2346773, y: -1.9910533, z: 0}
-  - {x: -5.3309813, y: 1.4758466, z: 0}
-  - {x: -6.4000006, y: 6.3999996, z: 0}
-  - {x: -1.7677786, y: 5.5205636, z: 0}
-  - {x: 2.0843315, y: 5.7131686, z: 0}
-  - {x: 6.3999996, y: 6.3999996, z: 0}
-  - {x: 5.4549294, y: 1.9573609, z: 0}
-  - {x: 5.3586264, y: -1.8947508, z: 0}
-  - {x: 6.3999996, y: -6.4, z: 0}
-  - {x: 2.0843315, y: -5.361651, z: 0}
-  - {x: -1.3825672, y: -5.2653475, z: 0}
-  m_ShapePathHash: -1073496425
-  m_Mesh: {fileID: 0}
-  m_InstanceId: 146014
-  m_LocalBounds:
-    m_Center: {x: -0.00000047683716, y: -0.00000047683716, z: 0}
-    m_Extent: {x: 6.4, y: 6.3999996, z: 0}
 --- !u!1 &8852965541501595288
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +182,7 @@ GameObject:
   - component: {fileID: 3968879045133451293}
   - component: {fileID: 6520458901558713316}
   - component: {fileID: 7107375747953518583}
-  - component: {fileID: 2712799032463002867}
+  - component: {fileID: 8800580541232815524}
   m_Layer: 12
   m_Name: RANGEUP_ITEM
   m_TagString: Untagged
@@ -399,7 +360,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 10
---- !u!114 &2712799032463002867
+--- !u!114 &8800580541232815524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -408,7 +369,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8852965541501595288}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aabda2052fbd5d419ec58f429bbabd7, type: 3}
+  m_Script: {fileID: 11500000, guid: a9bc376f33c2c4ffb892637d0b8d57b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemSO: {fileID: 11400000, guid: 669f0e7c364c04c42a2b2338a34444c2, type: 2}

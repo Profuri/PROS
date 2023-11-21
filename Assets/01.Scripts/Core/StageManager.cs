@@ -76,8 +76,7 @@ public class StageManager : MonoBehaviourPunCallbacks
         if (!NetworkManager.Instance.IsMasterClient)
             return;
         
-        // var type = Random.Range(0, StageTypeCnt) + 1;
-        var type = 1;
+        var type = Random.Range(0, StageTypeCnt) + 1;
         NetworkManager.Instance.PhotonView.RPC(nameof(GenerateNewMapRPC), RpcTarget.All, type);
     }
     
@@ -134,6 +133,13 @@ public class StageManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPositionRPC(int index, Vector2 position)
     {
-        _curStage.CurStageObject.Platforms[index].transform.position = position;
+        var platform = _curStage.CurStageObject.Platforms[index];
+
+        if (platform == null)
+        {
+            return;
+        }
+        
+        platform.transform.position = position;
     }
 }

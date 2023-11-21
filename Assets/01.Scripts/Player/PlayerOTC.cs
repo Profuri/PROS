@@ -82,9 +82,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
         }
         else
         {
-            Debug.Log(otcDir);
-
-
             _OnPlayerOTCEvent?.Invoke();
             _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;

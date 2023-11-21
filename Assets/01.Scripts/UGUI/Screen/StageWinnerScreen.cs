@@ -24,8 +24,7 @@ public class StageWinnerScreen : UGUIComponent
         
         if (percent >= 1f)
         {
-            UIManager.Instance.RemoveTopUGUI();
-            NetworkManager.Instance.LoadScene(ESceneName.Menu);
+            Application.Quit();
         }
     }
     
@@ -36,8 +35,6 @@ public class StageWinnerScreen : UGUIComponent
         var b = (float)player.CustomProperties["B"];
         var color = new Color(r, g, b, 1);
 
-        Debug.Log(_winnerCard);
-        Debug.Log(color);
         _winnerCard.SetColor(color);
         _winnerCard.SetNickName(player.NickName);
         _winnerCard.Winning();

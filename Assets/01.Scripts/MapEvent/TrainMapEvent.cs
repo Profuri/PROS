@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TrainMapEvent : BaseMapEvent
 {
+    private Train _curTrain;
     public override void StartEvent()
     {
         Debug.Log("TrainMapEvent");
@@ -13,13 +14,20 @@ public class TrainMapEvent : BaseMapEvent
 
     public override void EndEvent()
     {
-        
+        if(NetworkManager.Instance.IsMasterClient)
+        {
+            if(_curTrain.gameObject != null)
+            {
+                _curTrain = null;
+                PhotonNetwork.Destroy(_curTrain.gameObject);
+            }
+        }
     }
 
     public override void ExecuteEvent()
     {
-        Train train = PhotonNetwork.Instantiate("Train",GetRandomPos(),Quaternion.identity).GetComponent<Train>();
-        train.Init();
+        _curTrain = PhotonNetwork.Instantiate("Train",GetRandomPos(),Quaternion.identity).GetComponent<Train>();
+        _curTrain.Init();
     }
 
     private Vector3 GetRandomPos()

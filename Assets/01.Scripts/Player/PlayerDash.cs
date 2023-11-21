@@ -16,6 +16,7 @@ public class PlayerDash : PlayerHandler
 
     [SerializeField] private LayerMask _obstacleMask;
     [SerializeField] private LayerMask _dashCollisionMask;
+    [SerializeField] private AudioClip _dashClip;
 
     public override void Init(PlayerBrain brain)
     {
@@ -59,6 +60,7 @@ public class PlayerDash : PlayerHandler
     private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
         ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
+        AudioManager.Instance.Play(_dashClip);
 
         float timer = 0f;
         

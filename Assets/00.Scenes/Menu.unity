@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a55bfa572c82854aad61569b342194d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mode: 1
+  _mode: 2
   _mapEventList: []
   _minRandomEvnetTime: 30
   _maxRandomEvnetTime: 40

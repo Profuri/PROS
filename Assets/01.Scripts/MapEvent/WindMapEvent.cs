@@ -27,10 +27,12 @@ public class WindMapEvent : BaseMapEvent
         Debug.Log("WindMapEvent");
         ExecuteEvent();
     }
+
     public override void EndEvent()
     {
         StopAllCoroutines();
     }
+    
     public override void ExecuteEvent()
     {
         if (_coroutine != null)

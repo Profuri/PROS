@@ -22,6 +22,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     protected Coroutine _generateCor;
     protected BaseMapEvent _currentMapEvent;
     protected bool _runningStage;
+    public bool RunningStage => _runningStage;
 
     public virtual void Init(int mapIndex)
     {
@@ -35,7 +36,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         ItemManager.Instance.StartGenerateItem();
         GenerateNewStage(mapIndex);
 
-        PlayerManager.Instance.OnPlayerDead += RoundCheck;
+        
         _runningStage = true;
     }
 
@@ -55,7 +56,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
 
     public virtual void StageLeave()
     {
-        PlayerManager.Instance.OnPlayerDead -= RoundCheck;
         ItemManager.Instance.StopGenerateItem();
 
         RemoveCurStage();
@@ -95,6 +95,7 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             return;
         }
 
+        _currentMapEvent?.EndEvent();
         _currentStageObject = PoolManager.Instance.Pop($"Map{index}") as StageObject;
         _currentStageObject?.Setting();
 
@@ -117,7 +118,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     {
         PoolManager.Instance.Push(_currentStageObject);
 
-        _currentMapEvent?.EndEvent();
         _currentMapEvent = null;
 
         PlayerManager.Instance.RoundEnd();

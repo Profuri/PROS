@@ -6,6 +6,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Random = UnityEngine.Random;
+using System.Threading;
 
 namespace MonoPlayer
 {
@@ -39,6 +40,9 @@ namespace MonoPlayer
 
         public event Action<Player> OnPlayerDead;
 
+        //Attacker Deader
+        public Action<Player, Player> OnPlayerAttacked;
+
             #region Init
         public void Init()
         {
@@ -66,14 +70,19 @@ namespace MonoPlayer
         {
             //Show sprite player will apppear
             Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            
+
             var r = (float)revivePlayer.CustomProperties["R"];
             var g = (float)revivePlayer.CustomProperties["G"];
             var b = (float)revivePlayer.CustomProperties["B"];
-            
-            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC),RpcTarget.All,randomPos, r, g, b);
+
+            NetworkManager.Instance.PhotonView.RPC(nameof(ShowSpriteRPC), RpcTarget.All, randomPos, r, g, b);
+
             yield return _reviveWaitForSeconds;
-            CreatePlayer(revivePlayer, randomPos);
+
+            if (StageManager.Instance.CurStage.RunningStage)
+            {
+                CreatePlayer(revivePlayer, randomPos);
+            }
         }
         
         
@@ -136,6 +145,16 @@ namespace MonoPlayer
             IsAllOfPlayerLoad = false;
             RemovePlayer(NetworkManager.Instance.LocalPlayer);
         }
+
+        public void ResetAllOfPlayer()
+        {
+            if (NetworkManager.Instance.IsMasterClient == false) return;
+            IsAllOfPlayerLoad = false;
+            foreach(var player in LoadedPlayerList)
+            {
+                RemovePlayer(player);
+            }
+        }
         
         private void CreatePlayer(Player player,Vector3 spawnPos)
         {
@@ -157,7 +176,7 @@ namespace MonoPlayer
         }
 
         public void RemovePlayer(Player player) =>
-            NetworkManager.Instance.PhotonView.RPC("RemovePlayerRPC", RpcTarget.All, player);
+            NetworkManager.Instance.PhotonView.RPC(nameof(RemovePlayerRPC), RpcTarget.All, player);
         
         [PunRPC]
         private void RemovePlayerRPC(Player player)
@@ -176,7 +195,7 @@ namespace MonoPlayer
                 var obj = playerBrain.gameObject;
 
                 PhotonNetwork.Destroy(obj);
-                if (StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
+                if (StageManager.Instance.CurStage.RunningStage && StageManager.Instance.CurStage.Mode != EStageMode.SURVIVE)
                 {
                     RevivePlayer(player);
                 }

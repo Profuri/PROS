@@ -197,11 +197,11 @@ public class PlayerDash : PlayerHandler
                 if (collisionBrain.PlayerDefend.IsDefend)
                 {
                     collisionBrain.PlayerDefend.IsDefendBounce = true;
-                    _brain.PlayerOTC.Damaged(-dir);
+                    _brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner,-dir);
                 }
                 else
                 {
-                    collisionBrain.PlayerOTC.Damaged(dir);
+                    collisionBrain.PlayerOTC.Damaged(_brain.PhotonView.Owner,dir);
                 }
 
                 returnValue = true;
@@ -215,7 +215,7 @@ public class PlayerDash : PlayerHandler
                 }
 
                 collisionBrain.PlayerDefend.IsDefendBounce = true;
-                _brain.PlayerOTC.Damaged(-dir);
+                _brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner, -dir);
             }
         }
 

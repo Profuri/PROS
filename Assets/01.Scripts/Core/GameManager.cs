@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public void OTCPlayer(Player player, Vector3 attackDir)
     {
         var playerBrain = PlayerManager.Instance.BrainDictionary[player];
-        playerBrain.PlayerOTC.Damaged(attackDir);
+        playerBrain.PlayerOTC.Damaged(null,attackDir);
 
         if (playerBrain.PlayerDefend.IsDefendBounce)
         {

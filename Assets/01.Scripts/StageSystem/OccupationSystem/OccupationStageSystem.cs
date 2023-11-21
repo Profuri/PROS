@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using Photon.Pun;
 using Photon.Realtime;
+using MonoPlayer;
+
 public class OccupationStageSystem : BaseStageSystem
 {
     private OccupationSystem _occupationSystem;
@@ -13,52 +15,30 @@ public class OccupationStageSystem : BaseStageSystem
     public Action OnTargetChangeTime;
     public Action<Player> OnPlayerWinEvent;
 
-    private Player _winPlayer;
-    private bool _roundEnd = false;
-    
-
     public override void Init(int mapIndex)
     {
         base.Init(mapIndex);
-        _roundEnd = false;
-        OnPlayerWinEvent += WinPlayer;
-
-        Debug.LogError($"OccupationStageSystem");
+        OnPlayerWinEvent += RoundCheck;
     }
 
-    private void WinPlayer(Player player)
-    {
-        _winPlayer = player;
-        _roundEnd = true;
-    }
-
-    public override void StageUpdate()
-    {
-        base.StageUpdate();
-        RoundCheck(null);
-    }
-    public override void RoundCheck(Player player)
-    {
-        if (_roundEnd)
-        {
-            var winnerPlayer = _winPlayer;
-            RoundWinner(winnerPlayer);            
-        }
-    }  
     public override void StageLeave()
     {
         base.StageLeave();
+        OnPlayerWinEvent -= RoundCheck;
+        OnTargetChangeTime -= SetRandomOccupationPos;
     }
+
+    public override void RoundCheck(Player player)
+    {
+        RoundWinner(player);            
+    }  
 
     public override void GenerateNewStage(int index)
     {
         base.GenerateNewStage(index);
         
-        _winPlayer = null;
-        _roundEnd = false;
-        
-        if (NetworkManager.Instance.IsMasterClient == false) return;
-        NetworkManager.Instance.PhotonView.RPC("SetOccupationSystemRPC",RpcTarget.All);
+        if (false == NetworkManager.Instance.IsMasterClient) return;
+        NetworkManager.Instance.PhotonView.RPC(nameof(SetOccupationSystemRPC),RpcTarget.All);
     }
     
     [PunRPC]
@@ -78,10 +58,6 @@ public class OccupationStageSystem : BaseStageSystem
     }
     private void SetRandomOccupationPos()
     {
-        //It will be changed by fixed value
-        //Vector3 randomPos = new Vector3(UnityEngine.Random.Range(-5,5f),0,0);
-        
-        //Test Code
         Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
         
         _occupationSystem.SetOccupationPos(randomPos);

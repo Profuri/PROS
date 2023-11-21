@@ -9,8 +9,7 @@ using Random = UnityEngine.Random;
 using System;
 
 public enum EPLAYER_STATE
-{
-    NONE = 0,
+{    NONE = 0,
     LOADING = 1,
     SETUP = 2,
     END = 3,

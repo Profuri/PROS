@@ -3,12 +3,14 @@ using Photon.Pun;
 using Photon.Pun.Demo.Cockpit;
 using UnityEngine.Events;
 using System.Collections;
+using Photon.Realtime;
+using MonoPlayer;
 
 public class PlayerOTC : PlayerHandler, IDamageable
 {
     [SerializeField] private ParticleSystem _smokeParticle;
     [SerializeField] private UnityEvent _OnPlayerOTCEvent;
-    
+
     [SerializeField] private float _otcPower;
     [Range(0f, 1f)]
     [SerializeField] private float _bouncePer;
@@ -18,14 +20,14 @@ public class PlayerOTC : PlayerHandler, IDamageable
         base.Init(brain);
         //_brain.PlayerBuff.Heavy += Heavy;
     }
-    
-    public void Damaged(Vector3 attackDirection, bool priority = false)
+
+    public void Damaged(Player attacker, Vector3 attackDirection, bool priority = false)
     {
-        _brain.PhotonView.RPC(nameof(DamagedRPC),RpcTarget.All,attackDirection,priority);
+        _brain.PhotonView.RPC(nameof(DamagedRPC), RpcTarget.All,attacker, attackDirection, priority);
     }
 
     [PunRPC]
-    public void DamagedRPC(Vector3 attackDirection, bool priority = false)
+    public void DamagedRPC(Player attacker, Vector3 attackDirection, bool priority = false)
     {
         if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
         
@@ -90,11 +92,11 @@ public class PlayerOTC : PlayerHandler, IDamageable
         {
             Debug.Log(otcDir);
 
-
             _OnPlayerOTCEvent?.Invoke();
             _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;
             _brain.OnOTC?.Invoke();
+            PlayerManager.Instance.OnPlayerAttacked?.Invoke(attacker,_brain.PhotonView.Owner);
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
     }
@@ -135,4 +137,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
 
     public override void BrainUpdate(){}
     public override void BrainFixedUpdate(){}
+
+
 }

@@ -24,6 +24,7 @@ public class PlayerSprite : PoolableMono
     private void Update()
     {
         if(!IsChangeSprite) return;
+
         transform.position += new Vector3(0f,Mathf.Sin(Time.time * _moveSpeed) * _moveDistance ,0f);
         
         foreach (var renderer in _renderers)

@@ -153,8 +153,8 @@ public class PlayerDash : PlayerHandler
                     continue;
                 }
 
-                collisionBrain.PlayerDefend.IsDefendBounce = true;
-                _brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner, -dir);
+                //collisionBrain.PlayerDefend.IsDefendBounce = true;
+                //_brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner, -dir);
             }
         }
 
@@ -222,7 +222,7 @@ public class PlayerDash : PlayerHandler
             if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
             {
                 Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
-                player.PlayerOTC.Damaged(dir);
+                //player.PlayerOTC.Damaged(dir);
             }
         }
     }

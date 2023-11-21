@@ -821,6 +821,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _dashClip: {fileID: 8300000, guid: 95a55ddf2d21aff4e926ead1ae73efad, type: 3}
+  _dashParticle: {fileID: 0}
 --- !u!114 &2943213604507646997
 MonoBehaviour:
   m_ObjectHideFlags: 0

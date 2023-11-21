@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemTime: 5
   UsableHitCnt: 1
-  Sprite: {fileID: 21300000, guid: 936345f7fc3934efa8119a8700d904c7, type: 3}
+  Sprite: {fileID: 21300000, guid: 773d3c9c1f6f4914191e17ff522b34ec, type: 3}
   Description: "\uB354\uBE14 \uB300\uC26C\n"

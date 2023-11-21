@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8699751888992061818}
   - component: {fileID: 5366037344895951356}
   m_Layer: 12
-  m_Name: DoubleDashItem
+  m_Name: DOUBLEDASH_ITEM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

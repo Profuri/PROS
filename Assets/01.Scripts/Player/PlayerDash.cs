@@ -23,9 +23,9 @@ public class PlayerDash : PlayerHandler
         base.Init(brain);
         _brain.InputSO.OnDashKeyPress += DashRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDashKeyPress -= DashRPC;
-        //_brain.PlayerBuff.RangeUp += LandRangeUpRPC;
-        //_brain.PlayerBuff.Dashing += DashingBuff;
-        //_brain.PlayerBuff.DoubleDash += DoubleDashBuff;
+        _brain.PlayerBuff.RangeUp += LandRangeUpRPC;
+        _brain.PlayerBuff.Dashing += DashingBuff;
+        _brain.PlayerBuff.DoubleDash += DoubleDashBuff;
         _brain.OnOTC += () => enabled = false;
         StopAllCoroutines();
     }
@@ -243,9 +243,11 @@ public class PlayerDash : PlayerHandler
     private IEnumerator LandRangeUpTime(float value, float time)
     {
         _LandRange = value;
+        Debug.Log("Play LangeUp");
         yield return new WaitForSeconds(time);
         if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.RANGEUP))
             _brain.PlayerBuff.RevertBuff(EBuffType.RANGEUP);
+        Debug.Log("End LangeUp");
     }
 
     private void DashingBuff(bool value, float time)
@@ -256,8 +258,10 @@ public class PlayerDash : PlayerHandler
 
     private IEnumerator DashingTime(bool value, float time)
     {
+        Debug.Log("Play Dashing");
         _brain.PlayerBuff.IsDashing = value;
         yield return new WaitForSeconds(time);
+        Debug.Log("End Dashing");
         if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DASHING))
             _brain.PlayerBuff.RevertBuff(EBuffType.DASHING);
     }
@@ -270,32 +274,34 @@ public class PlayerDash : PlayerHandler
 
     private IEnumerator DoubleDashTime(bool value, float time)
     {
+        Debug.Log("Play DoubleDash");
         _brain.PlayerBuff.IsDoubleDashing = value;
         yield return new WaitForSeconds(time);
+        Debug.Log("End DoubleDash");
         if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH))
             _brain.PlayerBuff.RevertBuff(EBuffType.DOUBLEDASH);
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (_brain.PlayerBuff.IsDashing)
-    //    {
-    //        if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
-    //        {
-    //            Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
-    //            player.PlayerOTC.Damaged(dir);
-    //        }
-    //    }
-    //}
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (_brain.PlayerBuff.IsDashing)
+        {
+            if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
+            {
+                Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
+                player.PlayerOTC.Damaged(dir);
+            }
+        }
+    }
 
     public override void BrainUpdate()
     {
         if (_brain.PlayerMovement.IsGrounded)
         {
-            //if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
+            if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
             _isDashed = false;
-            //if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
-            //    _isDoubleDash = false;
+            if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
+                _isDoubleDash = false;
         }
     }
 

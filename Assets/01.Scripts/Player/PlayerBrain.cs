@@ -65,7 +65,7 @@ public class PlayerBrain : MonoBehaviour
         PlayerOTC = GetHandlerComponent<PlayerOTC>();
         AnimationController = GetComponent<AnimationController>();
         PlayerDefend = GetHandlerComponent<PlayerDefend>();
-        //PlayerBuff = GetHandlerComponent<PlayerBuff>();
+        PlayerBuff = GetHandlerComponent<PlayerBuff>();
         PlayerMovement = GetHandlerComponent<PlayerMovement>();
         PlayerColor = GetHandlerComponent<PlayerColor>();
 

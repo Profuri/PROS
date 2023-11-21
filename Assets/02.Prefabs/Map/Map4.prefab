@@ -1287,7 +1287,7 @@ PrefabInstance:
     - target: {fileID: 839218637758747073, guid: ce170de93dc296a4da8f03126184df08,
         type: 3}
       propertyPath: m_InstanceId
-      value: -1404
+      value: -1559756
       objectReference: {fileID: 0}
     - target: {fileID: 3971837068564655426, guid: ce170de93dc296a4da8f03126184df08,
         type: 3}
@@ -1499,7 +1499,7 @@ MonoBehaviour:
   - {x: 0.49819782, y: -0.49761704, z: 0}
   m_ShapePathHash: -706152084
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1380
+  m_InstanceId: 102672
   m_LocalBounds:
     m_Center: {x: -0.0007599592, y: 0.010200292, z: 0}
     m_Extent: {x: 0.49980432, y: 0.5078173, z: 0}
@@ -1653,7 +1653,7 @@ MonoBehaviour:
   - {x: 0.5014658, y: -0.4486046, z: 0}
   m_ShapePathHash: -1669371489
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1364
+  m_InstanceId: 102692
   m_LocalBounds:
     m_Center: {x: -0.0020398498, y: 0.030597001, z: 0}
     m_Extent: {x: 0.5035056, y: 0.50065434, z: 0}
@@ -1679,7 +1679,7 @@ PrefabInstance:
     - target: {fileID: -28301762943763199, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
       propertyPath: m_InstanceId
-      value: -1416
+      value: -1559836
       objectReference: {fileID: 0}
     - target: {fileID: 2704631733315392412, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
@@ -1768,7 +1768,7 @@ PrefabInstance:
     - target: {fileID: -28301762943763199, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
       propertyPath: m_InstanceId
-      value: -1432
+      value: -1559786
       objectReference: {fileID: 0}
     - target: {fileID: 2704631733315392412, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
@@ -1857,7 +1857,7 @@ PrefabInstance:
     - target: {fileID: 839218637758747073, guid: ce170de93dc296a4da8f03126184df08,
         type: 3}
       propertyPath: m_InstanceId
-      value: -1392
+      value: -1559766
       objectReference: {fileID: 0}
     - target: {fileID: 3971837068564655426, guid: ce170de93dc296a4da8f03126184df08,
         type: 3}
@@ -1983,6 +1983,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3796917229032211371, guid: bad2e7de752845141b44100fd13f7639,
+        type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3796917229032211371, guid: bad2e7de752845141b44100fd13f7639,
+        type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 1810798633029404892}
     - target: {fileID: 8712720844759189200, guid: bad2e7de752845141b44100fd13f7639,
         type: 3}
       propertyPath: m_Name
@@ -1993,6 +2003,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bad2e7de752845141b44100fd13f7639, type: 3}
+--- !u!114 &1810798633029404892 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -171440766478953913, guid: bad2e7de752845141b44100fd13f7639,
+    type: 3}
+  m_PrefabInstance: {fileID: 7259754516079925915}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8efc6b1d64977384eb3405357896c656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8485770747463846245 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1259978536832242686, guid: bad2e7de752845141b44100fd13f7639,
@@ -2135,7 +2157,7 @@ MonoBehaviour:
   - {x: 0.5000001, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -50118
+  m_InstanceId: 102648
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.50000006, y: 0.5, z: 0}
@@ -2274,7 +2296,7 @@ MonoBehaviour:
   - {x: 0.5000001, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1348
+  m_InstanceId: 102772
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.50000006, y: 0.5, z: 0}
@@ -2414,7 +2436,7 @@ MonoBehaviour:
   - {x: 0.5000001, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -49820
+  m_InstanceId: 102702
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.50000006, y: 0.5, z: 0}

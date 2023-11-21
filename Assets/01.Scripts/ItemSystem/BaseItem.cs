@@ -56,7 +56,6 @@ public abstract class BaseItem : PoolableMono, IItem
         {
             Used = true;
             OnTakeItem(hitPlayer);
-            Debug.Log($"TakeItem : {typeof(This)}");
         }
         else
         {

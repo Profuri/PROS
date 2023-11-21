@@ -113,6 +113,11 @@ public class WaitingRoomScreen : UGUIComponent
 
     private void EnterPlayerCallBack(Player player)
     {
+        foreach (var pair in _playerCardDiction.Where(pair => pair.Value.Ready))
+        {
+            pair.Value.ReadyToggle();
+        }
+        
         var playerCard = UIManager.Instance.GenerateUGUI("PlayerCard", EGenerateOption.NONE, _playerCardParent) as PlayerCard;
 
         if (playerCard is null)

@@ -18,7 +18,7 @@ public class PlayerOTC : PlayerHandler, IDamageable
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
-        //_brain.PlayerBuff.Heavy += Heavy;
+        _brain.PlayerBuff.Heavy += Heavy;
     }
 
     public void Damaged(Player attacker, Vector3 attackDirection, bool priority = false)

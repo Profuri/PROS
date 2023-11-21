@@ -37,19 +37,19 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 Debug.LogError("No Buff Added");
                 break;
             case EBuffType.INVINCIBLE:
-                Invincible?.Invoke(true, 3f);
+                Invincible?.Invoke(true, 10f);
                 break;
             case EBuffType.DASHING:
-                Dashing?.Invoke(true, 3f);
+                Dashing?.Invoke(true, 10f);
                 break;
             case EBuffType.RANGEUP:
-                RangeUp?.Invoke(2, 5f);
+                RangeUp?.Invoke(2, 10f);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke(50, 3f);
+                Heavy?.Invoke(1, 10f);
                 break;
             case EBuffType.DOUBLEDASH:
-                DoubleDash?.Invoke(true, 5f);
+                DoubleDash?.Invoke(true, 10f);
                 break;
         }
     }

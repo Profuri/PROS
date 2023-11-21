@@ -24,7 +24,7 @@ public class PlayerDefend : PlayerHandler
         _brain.InputSO.OnDefendKeyPress += DefendRPC;
         _brain.OnDisableEvent += () => _brain.InputSO.OnDefendKeyPress -= DefendRPC;
 
-        //_brain.PlayerBuff.Invincible += Invincible;
+        _brain.PlayerBuff.Invincible += Invincible;
         StopAllCoroutines();
     }
     
@@ -70,10 +70,15 @@ public class PlayerDefend : PlayerHandler
 
     private IEnumerator InvincibleTime(bool value, float time)
     {
+
+        Debug.Log("Play Invincible");
+
+
         _brain.PlayerDefend._isDefend = value;
         yield return new WaitForSeconds(time);
         if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.INVINCIBLE))
             _brain.PlayerBuff.RevertBuff(EBuffType.INVINCIBLE);
+        Debug.Log("End Invincible");
     }
 
     IEnumerator DefendCoroutine()

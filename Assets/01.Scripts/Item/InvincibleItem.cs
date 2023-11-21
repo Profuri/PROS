@@ -130,8 +130,8 @@ public class InvincibleItem : BaseItem
             {
                 angle = transform.rotation.eulerAngles.z + Mathf.Min(_turnAngleValue * Time.deltaTime, angle);
             }
-            transform.rotation = Quaternion.Euler(0, 0, angle);
-
+            if(angle != 0)
+                transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
         if (_isTurning && minDis < _detectDistance)

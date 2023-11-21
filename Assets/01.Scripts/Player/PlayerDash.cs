@@ -18,6 +18,7 @@ public class PlayerDash : PlayerHandler
     [SerializeField] private LayerMask _obstacleMask;
     [SerializeField] private LayerMask _dashCollisionMask;
     [SerializeField] private AudioClip _dashClip;
+    [SerializeField] private TrailRenderer _dashTrail;
 
     public override void Init(PlayerBrain brain)
     {
@@ -85,7 +86,8 @@ public class PlayerDash : PlayerHandler
 
 
         _brain.PlayerMovement.StopImmediately(timeToArrive);
-        
+
+        _dashTrail.enabled = true;
         while (timer < timeToArrive)
         {
             timer += Time.deltaTime;
@@ -106,6 +108,7 @@ public class PlayerDash : PlayerHandler
 
             yield return null;
         }
+        _dashTrail.enabled = false;
 
         transform.rotation = Quaternion.identity;
         _brain.AnimationController.PlayLandAnim(_brain.PlayerMovement.InputVec);

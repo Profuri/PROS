@@ -6,6 +6,8 @@ using Photon.Pun;
 public class PlayerColor : PlayerHandler
 {
     [SerializeField] private Transform _spriteRenderParent;
+    [SerializeField] private TrailRenderer _dashTrail;
+    
     private List<SpriteRenderer> _rendererList;
     public Color CurrentColor { get; private set; }
     
@@ -42,5 +44,8 @@ public class PlayerColor : PlayerHandler
             if(spRenderer != null)
                 spRenderer.material.color = CurrentColor;
         }
+
+        _dashTrail.startColor = CurrentColor;
+        _dashTrail.endColor = new Color(CurrentColor.r, CurrentColor.g, CurrentColor.b, 0);
     }
 }

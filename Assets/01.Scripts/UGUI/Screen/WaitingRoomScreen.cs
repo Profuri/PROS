@@ -99,6 +99,7 @@ public class WaitingRoomScreen : UGUIComponent
     private void ExitCallBack()
     {
         UIManager.Instance.RemoveTopUGUI();
+        UIManager.Instance.RemoveTopUGUI();
         UIManager.Instance.GenerateUGUI("OnlineMenuScreen", EGenerateOption.STACKING | EGenerateOption.CLEAR_PANEL | EGenerateOption.RESETING_POS);
     }
 

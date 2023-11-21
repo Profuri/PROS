@@ -23,7 +23,7 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
         {
             UIManager.Instance.ClearPanel();
         }
-
+        
         transform.SetParent(parent);
 
         if (options.HasFlag(EGenerateOption.RESETING_POS))

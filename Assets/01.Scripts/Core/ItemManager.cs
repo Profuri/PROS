@@ -51,23 +51,23 @@ public class ItemManager : MonoBehaviourPunCallbacks
 
     public void StartGenerateItem()
     {
-        if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
-        {
-            return;
-        }
-        
-        _runningRoutine = StartCoroutine(GenerateItemRoutine());
+        // if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
+        // {
+        //     return;
+        // }
+        //
+        // _runningRoutine = StartCoroutine(GenerateItemRoutine());
     }
 
     public void StopGenerateItem()
     {
-        if (!NetworkManager.Instance.IsMasterClient || _runningRoutine == null)
-        {
-            return;
-        }
-
-        StopCoroutine(_runningRoutine);
-        _runningRoutine = null;
+        // if (!NetworkManager.Instance.IsMasterClient || _runningRoutine == null)
+        // {
+        //     return;
+        // }
+        //
+        // StopCoroutine(_runningRoutine);
+        // _runningRoutine = null;
     }
 
     private IEnumerator GenerateItemRoutine()

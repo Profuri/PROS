@@ -33,7 +33,7 @@ public class PlayerDash : PlayerHandler
     
     private void DashRPC()
     {
-        if (_brain.IsMine && CanDash)
+        if (_brain.IsMine && (CanDash || !_isDoubleDash))
         {
             Vector3 mouseDir = (_brain.MousePos - _brain.AgentTrm.position).normalized;
             _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
@@ -48,6 +48,10 @@ public class PlayerDash : PlayerHandler
             StopCoroutine(_dashCoroutine);
         }
         float dashPower = _brain.MovementSO.DashPower;
+
+        if (_isDashed)
+            _isDoubleDash = true;
+        
         _isDashed = true;
         
         _dashCoroutine = StartCoroutine(DashCoroutine(dashPower,mouseDir));
@@ -222,7 +226,7 @@ public class PlayerDash : PlayerHandler
             if (collision.gameObject.TryGetComponent<PlayerBrain>(out PlayerBrain player))
             {
                 Vector3 dir = player.gameObject.transform.position.normalized - _brain.transform.position.normalized;
-                player.PlayerOTC.Damaged(dir);
+                //player.PlayerOTC.Damaged(player., dir);
             }
         }
     }
@@ -233,7 +237,7 @@ public class PlayerDash : PlayerHandler
         {
             if (_isDashed) _brain.AnimationController.PlayLandAnim(_brain.InputSO.CurrentInputValue);
             _isDashed = false;
-            if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
+            if (_brain.PlayerBuff.IsDoubleDashing && _brain.IsMine)
                 _isDoubleDash = false;
         }
     }

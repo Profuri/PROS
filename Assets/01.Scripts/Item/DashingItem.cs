@@ -11,9 +11,9 @@ public class DashingItem : BaseItem
     [SerializeField] private float _shakeDuration = 0.5f;
     [SerializeField] private float _detectDistance = 5f;
     [SerializeField] private float _baseStopMoveDuration = 1.3f;
-    [SerializeField] private float _stoptimeDeviation = 1f; // ½Ã°£ ÆíÂ÷
+    [SerializeField] private float _stoptimeDeviation = 1f; // ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private float _basePower = 5f;
-    [SerializeField] private float _powerDeviation = 1f; // Èû ÆíÂ÷
+    [SerializeField] private float _powerDeviation = 1f; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private UnityEvent RunAwayEvt;
     private float _stopTime = 0f;
     private float _stopMoveDuration;
@@ -52,23 +52,15 @@ public class DashingItem : BaseItem
         _isMove = false;
     }
 
-    #region DebugÄÚµå
-    //private void Update()
-    //{M
+    #region Debugï¿½Úµï¿½
 
-    //    QuidditchMove();
-
-    //    if (_isMove)
-    //        transform.position = Vector2.Lerp(transform.position, _targetMovePos, Time.deltaTime * _basePower);
-
-    //}
     #endregion
 
     public override void UpdateItem()
     {
         _spawnT += Time.deltaTime;
         if (_spawnT > 1f) _isSpawnEnd = true;
-        if (Used || !_isSpawnEnd)
+        if (!_isSpawnEnd)
         {
             return;
         }
@@ -80,7 +72,7 @@ public class DashingItem : BaseItem
 
     void QuidditchMove()
     {
-        #region ±ÙÃ³ ÇÃ·¹ÀÌ¾î Ã£±â.
+        #region ï¿½ï¿½Ã³ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ã£ï¿½ï¿½.
         Collider2D[] playerCol = Physics2D.OverlapCircleAll(transform.position, 50f, LayerMask.GetMask("DAMAGEABLE"));
 
         int nearColindex = 0; // min Distance collider index;
@@ -111,17 +103,17 @@ public class DashingItem : BaseItem
         {
             targetPos.x = -targetPos.x;
         }
-        if (viewportPoint.y <= 0 || viewportPoint.y >= 1)// Ä«¸Þ¶ó ¹üÀ§ ¹þ¾î³­°Í.
+        if (viewportPoint.y <= 0 || viewportPoint.y >= 1)// Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³­ï¿½ï¿½.
         {
             targetPos.y = -targetPos.y;
         }
 
-        if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // ¸ØÃçÀÖ´ø ½Ã°£ ³¡.
+        if (minDis < _detectDistance && _stopTime > _stopMoveDuration) // ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½.
         {
             if(!_isMove)
             {
                 _stopMoveDuration =
-                    _baseStopMoveDuration + Random.Range(-_stoptimeDeviation / 2, +_stoptimeDeviation / 2); //´ÙÀ½ Á¤Áö ½Ã°£À» ¹Ì¸® °è»ê.
+                    _baseStopMoveDuration + Random.Range(-_stoptimeDeviation / 2, +_stoptimeDeviation / 2); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½.
             }
             _isMove = true;
             _targetMovePos = targetPos;

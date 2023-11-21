@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -30,25 +31,6 @@ public class ItemManager : MonoBehaviourPunCallbacks
     {
         _runningRoutine = null;
     }
-
-    private void Update()
-    {
-        for (var i = 0; i < _items.Count; )
-        {
-            if (_items[i].Used)
-            {
-                if(NetworkManager.Instance.IsMasterClient)
-                {
-                    NetworkManager.Instance.PhotonView.RPC(nameof(RemoveItemRPC), RpcTarget.All, i);       
-                }
-            }
-            else
-            {
-                _items[i++].UpdateItem();
-            }
-        }
-    }
-
     public void StartGenerateItem()
     {
         if (!NetworkManager.Instance.IsMasterClient || _runningRoutine != null)
@@ -82,7 +64,8 @@ public class ItemManager : MonoBehaviourPunCallbacks
             var spawnPos = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
             var moveSpeed = Random.Range(1f, 2f);
             
-            NetworkManager.Instance.PhotonView.RPC("GenerateItemRPC", RpcTarget.All, type, moveDir, spawnPos, moveSpeed);
+            GenerateItemRPC(type,moveDir,spawnPos,moveSpeed);
+            //NetworkManager.Instance.PhotonView.RPC("GenerateItemRPC", RpcTarget.All, type, moveDir, spawnPos, moveSpeed);
         }
     }
 
@@ -90,31 +73,26 @@ public class ItemManager : MonoBehaviourPunCallbacks
     {
         for(int i = 0; i < _items.Count; i++)
         {
-            NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);
+            RemoveItem(_items[i]);
+            //NetworkManager.Instance.PhotonView.RPC("RemoveItemRPC", RpcTarget.All, i);
         }
         Debug.Log("������ ����");
         _items.Clear();
     }
 
-    [PunRPC]
+    public void RemoveItem(BaseItem item)
+    {
+        if(NetworkManager.Instance.IsMasterClient == false) return;
+        PhotonNetwork.Destroy(item.gameObject);
+        int index = _items.IndexOf(item);
+        _items.RemoveAt(index);
+    }
     public void GenerateItemRPC(int type, Vector2 moveDir, Vector2 spawnPos, float moveSpeed)
     {
-        var item = PoolManager.Instance.Pop($"{(EItemType)type}") as BaseItem;
-        //Debug.Log("ItemSpawn");
+        var prefab = PhotonNetwork.Instantiate($"{(EItemType)type}",spawnPos,Quaternion.identity);
+        var item = prefab.GetComponent<BaseItem>();
 
-        if (item == null)
-        {
-            return;
-        }
-        
         item.GenerateSetting(moveDir, spawnPos, moveSpeed);
         _items.Add(item);
-    }
-
-    [PunRPC]
-    public void RemoveItemRPC(int removeIndex)
-    {
-        PoolManager.Instance.Push(_items[removeIndex]);
-        _items.RemoveAt(removeIndex);
     }
 }

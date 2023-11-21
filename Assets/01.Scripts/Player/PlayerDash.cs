@@ -68,7 +68,7 @@ public class PlayerDash : PlayerHandler
 
         float distanceFromDestination = Vector3.Distance(_brain.AgentTrm.position, destination);
         float timeToArrive = _dashTime;
-        float radius = ((CircleCollider2D)_brain.Collider).radius * 1.5f;
+        float radius = ((CircleCollider2D)_brain.Collider).radius * _LandRange;
             
         _brain.ActionData.IsDashing = true;
         float percent = 0f;

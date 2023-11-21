@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PoolableParticle : PoolableMono
 {
@@ -11,10 +12,9 @@ public class PoolableParticle : PoolableMono
         _particleSystem.transform.SetPositionAndRotation(position, rotation);    
     }
 
-    public void SetDuration(float duration)
+    public void SetScale(Vector3 scale)
     {
-        var main = _particleSystem.main;
-        main.duration = duration;
+        _particleSystem.transform.localScale = scale;
     }
 
     public void PlayParticle()

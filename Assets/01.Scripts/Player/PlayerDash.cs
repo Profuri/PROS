@@ -16,6 +16,7 @@ public class PlayerDash : PlayerHandler
 
     [SerializeField] private LayerMask _obstacleMask;
     [SerializeField] private LayerMask _dashCollisionMask;
+    [SerializeField] private AudioClip _dashClip;
 
     public override void Init(PlayerBrain brain)
     {
@@ -35,6 +36,10 @@ public class PlayerDash : PlayerHandler
         if (_brain.IsMine)
         {
             Vector3 mouseDir = (_brain.MousePos - _brain.AgentTrm.position).normalized;
+            Debug.Log("dash particle");
+            Quaternion particleAngle = Quaternion.Euler(Mathf.Atan2(mouseDir.y, mouseDir.x) * Mathf.Rad2Deg, -90f, -90f);
+            Vector3 particleScale = new Vector3(1f, 0.5f, 1f);
+            ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", transform.position, particleScale, particleAngle);
             _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
         }
     }
@@ -57,7 +62,8 @@ public class PlayerDash : PlayerHandler
 
     private IEnumerator DashCoroutine(float power, Vector3 mouseDir)
     {
-        ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", _brain.AgentTrm.position);
+        PlayDashEffect(mouseDir);
+        AudioManager.Instance.Play(_dashClip);
 
         float timer = 0f;
         
@@ -291,6 +297,24 @@ public class PlayerDash : PlayerHandler
             //if (_brain.PlayerBuff.CurrentBuff.HasFlag(EBuffType.DOUBLEDASH) && _brain.IsMine)
             //    _isDoubleDash = false;
         }
+    }
+
+    private void PlayDashEffect(Vector3 mouseDir)
+    {
+        Vector3 mouseDirNormal = mouseDir.normalized;
+        float xDir = Mathf.Atan2(mouseDirNormal.y, mouseDirNormal.x) * Mathf.Rad2Deg;
+
+        //if (_brain.MousePos.x - _brain.AgentTrm.position.x > 0)
+        //{
+        //    xDir += 180;
+        //}
+
+        // 플립 신경써줘야 함                      || _brain.MousePos랑 IsMine의 Player의 x랑 비교해서 플립시키기
+        // 대쉬 방향 신경써줘야 함                 || 
+        Vector3 dashPos = _brain.AgentTrm.position;
+        Vector3 dashRot = new Vector3(xDir, -90, -90);
+
+        ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", dashPos, dashRot);
     }
 
     public override void BrainFixedUpdate()

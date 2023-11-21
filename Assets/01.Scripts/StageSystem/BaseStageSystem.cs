@@ -15,12 +15,12 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
     public StageObject CurStageObject => _currentStageObject;
 
     [SerializeField] protected List<BaseMapEvent> _mapEventList;
-
-    [SerializeField] protected float _minRandomEvnetTime = 10f;
+    
+    [SerializeField] protected float _minRandomEvnetTime = 10f; 
     [SerializeField] protected float _maxRandomEvnetTime = 30f;
 
     protected Coroutine _generateCor;
-    protected BaseMapEvent _currentMapEvent;
+
     protected bool _runningStage;
     public bool RunningStage => _runningStage;
 
@@ -31,8 +31,6 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _mapEventList.ForEach(mapEvent => mapEvent.Init(StageManager.Instance.MapBound));
 
         _round = 1;
-        
-        _currentMapEvent = null;
         ItemManager.Instance.StartGenerateItem();
         GenerateNewStage(mapIndex);
 
@@ -46,24 +44,25 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         {
             return;
         }
-
+        
         _runningStage = false;
         ++_round;
 
-        ScoreManager.Instance.AddScore(winner);
-        StageManager.Instance.RoundWinner(winner);
+        if (!ScoreManager.Instance.AddScore(winner))
+        {
+            StageManager.Instance.RoundWinner(winner);
+        }
     }
 
     public virtual void StageLeave()
     {
         ItemManager.Instance.StopGenerateItem();
-
         RemoveCurStage();
     }
 
     public virtual void StageUpdate()
     {
-
+        
     }
 
     public Vector3 GetRandomSpawnPoint()
@@ -71,20 +70,20 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         if (!_currentStageObject)
         {
             _currentStageObject = PoolManager.Instance.Pop($"Map{StageManager.Instance.MapIdx}") as StageObject;
-
-            if (!_currentStageObject)
+            
+            if(!_currentStageObject)
             {
                 Debug.LogError("Stage doesnt loaded");
                 return Vector3.zero;
             }
         }
-
+        
         if (_currentStageObject.SpawnPoints.Count <= 0)
         {
             Debug.LogWarning("Stage spawn points is empty!");
             return Vector3.zero;
         }
-
+        
         return _currentStageObject.SpawnPoints[Random.Range(0, _currentStageObject.SpawnPoints.Count)];
     }
 
@@ -100,30 +99,28 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         _currentStageObject?.Setting();
 
         Debug.Log($"CurrentStageObject: {_currentStageObject}");
-
+        
         PlayerManager.Instance.RoundStart();
 
-        if (NetworkManager.Instance.IsMasterClient)
+        if (_generateCor != null)
         {
-            if (_generateCor != null)
-            {
-                StopCoroutine(_generateCor);
-            }
-            _generateCor = StartCoroutine(GenerateMapEvent());
+            StopCoroutine(_generateCor);
         }
         _runningStage = true;
+        _generateCor = StartCoroutine(GenerateMapEvent());
     }
 
     public virtual void RemoveCurStage()
     {
         PoolManager.Instance.Push(_currentStageObject);
 
+        _currentMapEvent?.EndEvent();
         _currentMapEvent = null;
 
         PlayerManager.Instance.RoundEnd();
         _currentStageObject = null;
     }
-
+    
     protected IEnumerator GenerateMapEvent()
     {
         float timer = 0f;
@@ -134,21 +131,20 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
             {
                 timer = 0f;
                 randomTime = Random.Range(_minRandomEvnetTime, _maxRandomEvnetTime);
-                _currentMapEvent = GetRandomBaseMapEvent();
-                _currentMapEvent?.StartEvent();
+                GetRandomBaseMapEvent()?.StartEvent();
             }
             timer += Time.deltaTime;
-
+            
             yield return null;
         }
     }
 
     private BaseMapEvent GetRandomBaseMapEvent()
     {
-        int index = Random.Range(0, _mapEventList.Count);
+        int index = Random.Range(0,_mapEventList.Count);
         //int index = 1;
         return _mapEventList[index];
     }
-
+    
     public abstract void RoundCheck(Player player);
 }

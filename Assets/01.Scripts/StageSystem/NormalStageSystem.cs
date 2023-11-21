@@ -20,7 +20,7 @@ public class NormalStageSystem : BaseStageSystem
     {
         if (PlayerManager.Instance.LoadedPlayerList.Count == 1)
         {
-            var winner = PlayerManager.Instance.LoadedPlayerList[0]; ;
+            var winner = PlayerManager.Instance.LoadedPlayerList[0];
             RoundWinner(winner);
         }
     }

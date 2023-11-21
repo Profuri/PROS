@@ -10,6 +10,9 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
     
     private EGenerateOption _options;
     public EGenerateOption Options => _options;
+
+    private bool _isActive;
+    public bool IsActive => _isActive;
     
     public virtual void GenerateUI(Transform parent, EGenerateOption options)
     {
@@ -28,10 +31,13 @@ public abstract class UGUIComponent : PoolableMono, IUGUI
             ((RectTransform)transform).offsetMin = Vector2.zero;
             ((RectTransform)transform).offsetMax = Vector2.zero;
         }
+
+        _isActive = true;
     }
 
     public virtual void RemoveUI()
     {
+        _isActive = false;
         transform.SetParent(_prevParent);
         PoolManager.Instance.Push(this);
     }

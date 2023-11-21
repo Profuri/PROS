@@ -128,32 +128,6 @@ public class StageManager : MonoBehaviourPunCallbacks
         _curStage.Init(mapIndex);
     }
 
-    public void SetOpacity(int index, float opacity)
-    {
-        NetworkManager.Instance.PhotonView.RPC(nameof(SetOpacityRPC), RpcTarget.All, index, opacity);
-    }
-
-    [PunRPC]
-    public void SetOpacityRPC(int index, float opacity)
-    {
-        var color = _curStage.CurStageObject.Platforms[index].SpriteRenderer.color;
-        color.a = opacity;
-        _curStage.CurStageObject.Platforms[index].SpriteRenderer.color = color;
-
-        if (opacity <= 0)
-        {
-            ((InvisiblePlatform)_curStage.CurStageObject.Platforms[index]).IsVisible = false;
-            _curStage.CurStageObject.Platforms[index].Collider.enabled = false;
-            _curStage.CurStageObject.Platforms[index].ShadowCaster.enabled = false;
-        }
-        else if (opacity >= 1)
-        {
-            ((InvisiblePlatform)_curStage.CurStageObject.Platforms[index]).IsVisible = true;
-            _curStage.CurStageObject.Platforms[index].Collider.enabled = true;
-            _curStage.CurStageObject.Platforms[index].ShadowCaster.enabled = true;
-        }
-    }
-
     public void SetPosition(int index, Vector2 position)
     {
         NetworkManager.Instance.PhotonView.RPC(nameof(SetPositionRPC), RpcTarget.All, index, position);
@@ -162,6 +136,13 @@ public class StageManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetPositionRPC(int index, Vector2 position)
     {
-        _curStage.CurStageObject.Platforms[index].transform.position = position;
+        var platform = _curStage.CurStageObject.Platforms[index];
+
+        if (platform == null)
+        {
+            return;
+        }
+        
+        platform.transform.position = position;
     }
 }

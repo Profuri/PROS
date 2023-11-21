@@ -57,8 +57,6 @@ public class RoomListScreen : UGUIComponent
             }
             _roomCards.Clear();
         }
-
-
         
         var roomList = NetworkManager.Instance.RoomList;
         for (var i = 0; i < roomList.Count; i++)

@@ -212,8 +212,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _shakeDuration: 0.5
-  _detectDistance: 5
-  _baseStopMoveDuration: 1
+  _detectDistance: 15
+  _baseStopMoveDuration: 0.7
   _stoptimeDeviation: 1
   _basePower: 3
   _powerDeviation: 0.5

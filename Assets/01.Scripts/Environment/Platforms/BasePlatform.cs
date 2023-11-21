@@ -14,7 +14,6 @@ public abstract class BasePlatform : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Collider2D _collider;
     private ShadowCaster2D _shadowCaster;
-    private PhotonView _photonView;
 
     public SpriteRenderer SpriteRenderer => _spriteRenderer;
     public Collider2D Collider => _collider;
@@ -26,7 +25,6 @@ public abstract class BasePlatform : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<Collider2D>();
         _shadowCaster = GetComponent<ShadowCaster2D>();
-        _photonView = GetComponent<PhotonView>();
     }
 
     public virtual void Reset()

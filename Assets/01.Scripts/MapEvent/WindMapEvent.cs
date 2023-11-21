@@ -47,9 +47,10 @@ public class WindMapEvent : BaseMapEvent
 
         _curDir = Random.Range(0, 2) == 0 ? -1 : 1;
 
-        var pos = _curDir == -1 ? new Vector2(30, 0) : new Vector2(-30, 0); 
-        
-        ParticleManager.Instance.PlayParticleAll("WindParticle", pos, Quaternion.identity, targetTime);
+        var pos = _curDir == -1 ? new Vector2(30, 0) : new Vector2(-30, 0);
+        var scale = _curDir == -1 ? Vector3.one : new Vector3(-1, 1, 1);
+
+        ParticleManager.Instance.PlayParticleAll("WindZoneParticle", pos, scale);
         
         while (timer <= targetTime)
         {
@@ -63,6 +64,11 @@ public class WindMapEvent : BaseMapEvent
     [PunRPC]
     private void ApplyWindRPC(int dir)
     {
+        if (!PlayerManager.Instance.BrainDictionary.ContainsKey(NetworkManager.Instance.LocalPlayer))
+        {
+            return;
+        }
+        
         PlayerBrain brain = PlayerManager.Instance.BrainDictionary[NetworkManager.Instance.LocalPlayer];
         brain.PlayerMovement.ApplyWind(_windPower,dir);
     }

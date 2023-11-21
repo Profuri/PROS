@@ -18,8 +18,14 @@ public class PlayerOTC : PlayerHandler, IDamageable
         base.Init(brain);
         //_brain.PlayerBuff.Heavy += Heavy;
     }
-
+    
     public void Damaged(Vector3 attackDirection, bool priority = false)
+    {
+        _brain.PhotonView.RPC(nameof(DamagedRPC),RpcTarget.All,attackDirection,priority);
+    }
+
+    [PunRPC]
+    public void DamagedRPC(Vector3 attackDirection, bool priority = false)
     {
         if (_brain.PlayerDefend.IsDefend || _brain.ActionData.IsFlying) return;
         
@@ -82,9 +88,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
         }
         else
         {
-            Debug.Log(otcDir);
-
-
             _OnPlayerOTCEvent?.Invoke();
             _brain.Collider.isTrigger = true;
             _brain.ActionData.IsFlying = true;
@@ -92,7 +95,6 @@ public class PlayerOTC : PlayerHandler, IDamageable
             _brain.Rigidbody.AddForce(otcDir * _otcPower, ForceMode2D.Impulse);
         }
     }
-
     private void PlaySmokeParticle(Vector3 otcDir)
     {
             if(_smokeParticle.isPlaying)

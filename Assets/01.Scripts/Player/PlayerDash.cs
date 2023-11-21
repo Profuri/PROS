@@ -45,7 +45,6 @@ public class PlayerDash : PlayerHandler
     {
         if (CanDash)
         {
-            _brain.AnimationController.PlayDashAnim();
             if (_dashCoroutine != null)
             {
                 StopCoroutine(_dashCoroutine);
@@ -82,9 +81,12 @@ public class PlayerDash : PlayerHandler
             timeToArrive = Vector3.Distance(_brain.AgentTrm.position, destination) / power * _dashTime; 
         }
 
+        _brain.AnimationController.PlayDashAnim();
+
+
         _brain.PlayerMovement.StopImmediately(timeToArrive);
         
-        while (timer < timeToArrive - 0.1f)
+        while (timer < timeToArrive)
         {
             timer += Time.deltaTime;
             percent = timer / timeToArrive;
@@ -97,16 +99,18 @@ public class PlayerDash : PlayerHandler
             {
                 //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
                 transform.rotation = Quaternion.identity;
+                _brain.AnimationController.PlayLandAnim(_brain.PlayerMovement.InputVec);
                 yield break;
             }
 
             yield return null;
         }
-        
+
+        transform.rotation = Quaternion.identity;
+        _brain.AnimationController.PlayLandAnim(_brain.PlayerMovement.InputVec);
         _brain.PlayerMovement.StopImmediately(0.0f);
         //_brain.PlayerMovement.SetRotationByDirection(Vector3.up);
-        transform.rotation = Quaternion.identity;
-        CheckDashCollision(mouseDir, radius * 1.5f);
+        //CheckDashCollision(mouseDir, radius * 1.5f);
         _brain.ActionData.IsDashing = false;
     }
 
@@ -191,7 +195,7 @@ public class PlayerDash : PlayerHandler
             {
                 _brain.PlayerMovement.StopImmediately(0.0f);
                 ParticleManager.Instance.PlayParticleAll("ExplosionParticle", _brain.AgentTrm.position);
-
+                
                 if (collisionBrain.PlayerDefend.IsDefend)
                 {
                     collisionBrain.PlayerDefend.IsDefendBounce = true;

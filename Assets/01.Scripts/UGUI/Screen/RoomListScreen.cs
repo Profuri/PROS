@@ -46,7 +46,7 @@ public class RoomListScreen : UGUIComponent
         loading.ExecuteLoading(ELoadingType.JOIN_ROOM);
         NetworkManager.Instance.JoinRoom(room.Name);
     }
-
+        
     private void RefreshCallBack()
     {
         foreach (var roomCard in _roomCards)
@@ -66,7 +66,7 @@ public class RoomListScreen : UGUIComponent
                 return;
             }
 
-            // roomCard.SetMode((EStageMode)cp["Mode"]);
+            roomCard.SetMode((EStageMode)cp["Mode"]);
             
             roomCard.SetTitle(roomList[i].Name);
             roomCard.SetPlayerCnt(roomList[i].PlayerCount, roomList[i].MaxPlayers);

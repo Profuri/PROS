@@ -170,6 +170,7 @@ namespace MonoPlayer
             OnPlayerDead?.Invoke(player);
 
             var playerBrain = BrainDictionary[player];
+            BrainDictionary.Remove(player);
             
             if (playerBrain.PhotonView.IsMine)
             {

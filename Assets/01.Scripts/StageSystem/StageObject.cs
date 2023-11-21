@@ -22,13 +22,13 @@ public class StageObject : PoolableMono
         transform.position = position;
         transform.rotation = rotation;
 
-        // GetComponentsInChildren(_platforms);
-        // GetComponentsInChildren(_walls);
+        GetComponentsInChildren(_platforms);
+        GetComponentsInChildren(_walls);
 
-        // for (var i = 0; i < _platforms.Count; i++)
-            // _platforms[i].Init(i);
-        // for(var i = 0; i < _walls.Count; i++)
-            // _walls[i].Init();
+        for (var i = 0; i < _platforms.Count; i++)
+            _platforms[i].Init(i);
+        for(var i = 0; i < _walls.Count; i++)
+            _walls[i].Init();
 
         var pointsTrm = transform.Find("Points");
         for (var i = 0; i < pointsTrm.childCount; i++)

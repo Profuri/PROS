@@ -46,9 +46,11 @@ public abstract class BaseStageSystem : MonoBehaviour, IStageSystem
         
         _runningStage = false;
         ++_round;
-            
-        ScoreManager.Instance.AddScore(winner);
-        StageManager.Instance.RoundWinner(winner);
+
+        if (!ScoreManager.Instance.AddScore(winner))
+        {
+            StageManager.Instance.RoundWinner(winner);
+        }
     }
 
     public virtual void StageLeave()

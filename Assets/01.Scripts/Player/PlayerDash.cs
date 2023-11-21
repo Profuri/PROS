@@ -157,8 +157,8 @@ public class PlayerDash : PlayerHandler
                     continue;
                 }
 
-                collisionBrain.PlayerDefend.IsDefendBounce = true;
-                _brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner, -dir);
+                //collisionBrain.PlayerDefend.IsDefendBounce = true;
+                //_brain.PlayerOTC.Damaged(collisionBrain.PhotonView.Owner, -dir);
             }
         }
 

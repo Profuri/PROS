@@ -1462,7 +1462,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86854
+  m_InstanceId: 76086
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1632,7 +1632,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86882
+  m_InstanceId: 75998
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1757,7 +1757,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4490381704158537818}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1802,7 +1802,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86714
+  m_InstanceId: 75934
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -1972,7 +1972,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86728
+  m_InstanceId: 76098
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -2058,7 +2058,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87028
+      value: -568124
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2231,7 +2231,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86644
+  m_InstanceId: 76162
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -2401,7 +2401,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86812
+  m_InstanceId: 76076
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -2427,7 +2427,7 @@ PrefabInstance:
     - target: {fileID: -28301762943763199, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
       propertyPath: m_InstanceId
-      value: -86922
+      value: -568162
       objectReference: {fileID: 0}
     - target: {fileID: 2704631733315392412, guid: 58358417d1ed7c043ae79e128803b5d4,
         type: 3}
@@ -2596,7 +2596,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87084
+      value: -568194
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2769,7 +2769,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86672
+  m_InstanceId: 76160
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -2850,7 +2850,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -86986
+      value: -568028
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3023,7 +3023,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86798
+  m_InstanceId: 75986
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -3104,7 +3104,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87000
+      value: -568040
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3188,7 +3188,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87126
+      value: -568214
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3272,7 +3272,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87140
+      value: -567992
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3445,7 +3445,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86784
+  m_InstanceId: 76176
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -3531,7 +3531,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87014
+      value: -568084
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3659,7 +3659,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157930454649321603}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -3704,7 +3704,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86700
+  m_InstanceId: 76248
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -3874,7 +3874,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86742
+  m_InstanceId: 76142
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -3960,7 +3960,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87042
+      value: -568052
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4049,7 +4049,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87070
+      value: -568144
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4183,7 +4183,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9135775064583913469}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -4228,7 +4228,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86770
+  m_InstanceId: 76050
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -4303,7 +4303,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87112
+      value: -568174
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4482,7 +4482,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86658
+  m_InstanceId: 76216
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -4557,7 +4557,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87098
+      value: -568064
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4641,7 +4641,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -86944
+      value: -568242
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4775,7 +4775,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7689737377705132328}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -4820,7 +4820,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86756
+  m_InstanceId: 76200
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -4895,7 +4895,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -86972
+      value: -568254
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4979,7 +4979,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -86958
+      value: -568112
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5158,7 +5158,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86910
+  m_InstanceId: 76208
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -5283,7 +5283,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5899957929408327965}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -5328,7 +5328,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86826
+  m_InstanceId: 76048
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -5498,7 +5498,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86686
+  m_InstanceId: 76112
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -5578,7 +5578,7 @@ PrefabInstance:
     - target: {fileID: 5603304241385541401, guid: 0524a2b41abcb0e42a5cc7830082926c,
         type: 3}
       propertyPath: m_InstanceId
-      value: -87056
+      value: -567964
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5757,7 +5757,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86840
+  m_InstanceId: 75924
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -5927,7 +5927,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86896
+  m_InstanceId: 75900
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}
@@ -6097,7 +6097,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -86868
+  m_InstanceId: 76206
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0.5, z: 0}

@@ -97,13 +97,15 @@ public class PlayerOTC : PlayerHandler, IDamageable
     }
     private void PlaySmokeParticle(Vector3 otcDir)
     {
-            if(_smokeParticle.isPlaying)
-            {
-                _smokeParticle.Stop();
-            }
-            var rotation = Quaternion.LookRotation(-otcDir);
-            _smokeParticle.transform.rotation = rotation;
-            _smokeParticle.Play();
+        Debug.Log("otc particle");
+        ParticleManager.Instance.PlayParticleAll("ExplosionParticle", transform.position, Vector3.one, Quaternion.identity);
+        if(_smokeParticle.isPlaying)
+        {
+            _smokeParticle.Stop();
+        }
+        var rotation = Quaternion.LookRotation(-otcDir);
+        _smokeParticle.transform.rotation = rotation;
+        _smokeParticle.Play();
     }
 
     private Vector3 CalcOTCDir(Vector3 attackMoveDir, Vector3 otcMoveDir)

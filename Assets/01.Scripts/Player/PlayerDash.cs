@@ -36,6 +36,10 @@ public class PlayerDash : PlayerHandler
         if (_brain.IsMine)
         {
             Vector3 mouseDir = (_brain.MousePos - _brain.AgentTrm.position).normalized;
+            Debug.Log("dash particle");
+            Quaternion particleAngle = Quaternion.Euler(Mathf.Atan2(mouseDir.y, mouseDir.x) * Mathf.Rad2Deg, -90f, -90f);
+            Vector3 particleScale = new Vector3(1f, 0.5f, 1f);
+            ParticleManager.Instance.PlayParticleAll("Effect_PlayerDash", transform.position, particleScale, particleAngle);
             _brain.PhotonView.RPC("Dash", RpcTarget.All,mouseDir);
         }
     }

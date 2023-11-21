@@ -49,7 +49,7 @@ public class PlayerDash : PlayerHandler
         }
         float dashPower = _brain.MovementSO.DashPower;
 
-        if (_isDashed)
+        if (_isDashed && _brain.IsMine)
             _isDoubleDash = true;
         
         _isDashed = true;

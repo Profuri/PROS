@@ -46,7 +46,7 @@ public class PlayerBuff : PlayerHandler // 상수 나중에 바꿀거야!
                 RangeUp?.Invoke(2, 10f);
                 break;
             case EBuffType.HEAVY:
-                Heavy?.Invoke(50, 10f);
+                Heavy?.Invoke(1, 10f);
                 break;
             case EBuffType.DOUBLEDASH:
                 DoubleDash?.Invoke(true, 10f);

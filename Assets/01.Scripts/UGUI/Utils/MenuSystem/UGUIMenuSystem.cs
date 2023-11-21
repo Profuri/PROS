@@ -5,6 +5,9 @@ using UnityEngine;
 public class UGUIMenuSystem : MonoBehaviour
 {
     [SerializeField] private InputSO _inputSO;
+
+    [SerializeField] private AudioClip _indexChangeClip;
+    [SerializeField] private AudioClip _enterClip;
     
     private RectTransform _cursorRectTransform;
 
@@ -45,7 +48,8 @@ public class UGUIMenuSystem : MonoBehaviour
         {
             return;
         }
-        
+
+        AudioManager.Instance.Play(_indexChangeClip);
         SetIndex(_index - 1);
     }
 
@@ -56,6 +60,7 @@ public class UGUIMenuSystem : MonoBehaviour
             return;
         }
         
+        AudioManager.Instance.Play(_indexChangeClip);
         SetIndex(_index + 1);
     }
 
@@ -84,5 +89,6 @@ public class UGUIMenuSystem : MonoBehaviour
         }
         
         _menus[_index].OnAction();
+        AudioManager.Instance.Play(_enterClip);
     }
 }

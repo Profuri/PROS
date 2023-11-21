@@ -485,6 +485,16 @@ PrefabInstance:
       propertyPath: CallBackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7285834916676321702, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
+        type: 3}
+      propertyPath: _enterClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5e1ec355f87a2804e8c9f0984fa02aa6, type: 3}
+    - target: {fileID: 7285834916676321702, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
+        type: 3}
+      propertyPath: _indexChangeClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 60f46aca94ba2fa4b9738136849c666c, type: 3}
     - target: {fileID: 7656545196127903290, guid: cb1d7dfeca99a47f08ae805a8dc6f1b4,
         type: 3}
       propertyPath: m_text

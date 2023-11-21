@@ -109,7 +109,6 @@ public class WaitingRoomScreen : UGUIComponent
 
     private void EnterPlayerCallBack(Player player)
     {
-        Debug.Log($"Join player: {player.NickName}");
         var playerCard = UIManager.Instance.GenerateUGUI("PlayerCard", EGenerateOption.NONE, _playerCardParent) as PlayerCard;
 
         if (playerCard is null)

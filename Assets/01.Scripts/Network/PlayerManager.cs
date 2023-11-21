@@ -76,6 +76,7 @@ namespace MonoPlayer
             CreatePlayer(revivePlayer, randomPos);
         }
         
+        
         [PunRPC]
         private void ShowSpriteRPC(Vector3 spawnPos,float r,float g,float b)
         {
@@ -86,6 +87,7 @@ namespace MonoPlayer
             playerSprite.SetColor(new Color(r,g,b));
             playerSprite.SetDestroy(_reviveTimer);            
         }
+
 
         private void OnLeftPlayer(Player leftPlayer)
         {
@@ -103,29 +105,11 @@ namespace MonoPlayer
 
         public void RoundStart()
         {
-            if (!NetworkManager.Instance.IsMasterClient)
-                return;
-            
-            NetworkManager.Instance.PhotonView.RPC("RoundStartRPC", RpcTarget.All);
+            RevivePlayer(NetworkManager.Instance.LocalPlayer);
         }
+
 
         public void RoundEnd()
-        {
-            if (!NetworkManager.Instance.IsMasterClient)
-                return;
-            
-            NetworkManager.Instance.PhotonView.RPC("RoundEndRPC", RpcTarget.All);
-        }
-        
-        [PunRPC]
-        private void RoundStartRPC()
-        {
-            var randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
-            CreatePlayer(NetworkManager.Instance.LocalPlayer,randomPos);
-        }
-
-        [PunRPC]
-        private void RoundEndRPC()
         {
             ResetPlayer();
         }
@@ -144,7 +128,6 @@ namespace MonoPlayer
                 Debug.Log("Is not waiting other player");
                 return;
             }
-
             waitingRoom.ReadyPlayer(player);
         }
 
@@ -183,12 +166,12 @@ namespace MonoPlayer
             //This stop Coroutines makes error (not revive player because of RPC)
             //StopAllCoroutines();
 
-            OnPlayerDead?.Invoke(player);
-            var playerBrain = BrainDictionary[player];
-
-
             LoadedPlayerList.Remove(player);
+            OnPlayerDead?.Invoke(player);
 
+            var playerBrain = BrainDictionary[player];
+            BrainDictionary.Remove(player);
+            
             if (playerBrain.PhotonView.IsMine)
             {
                 var obj = playerBrain.gameObject;

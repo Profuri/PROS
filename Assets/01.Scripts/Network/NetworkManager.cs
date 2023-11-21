@@ -70,7 +70,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             MaxPlayers = 4,
         };
-        options.CustomRoomProperties = new Hashtable { { "Mode", (int)mode } };
+        Hashtable modeInfo = new Hashtable { { "Mode", (int)mode } };
+        string[] customRoomPropsForLobby = {"Mode" };
+        options.CustomRoomProperties = modeInfo;
+        options.CustomRoomPropertiesForLobby = customRoomPropsForLobby;
+
         PhotonNetwork.CreateRoom($"{owner.NickName}'S ROOM", options);
     }
 

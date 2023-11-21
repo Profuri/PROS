@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 6002139629988740056}
   - component: {fileID: 6531823120920919508}
   - component: {fileID: -5486951534985572951}
+  - component: {fileID: 8718199199060156996}
   m_Layer: 7
   m_Name: SamplePlayer(Rig)(ScaleUP)
   m_TagString: Untagged
@@ -687,7 +688,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 9.8
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -797,6 +798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdba5dc5800e9894c871361c53173aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _landClip: {fileID: 8300000, guid: 81652031b64c342cc8dbc59c138d77c5, type: 3}
+  _jumpClip: {fileID: 8300000, guid: 707f421ea24169343846f894516ced98, type: 3}
   _maxWindPower: 10
 --- !u!114 &8414002105391812695
 MonoBehaviour:
@@ -810,13 +813,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7547ae2e9ccbb4db68c9fbfa61fc67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dashTime: 0.3
+  _dashTime: 0.35
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 320
   _dashCollisionMask:
     serializedVersion: 2
     m_Bits: 128
+  _dashClip: {fileID: 8300000, guid: 95a55ddf2d21aff4e926ead1ae73efad, type: 3}
 --- !u!114 &2943213604507646997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,6 +940,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8718199199060156996}
+        m_TargetAssemblyTypeName: PlayerAudio, Assembly-CSharp
+        m_MethodName: PlayHitClip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _otcPower: 100
   _bouncePer: 0.5
 --- !u!114 &-5486951534985572951
@@ -951,6 +967,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderParent: {fileID: 7823556322010030652}
+--- !u!114 &8718199199060156996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958669578175485639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8878afc5f16fecf40a4782be93ba203f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onHitClip: {fileID: 8300000, guid: af66162561d2eed40ad49268cab318bb, type: 3}
 --- !u!1 &4005831873032644307
 GameObject:
   m_ObjectHideFlags: 0

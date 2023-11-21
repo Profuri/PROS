@@ -63,24 +63,22 @@ public class ScoreManager : MonoBehaviourPunCallbacks
         }
     }
     
-    public void AddScore(Player targetPlayer)
+    public bool AddScore(Player targetPlayer)
     {
         var score = (int)targetPlayer.CustomProperties["Score"];
         targetPlayer.CustomProperties["Score"] = ++score;
-        NetworkManager.Instance.PhotonView.RPC("UpdateScoreboard", RpcTarget.All, targetPlayer);
+        _scoreboard.UpdateScoreboard(targetPlayer);
 
-        if (score >= 4)
+        if (score < 4)
         {
-            StageManager.Instance.StageWinner(targetPlayer);
+            return false;
         }
+        
+        StageManager.Instance.StageWinner(targetPlayer);
+        return true;
+
     }
     
-    [PunRPC]
-    private void UpdateScoreboard(Player targetPlayer)
-    {
-        _scoreboard.UpdateScoreboard(targetPlayer);
-    }
-
     private void RPCCallRemoveScoreboard(Player targetPlayer)
     {
         if (_scoreboard is null)

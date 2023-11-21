@@ -6,13 +6,13 @@ public class StageWinnerScreen : UGUIComponent
     [SerializeField] private float _activeTime;
     private float _currentTime;
 
-    private PlayerCard _winnerCard;
+    [SerializeField] private PlayerCard _winnerCard;
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
-
-        _winnerCard = transform.GetComponentInChildren<PlayerCard>();
+        
+        _winnerCard.GenerateUI(_winnerCard.transform.parent, EGenerateOption.NONE);
         
         _currentTime = 0f;
     }
@@ -24,8 +24,7 @@ public class StageWinnerScreen : UGUIComponent
         
         if (percent >= 1f)
         {
-            UIManager.Instance.RemoveTopUGUI();
-            NetworkManager.Instance.LoadScene(ESceneName.Menu);
+            Application.Quit();
         }
     }
     
@@ -35,7 +34,7 @@ public class StageWinnerScreen : UGUIComponent
         var g = (float)player.CustomProperties["G"];
         var b = (float)player.CustomProperties["B"];
         var color = new Color(r, g, b, 1);
-        
+
         _winnerCard.SetColor(color);
         _winnerCard.SetNickName(player.NickName);
         _winnerCard.Winning();

@@ -6,6 +6,7 @@ public class NickNameInputScreen : UGUIComponent
 {
     [SerializeField] private InputSO _inputSO;
     [SerializeField] private TMP_InputField _inputField;
+    [SerializeField] private AudioClip _enterClip;
 
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
@@ -50,6 +51,8 @@ public class NickNameInputScreen : UGUIComponent
         NetworkManager.Instance.LocalPlayer.CustomProperties.Add("G", Random.Range(0.5f, 1f));
         NetworkManager.Instance.LocalPlayer.CustomProperties.Add("B", Random.Range(0.5f, 1f));
 
+        AudioManager.Instance.Play(_enterClip);
+        AudioManager.Instance.PlayLobbyBGM();
         UIManager.Instance.RemoveTopUGUI();
     }
     

@@ -9,6 +9,7 @@ public class OccupationStageSystem : BaseStageSystem
     private OccupationSystem _occupationSystem;
     [SerializeField] private LayerMask _targetLayerMask;
     [SerializeField] private float _targetOccupationTime;
+
     public Action OnTargetChangeTime;
     public Action<Player> OnPlayerWinEvent;
 
@@ -21,6 +22,8 @@ public class OccupationStageSystem : BaseStageSystem
         base.Init(mapIndex);
         _roundEnd = false;
         OnPlayerWinEvent += WinPlayer;
+
+        Debug.LogError($"OccupationStageSystem");
     }
 
     private void WinPlayer(Player player)
@@ -28,16 +31,23 @@ public class OccupationStageSystem : BaseStageSystem
         _winPlayer = player;
         _roundEnd = true;
     }
-    
-    public override bool RoundCheck(out Player winnerPlayer)
+
+    public override void StageUpdate()
     {
-        winnerPlayer = null;
+        base.StageUpdate();
+        RoundCheck(null);
+    }
+    public override void RoundCheck(Player player)
+    {
         if (_roundEnd)
         {
-            winnerPlayer = _winPlayer;
-            Debug.LogError($"WinPlayer: {winnerPlayer}");
+            var winnerPlayer = _winPlayer;
+            RoundWinner(winnerPlayer);            
         }
-        return _roundEnd;
+    }  
+    public override void StageLeave()
+    {
+        base.StageLeave();
     }
 
     public override void GenerateNewStage(int index)
@@ -55,7 +65,7 @@ public class OccupationStageSystem : BaseStageSystem
     private void SetOccupationSystemRPC()
     {
         OccupationStruct data = new OccupationStruct(_targetOccupationTime,
-            minChangeTime: 20f,maxChangeTime: 40f,5f,_targetLayerMask);
+            minChangeTime: 60f,maxChangeTime: 80f, 10f, _targetLayerMask);
 
         if (_occupationSystem == null)
         {
@@ -72,7 +82,7 @@ public class OccupationStageSystem : BaseStageSystem
         //Vector3 randomPos = new Vector3(UnityEngine.Random.Range(-5,5f),0,0);
         
         //Test Code
-        Vector3 randomPos = Vector3.zero - new Vector3(0 ,-2 ,0);
+        Vector3 randomPos = StageManager.Instance.CurStage.GetRandomSpawnPoint();
         
         _occupationSystem.SetOccupationPos(randomPos);
     }

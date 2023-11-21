@@ -11,6 +11,9 @@ public class PlayerMovement : PlayerHandler
     private Vector2 _prevInputVec = Vector2.zero;
     public Vector2 PrevInputVec => _prevInputVec;
     
+    [SerializeField] private AudioClip _landClip;
+    [SerializeField] private AudioClip _jumpClip;
+
     private Coroutine _stopCoroutine;
     private float _originGravityScale;
     
@@ -29,15 +32,13 @@ public class PlayerMovement : PlayerHandler
     
     public bool CanJump { get; private set; }
     private float _jumpingTime = 0f;
+
     public bool CanMoveAnim { get; private set; } = false;
 
-    
-    
     public override void Init(PlayerBrain brain)
     {
         base.Init(brain);
 
-        Debug.Log(_brain?.AnimationController);
         _brain.InputSO.OnJumpKeyPress += SetCanJump;
         _brain.InputSO.OnMovementKeyPress += SetInputVec;
         _brain.OnOTC += () => enabled = false;
@@ -45,6 +46,7 @@ public class PlayerMovement : PlayerHandler
         _jumpingTime = 0f;
         StopAllCoroutines();
     }
+
     public void ApplyWind(float windPower,int dir) => _brain.PhotonView.RPC(nameof(ApplyWindRPC),RpcTarget.All,windPower,(int)dir);
     
     [PunRPC]
@@ -92,6 +94,7 @@ public class PlayerMovement : PlayerHandler
     public void PlayJumpAnimRPC(Vector2 _input)
     {
         _brain?.AnimationController.PlayJumpAnim(_input);
+        AudioManager.Instance.Play(_jumpClip);
     }
 
     [PunRPC]
@@ -105,6 +108,7 @@ public class PlayerMovement : PlayerHandler
     {
         _brain?.AnimationController.PlayLandAnim(_input);
         _prevInputVec = Vector2.zero;
+        AudioManager.Instance.Play(_landClip);
     }    
 
     public void JumpAction() //Play Action in JumpAnim Event
@@ -136,14 +140,14 @@ public class PlayerMovement : PlayerHandler
         {
             if(CanJump)
             {
-                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, Quaternion.LookRotation(-GroundNormal));
+                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, default, Quaternion.LookRotation(-GroundNormal));
                 PlayJumpAnim(movement);
                 CanJump = false;
             }
 
             if (_brain.ActionData.IsJumping == true && _jumpingTime >= 0.5f)
             {
-                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, Quaternion.LookRotation(-GroundNormal));
+                ParticleManager.Instance.PlayParticleAll("JumpAndDropParticle", GroundPos, default, Quaternion.LookRotation(-GroundNormal));
                 PlayLandAnim(movement);
             }
         }

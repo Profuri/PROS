@@ -51,6 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
+  _indexChangeClip: {fileID: 8300000, guid: 60f46aca94ba2fa4b9738136849c666c, type: 3}
+  _enterClip: {fileID: 8300000, guid: 5e1ec355f87a2804e8c9f0984fa02aa6, type: 3}
 --- !u!1 &1825102851572053584
 GameObject:
   m_ObjectHideFlags: 0

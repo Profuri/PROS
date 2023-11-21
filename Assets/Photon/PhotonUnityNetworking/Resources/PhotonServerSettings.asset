@@ -72,6 +72,10 @@ MonoBehaviour:
   - ThroughMapRPC
   - RoundWinnerRPC
   - StageWinnerRPC
+  - LandRangeUp
+  - SetOpacityRPC
+  - SetPositionRPC
+  - DamagedRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

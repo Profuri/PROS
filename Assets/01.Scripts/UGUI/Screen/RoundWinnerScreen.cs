@@ -27,8 +27,8 @@ public class RoundWinnerScreen : UGUIComponent
         
         _playerCardPanel = parent.Find("PlayerCardPanel");
 
-        _upperWinnerNameTMP.rectTransform.anchoredPosition = new Vector2(_leftLimit, 450f);
-        _downWinnerNameTMP.rectTransform.anchoredPosition = new Vector2(_rightLimit, -450f);
+        _upperWinnerNameTMP.rectTransform.anchoredPosition = new Vector2(_leftLimit, 430f);
+        _downWinnerNameTMP.rectTransform.anchoredPosition = new Vector2(_rightLimit, -430f);
         
         _playerCardDiction = new Dictionary<Player, PlayerCard>();
         foreach (var player in NetworkManager.Instance.PlayerList)
@@ -78,9 +78,9 @@ public class RoundWinnerScreen : UGUIComponent
         }
 
         _upperWinnerNameTMP.rectTransform.anchoredPosition =
-            new Vector2(Mathf.Lerp(_leftLimit, _rightLimit, percent), 450f);
+            new Vector2(Mathf.Lerp(_leftLimit, _rightLimit, percent), 430f);
         _downWinnerNameTMP.rectTransform.anchoredPosition =
-            new Vector2(Mathf.Lerp(_rightLimit, _leftLimit, percent), -450f);
+            new Vector2(Mathf.Lerp(_rightLimit, _leftLimit, percent), -430f);
     }
 
     public void SetWinner(Player player)

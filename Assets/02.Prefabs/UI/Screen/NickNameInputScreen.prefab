@@ -56,6 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputSO: {fileID: 11400000, guid: 741c4322dd98d884f9289263d63057f9, type: 2}
   _inputField: {fileID: 673636604232264165}
+  _enterClip: {fileID: 8300000, guid: 5e1ec355f87a2804e8c9f0984fa02aa6, type: 3}
 --- !u!222 &1815079334483094221
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -16,6 +16,9 @@ public class PlayerCard : UGUIComponent
     [SerializeField] private Color _readyColor;
     [SerializeField] private Color _winningColor;
 
+    [SerializeField] private AudioClip _readyClip;
+    [SerializeField] private AudioClip _cancelClip;
+
     public override void GenerateUI(Transform parent, EGenerateOption options)
     {
         base.GenerateUI(parent, options);
@@ -56,6 +59,7 @@ public class PlayerCard : UGUIComponent
     public void ReadyToggle()
     {
         _ready = !_ready;
+        AudioManager.Instance.Play(_ready ? _readyClip : _cancelClip);
         _backGroundImage.color = _ready ? _readyColor : _unReadyColor;
         _readyTMP.text = _ready ? "READY" : "";
     }

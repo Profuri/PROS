@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (_componentStack.Count > 0)
+        if (_componentStack.Count > 0 && TopComponent.IsActive)
         {
             TopComponent.UpdateUI();
         }

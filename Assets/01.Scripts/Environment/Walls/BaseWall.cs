@@ -5,12 +5,27 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class BaseWall : MonoBehaviour
 {
-    protected Collider2D _collider2D;
-    protected Rigidbody2D _rigidbody2D;
+    private Vector3 _initPos;
+    private Quaternion _initRot;
 
-    protected virtual void Awake()
+    private Collider2D _collider;
+    private Rigidbody2D _rigidbody;
+
+    public Collider2D Collider => _collider;
+    public Rigidbody2D Rigidbody => _rigidbody;
+
+    public virtual void Init()
     {
-        _collider2D = GetComponent<Collider2D>();
-        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _initPos = transform.position;
+        _initRot = transform.rotation;
+        _collider = GetComponent<Collider2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    public virtual void Reset()
+    {
+        _rigidbody.velocity = Vector2.zero;
+        transform.rotation = _initRot;
+        transform.position = _initPos;
     }
 }

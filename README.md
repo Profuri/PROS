@@ -10,7 +10,7 @@
 
 ## 조작 방법
 
-![movement](ReadmeResource/movement.gif)![jump](ReadmeResource/jump.gif)![dash](ReadmeResource/dash.gif)
+<img src="ReadmeResource/movement.gif" width="211"/><img src="ReadmeResource/jump.gif" width="211"/><img src="ReadmeResource/dash.gif" width="211"/>
 
 `A` `D` 를 통해 움질일 수 있고, `SPACE` 를 통해 점프할 수 있습니다. 점프한 상태에서 `SHIFT` 를 통해 마우스 방향으로 대쉬할 수 있습니다.
 

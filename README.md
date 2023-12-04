@@ -4,7 +4,7 @@
 
 [**다운로드 바로가기**](https://drive.google.com/file/d/1WJahNkOlYfkfCPFyd9jfuT0QUd1mSMPd/view?usp=sharing)
 
-대쉬를 통해 상대에게 부딪치거나 상대방에 대쉬를 방어하여 상대를 장외로 날리는 것이 목표인 최대 4인 난투형 액션게임입니다. 
+대쉬를 통해 상대에게 부딪치거나 상대방의 대쉬를 방어하여 상대를 장외로 날리는 것이 목표인 최대 4인 난투형 액션게임입니다. 
 
 ![mainView](ReadmeResource/mainView.png)
 
